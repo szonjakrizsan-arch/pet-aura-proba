@@ -150,7 +150,7 @@ function caps(list,col){const w=document.createElement('div');w.className='caps'
   b.onclick=()=>{w.querySelectorAll('.cap').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');chosen=key;okBtn.disabled=false;collapse(label)};w.appendChild(b)});return w}
 // választás után a hangolás egy diszkrét sorrá húzódik össze, hogy a portré újra teljes méretű legyen az igazításhoz
 let ct;function collapse(label){clearTimeout(ct);ct=setTimeout(()=>{const tn=$('tune');tn.innerHTML='';const m=document.createElement('button');m.className='modl';m.id='modl';m.textContent='✦ '+label+' · módosítás';
-  m.onclick=()=>{renderTune(true)};tn.appendChild(m);document.documentElement.classList.remove('c-elteres','c-vendeg');requestAnimationFrame(()=>fit(true))},650)}
+  m.onclick=()=>{renderTune(true)};tn.appendChild(m);document.documentElement.classList.remove('c-elteres','c-vendeg');requestAnimationFrame(()=>fit(true))},950)}
 function renderTune(again){const t=$('tune');t.classList.remove('on');document.documentElement.classList.add('c-'+CASE);if(again)requestAnimationFrame(()=>fit(true));
  if(CASE==='bizonytalan'){t.innerHTML='<div class="t">Energetikai rezgés hangolása:</div>';t.appendChild(caps([['kutya','Kutya',again&&chosen==='kutya'],['macska','Macska',again&&chosen==='macska']]));if(!again){chosen=null;okBtn.disabled=true}t.classList.add('on')}
  else if(CASE==='elteres'){t.innerHTML='<div class="t it">Ezen a portrén most macskát érzékelek… '+PET.name+' adatlapján viszont kutya szerepel. Melyik energiájával hangoljam össze az elemzést?</div>';
