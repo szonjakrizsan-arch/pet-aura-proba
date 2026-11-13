@@ -18,7 +18,7 @@ canvas.fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
 h1{margin:6px 58px 0;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-weight:600;color:#f3d58a;text-shadow:0 0 10px #ffcf7a66;text-align:center}
 .sub{font-size:16px;font-style:italic;color:#e9dcf6;margin:2px 0 0;text-align:center;text-shadow:0 1px 3px #000a}
 /* ---------- a portré: a tükör elhomályosult ---------- */
-.pf{position:relative;flex:none;width:min(62vw,250px,calc(100dvh - 500px));min-width:120px;aspect-ratio:1;margin-top:12px}
+.pf{position:relative;flex:none;width:min(62vw,250px,calc(100dvh - 540px));min-width:120px;aspect-ratio:1;margin-top:12px}
 @media (max-height:700px){.sub{display:none}h1{margin-top:2px}.scroll{margin-top:10px}.p-in h2{font-size:17px}.p-in p{font-size:14.5px;line-height:1.22;margin-bottom:4px}.p-in .tip{font-size:14px}.note{margin-top:6px;font-size:14px}.acts{gap:8px}.acts button{height:48px}.acts .sec{height:44px}}
 .halo{position:absolute;inset:-16%;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,#2a0f5ccc 0 58%,#3a1680aa 70%,transparent 100%)}
 .wreath{position:absolute;inset:-22%;pointer-events:none;animation:wbreath 10s ease-in-out infinite}
@@ -41,7 +41,7 @@ h1{margin:6px 58px 0;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-wei
 .scroll .p-bot{bottom:0;-webkit-mask:linear-gradient(transparent,#000 3cqw);mask:linear-gradient(transparent,#000 3cqw)}
 .scroll .p-mid{position:absolute;left:0;width:100%;top:7.4cqw;bottom:7.4cqw;background:url(perg_kozep.png) top center/100% auto repeat-y;pointer-events:none}
 .p-in{position:relative;color:#47290f;text-align:center;padding:10.5cqw 11cqw 11cqw}
-.p-in h2{margin:0 0 4px;font-size:18.5px;font-weight:700;color:#5b3510;line-height:1.15}
+.p-in h2{margin:0 0 5px;font-size:18px;font-weight:700;color:#5b3510;line-height:1.15}
 .p-in p{margin:0 0 6px;font-size:15px;line-height:1.28}
 .p-in .tip{font-style:italic;font-size:14.5px;color:#6a4218;margin:0}
 .plight{position:absolute;left:6cqw;right:6cqw;top:9cqw;bottom:8cqw;overflow:hidden;pointer-events:none;mix-blend-mode:overlay;-webkit-mask:radial-gradient(closest-side,#000 62%,transparent 100%);mask:radial-gradient(closest-side,#000 62%,transparent 100%)}
@@ -69,7 +69,7 @@ button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
 <button class="medal" id="back" aria-label="Vissza"><svg viewBox="0 0 24 24"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".5" stop-color="#f0c66a"/><stop offset="1" stop-color="#c58a2c"/></linearGradient></defs><path d="M14.5 5.5 8 12l6.5 6.5" fill="none" stroke="url(#g1)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 <div class="screen">
  <h1>A TÜKÖR MÉG HALLGAT</h1>
- <div class="sub">Az aura ezúttal nem rajzolódott ki</div>
+ <div class="sub">A fények most még rejtve maradtak</div>
  <div class="pf">
   <div class="halo"></div>
   <div class="wreath"><i class="wg"></i><i class="wv"></i></div>
@@ -78,9 +78,9 @@ button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
  </div>
  <div class="scroll"><div class="p-mid"></div><img class="p-top" src="perg_felso.png" alt=""><img class="p-bot" src="perg_also.png" alt=""><div class="plight"><i></i></div>
   <div class="p-in">
-   <h2 id="h2">Most nem sikerült elkészítenünk <span id="nm">Bodza</span> auraképét.</h2>
-   <p>Próbálj egy másik fotót, amelyen kedvenced jól látható! Egy élesebb, világosabb kép segíthet, hogy elkészíthessük az egyedi auráját.</p>
-   <p class="tip" id="tip">Tipp: arca és mindkét szeme legyen a képen, természetes fényben.</p>
+   <h2 id="h2"><span id="nm">Bodza</span> aurája most még fátyol mögött rejtőzik.</h2>
+   <p>A varázstükörnek tiszta fényre van szüksége ahhoz, hogy kiolvashassa kedvenced lelkének színeit. Készíts egy új, világosabb fotót, amelyen <span class="nm2">Bodza</span> szemei tisztán ragyognak!</p>
+   <p class="tip" id="tip">✦ Apró varázslat: forduljon feléd kedvenced, és mindkét szeme nézzen a lencsébe.</p>
   </div>
  </div>
  <div class="note">Ez a próbálkozás nem számít bele az elemzéseidbe.</div>
@@ -91,7 +91,7 @@ button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
 const $=id=>document.getElementById(id),RM=matchMedia('(prefers-reduced-motion: reduce)').matches,Q=new URLSearchParams(location.search);
 try{const p=sessionStorage.getItem('aura_portre');if(p)$('img').src=p}catch(e){}
 /* az ok szerinti tipp (az elemző adja; a próbában ?ok=...) */
-const TIPS={homalyos:'Tipp: tartsd a telefont nyugodtan, és készítsd a képet természetes fényben.',arc:'Tipp: kedvenced arca és mindkét szeme legyen jól látható a képen.',sotet:'Tipp: egy világosabb helyen, ablak közelében készült kép sokat segít.',tavol:'Tipp: menj közelebb – a fej és a mellkas töltse ki a kört.'};
+const TIPS={arc:'✦ Apró varázslat: forduljon feléd kedvenced, és mindkét szeme nézzen a lencsébe.',homalyos:'✦ Apró varázslat: tartsd a telefont egy pillanatig mozdulatlanul, és várd meg, míg kedvenced is megnyugszik.',sotet:'✦ Apró varázslat: keress egy ablakot – a nappali fényben a tükör sokkal tisztábban lát.',tavol:'✦ Apró varázslat: lépj közelebb, hogy kedvenced feje és mellkasa betöltse a kört.'};
 if(TIPS[Q.get('ok')])$('tip').textContent=TIPS[Q.get('ok')];
 $('again').onclick=$('back').onclick=()=>{location.href='../kamera/'+location.search};
 $('gal').onclick=()=>$('file').click();
