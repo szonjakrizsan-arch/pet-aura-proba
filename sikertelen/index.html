@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#1a0f38">
+<title>Aura Scanner – a tükör még hallgat</title>
+<style>
+@font-face{font-family:Cormorant;font-weight:600;src:url(cormorant-600.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cormorant;font-weight:600;src:url(cormorant-600-ext.woff2) format("woff2");unicode-range:U+0100-024F}
+:root{--gold:#e8b95a;--gold-hi:#fff0b8;--ink:#f6e7c1}
+html,body{margin:0;height:100%;background:#1a0f38;color:var(--ink);font-family:Cormorant,Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+body{background:#1a0f38 url(hatter.jpg) center top/cover no-repeat}
+canvas.fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 14px);box-sizing:border-box}
+.medal{position:fixed;z-index:5;left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px);width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(arany_medal_w.png) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer}
+.medal svg{width:24px;height:24px}
+h1{margin:6px 58px 0;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-weight:600;color:#f3d58a;text-shadow:0 0 10px #ffcf7a66;text-align:center}
+.sub{font-size:16px;font-style:italic;color:#e9dcf6;margin:2px 0 0;text-align:center;text-shadow:0 1px 3px #000a}
+/* ---------- a portré: a tükör elhomályosult ---------- */
+.pf{position:relative;flex:none;width:min(62vw,250px,calc(100dvh - 500px));min-width:120px;aspect-ratio:1;margin-top:12px}
+@media (max-height:700px){.sub{display:none}h1{margin-top:2px}.scroll{margin-top:10px}.p-in h2{font-size:17px}.p-in p{font-size:14.5px;line-height:1.22;margin-bottom:4px}.p-in .tip{font-size:14px}.note{margin-top:6px;font-size:14px}.acts{gap:8px}.acts button{height:48px}.acts .sec{height:44px}}
+.halo{position:absolute;inset:-16%;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,#2a0f5ccc 0 58%,#3a1680aa 70%,transparent 100%)}
+.wreath{position:absolute;inset:-22%;pointer-events:none;animation:wbreath 10s ease-in-out infinite}
+.wreath i{position:absolute;inset:0;border-radius:50%;filter:blur(10px)}
+.wreath .wg{background:radial-gradient(closest-side,transparent 56%,#ffcf7a40 66%,#f3b45a1c 78%,transparent 96%);animation:wfade 7s ease-in-out infinite}
+.wreath .wv{background:radial-gradient(closest-side,transparent 50%,#b98cff44 64%,#8a6cd022 80%,transparent 96%);animation:wfade 9s ease-in-out -4s infinite}
+@keyframes wbreath{0%,100%{transform:scale(.96)}50%{transform:scale(1.04)}}
+@keyframes wfade{0%,100%{opacity:.4}50%{opacity:.9}}
+.ph{position:absolute;left:12%;top:12%;width:76%;height:76%;border-radius:50%;overflow:hidden;background:#0d0820}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(2.5px) brightness(.5) saturate(.5)}
+.mist{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 40% 36%,#c9b6f0aa,#5a3f9a66 45%,#1a0a3899 100%);mix-blend-mode:screen;animation:mist 8s ease-in-out infinite alternate}
+@keyframes mist{from{transform:translate(-6%,-4%) scale(1.1)}to{transform:translate(6%,4%) scale(1.15)}}
+.ph .q{position:absolute;inset:0;display:grid;place-items:center;font-size:44px;color:#f3d58acc;text-shadow:0 0 14px #ffcf7a99;animation:qf 4s ease-in-out infinite}
+@keyframes qf{0%,100%{opacity:.5}50%{opacity:1}}
+.pf>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+/* ---------- a jós üzenete: a jóváhagyott kis pergamen ---------- */
+.scroll{position:relative;container-type:inline-size;width:min(100%,380px);margin-top:16px;animation:appear .9s ease .25s both}
+.scroll .p-top,.scroll .p-bot{position:absolute;left:0;width:100%;display:block;pointer-events:none}
+.scroll .p-top{top:0;-webkit-mask:linear-gradient(#000 calc(100% - 3cqw),transparent);mask:linear-gradient(#000 calc(100% - 3cqw),transparent)}
+.scroll .p-bot{bottom:0;-webkit-mask:linear-gradient(transparent,#000 3cqw);mask:linear-gradient(transparent,#000 3cqw)}
+.scroll .p-mid{position:absolute;left:0;width:100%;top:7.4cqw;bottom:7.4cqw;background:url(perg_kozep.png) top center/100% auto repeat-y;pointer-events:none}
+.p-in{position:relative;color:#47290f;text-align:center;padding:10.5cqw 11cqw 11cqw}
+.p-in h2{margin:0 0 4px;font-size:18.5px;font-weight:700;color:#5b3510;line-height:1.15}
+.p-in p{margin:0 0 6px;font-size:15px;line-height:1.28}
+.p-in .tip{font-style:italic;font-size:14.5px;color:#6a4218;margin:0}
+.plight{position:absolute;left:6cqw;right:6cqw;top:9cqw;bottom:8cqw;overflow:hidden;pointer-events:none;mix-blend-mode:overlay;-webkit-mask:radial-gradient(closest-side,#000 62%,transparent 100%);mask:radial-gradient(closest-side,#000 62%,transparent 100%)}
+.plight i{position:absolute;width:90%;height:90%;left:5%;top:5%;border-radius:50%;background:radial-gradient(closest-side,#fff3d0e6,#ffe2a070 45%,transparent 100%);animation:plmove 17s ease-in-out infinite alternate,plbreath 7s ease-in-out infinite}
+@keyframes plmove{0%{transform:translate(-22%,-18%)}30%{transform:translate(18%,-6%)}60%{transform:translate(-8%,16%)}100%{transform:translate(22%,10%)}}
+@keyframes plbreath{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes appear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.note{margin-top:10px;font-size:14.5px;font-style:italic;color:#d9cbef;text-align:center;text-shadow:0 1px 3px #000a}
+/* ---------- gombok (az indító jóváhagyott gombjai) ---------- */
+.acts{margin-top:auto;display:flex;flex-direction:column;gap:10px;width:min(100%,360px)}
+.acts button{font:inherit;position:relative;height:52px;display:flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;border:2.4px solid transparent;font-size:20px;font-weight:700;letter-spacing:.02em;cursor:pointer;overflow:hidden}
+.acts button::before{content:'';position:absolute;inset:3.5px;border-radius:999px;border:1px solid #f0a54f80;pointer-events:none}
+.acts .main{color:#2a1236;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c) padding-box,linear-gradient(90deg,#c9631c,#ffe9b0 30%,#fff6d8 50%,#ffe9b0 70%,#c9631c) border-box;box-shadow:0 0 12px #ffb84a99,0 0 26px #ff9f3a55,0 4px 12px #0009,inset 0 2px 4px #fff8,inset 0 -3px 8px #a8641e66;animation:pulse 3.2s ease-in-out infinite}
+.acts .main::after{content:'';position:absolute;inset:0;border-radius:999px;pointer-events:none;background:linear-gradient(105deg,transparent 42%,#fffdf0b0 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:100% 0;animation:sheen 5s ease-in-out 2s infinite}
+@keyframes sheen{0%{background-position:100% 0}42%,100%{background-position:0 0}}
+@keyframes pulse{0%,100%{box-shadow:0 0 12px #ffb84a99,0 0 26px #ff9f3a55,0 4px 12px #0009,inset 0 2px 4px #fff8,inset 0 -3px 8px #a8641e66}50%{box-shadow:0 0 18px #ffc860cc,0 0 36px #ff9f3a88,0 4px 12px #0009,inset 0 2px 4px #fff8,inset 0 -3px 8px #a8641e66}}
+.acts .sec{height:46px;font-size:18px;color:#f6dfae;background:linear-gradient(180deg,#311747f2,#1a0b2bf5) padding-box,linear-gradient(90deg,#c9631c,#f0a040 14%,#ffd889 32%,#ffc560 50%,#ffd889 68%,#f0a040 86%,#c9631c) border-box;box-shadow:0 0 8px #ff9f3a99,0 3px 10px #0008,inset 0 0 14px #0008}
+.acts button:active{transform:translateY(1px)}
+button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<canvas class="fx" id="dust"></canvas>
+<button class="medal" id="back" aria-label="Vissza"><svg viewBox="0 0 24 24"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".5" stop-color="#f0c66a"/><stop offset="1" stop-color="#c58a2c"/></linearGradient></defs><path d="M14.5 5.5 8 12l6.5 6.5" fill="none" stroke="url(#g1)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<div class="screen">
+ <h1>A TÜKÖR MÉG HALLGAT</h1>
+ <div class="sub">Az aura ezúttal nem rajzolódott ki</div>
+ <div class="pf">
+  <div class="halo"></div>
+  <div class="wreath"><i class="wg"></i><i class="wv"></i></div>
+  <div class="ph"><img id="img" alt=""><div class="mist"></div><div class="q">✦</div></div>
+  <img src="portrekeret.png" alt="">
+ </div>
+ <div class="scroll"><div class="p-mid"></div><img class="p-top" src="perg_felso.png" alt=""><img class="p-bot" src="perg_also.png" alt=""><div class="plight"><i></i></div>
+  <div class="p-in">
+   <h2 id="h2">Most nem sikerült elkészítenünk <span id="nm">Bodza</span> auraképét.</h2>
+   <p>Próbálj egy másik fotót, amelyen kedvenced jól látható! Egy élesebb, világosabb kép segíthet, hogy elkészíthessük az egyedi auráját.</p>
+   <p class="tip" id="tip">Tipp: arca és mindkét szeme legyen a képen, természetes fényben.</p>
+  </div>
+ </div>
+ <div class="note">Ez a próbálkozás nem számít bele az elemzéseidbe.</div>
+ <div class="acts"><button class="main" id="again">✦ Új fotó készítése</button><button class="sec" id="gal">Fotó a galériából</button></div>
+</div>
+<input type="file" id="file" accept="image/*" hidden>
+<script>
+const $=id=>document.getElementById(id),RM=matchMedia('(prefers-reduced-motion: reduce)').matches,Q=new URLSearchParams(location.search);
+try{const p=sessionStorage.getItem('aura_portre');if(p)$('img').src=p}catch(e){}
+/* az ok szerinti tipp (az elemző adja; a próbában ?ok=...) */
+const TIPS={homalyos:'Tipp: tartsd a telefont nyugodtan, és készítsd a képet természetes fényben.',arc:'Tipp: kedvenced arca és mindkét szeme legyen jól látható a képen.',sotet:'Tipp: egy világosabb helyen, ablak közelében készült kép sokat segít.',tavol:'Tipp: menj közelebb – a fej és a mellkas töltse ki a kört.'};
+if(TIPS[Q.get('ok')])$('tip').textContent=TIPS[Q.get('ok')];
+$('again').onclick=$('back').onclick=()=>{location.href='../kamera/'+location.search};
+$('gal').onclick=()=>$('file').click();
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.naturalWidth,im.naturalHeight)),cv=document.createElement('canvas');cv.width=Math.round(im.naturalWidth*k);cv.height=Math.round(im.naturalHeight*k);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);
+ try{sessionStorage.setItem('aura_foto',cv.toDataURL('image/jpeg',.9));sessionStorage.setItem('aura_irany','')}catch(x){}location.href='../igazitas/'+location.search};im.src=u};
+/* halk csillagpor a portré körül – kevesebb, mint máshol: a tükör most pihen */
+const dc=$('dust'),dx=dc.getContext('2d');let P=[],next=0,tp=performance.now();
+function size(){dc.width=innerWidth*devicePixelRatio;dc.height=innerHeight*devicePixelRatio}size();addEventListener('resize',size);
+function spawn(){const f=document.querySelector('.pf').getBoundingClientRect(),a=Math.random()*Math.PI*2,r=f.width*(.5+Math.random()*.2);
+ P.push({x:f.left+f.width/2+Math.cos(a)*r,y:f.top+f.height/2+Math.sin(a)*r,r:1+Math.random()*1.4,v:5+Math.random()*8,dur:3.5+Math.random()*3,life:0,c:Math.random()<.6?'255,214,130':'208,172,255',ph:Math.random()*7,sw:3+Math.random()*6,f:.3+Math.random()*.6})}
+(function loop(now){const dt=Math.min(.1,(now-tp)/1000);tp=now;const d=devicePixelRatio;dx.clearRect(0,0,dc.width,dc.height);
+ if(!RM){next-=dt;while(next<=0&&P.length<16){spawn();next+=-Math.log(1-Math.random())/1.8}
+ P=P.filter(p=>{p.life+=dt/p.dur;if(p.life>=1)return false;p.y-=p.v*dt;const al=Math.min(1,p.life*5)*Math.pow(1-p.life,1.2)*.8,x=(p.x+Math.sin(now/1000*p.f+p.ph)*p.sw)*d,y=p.y*d,R=p.r*d*4;
+  const g=dx.createRadialGradient(x,y,0,x,y,R);g.addColorStop(0,`rgba(255,250,230,${al})`);g.addColorStop(.25,`rgba(${p.c},${al*.8})`);g.addColorStop(1,`rgba(${p.c},0)`);dx.fillStyle=g;dx.beginPath();dx.arc(x,y,R,0,7);dx.fill();return true})}
+ requestAnimationFrame(loop)})(tp);
+</script>
+</body>
+</html>
