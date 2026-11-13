@@ -20,7 +20,7 @@ canvas.fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
 h1{margin:6px 58px 0;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-weight:600;color:#f3d58a;text-shadow:0 0 10px #ffcf7a66;text-align:center}
 .sub{font-size:16px;font-style:italic;color:#e9dcf6;margin:2px 0 0;text-align:center;text-shadow:0 1px 3px #000a}
 /* ---------- a portré: a képernyő ékköve ---------- */
-.pf{position:relative;flex:none;width:min(86vw,350px,calc(100dvh - 392px));aspect-ratio:1;margin-top:10px}
+.pf{position:relative;flex:none;transition:width .5s ease;width:min(86vw,350px,calc(100dvh - 392px));aspect-ratio:1;margin-top:10px}
 .halo{position:absolute;inset:-16%;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,#2a0f5ccc 0 58%,#3a1680aa 70%,transparent 100%)}
 .wreath{position:absolute;inset:-22%;pointer-events:none;animation:wbreath 9s ease-in-out infinite,wturn 26s ease-in-out infinite alternate}
 .wreath i{position:absolute;inset:0;border-radius:50%;filter:blur(9px)}
@@ -36,6 +36,9 @@ h1{margin:6px 58px 0;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-wei
 .ph.touch .geo{opacity:.2}
 .pf>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .c-vendeg .pf{width:min(86vw,350px,calc(100dvh - 432px))}
+.c-elteres .pf{width:min(86vw,350px,calc(100dvh - 462px))}
+.c-elteres .tune .t{font-size:15.5px;line-height:1.22;max-width:340px}
+.c-elteres .cap{height:36px;font-size:16px}
 .shine{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;overflow:hidden;border-radius:50%;-webkit-mask:url(portrekeret.png) center/100% 100%;mask:url(portrekeret.png) center/100% 100%}
 .shine i{position:absolute;inset:-10%;background:conic-gradient(from 0deg,transparent 0 268deg,#ffd98a2e 292deg,#ffeec090 310deg,#ffd98a2e 328deg,transparent 350deg);animation:spin 10s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -52,11 +55,12 @@ h1{margin:6px 58px 0;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-wei
 .zoom input::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;border:2px solid #f0c66a;background:#4a2788 url(ekko.png) center/cover;box-shadow:0 0 0 1px #8a5716,0 0 10px #c49affcc,0 2px 4px #000a}
 .zoom input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:2px solid #f0c66a;background:#4a2788 url(ekko.png) center/cover;box-shadow:0 0 10px #c49affcc}
 /* ---------- hangolás (csak ha kell) – doboz nélkül, lebegve ---------- */
-.tune{margin-top:8px;display:none;flex-direction:column;align-items:center;gap:7px;width:100%}
-.tune.on{display:flex;animation:appear .8s ease both}
+.tune{margin-top:8px;display:flex;flex-direction:column;align-items:center;gap:7px;width:100%}
+.tune.on{animation:appear .8s ease both}
 @keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .tune .t{font-size:16px;color:#f3d58a;text-shadow:0 0 10px #ffcf7a77,0 1px 3px #000;text-align:center}
 .tune .t.it{font-style:italic}
+.modl{margin-top:6px;font:inherit;font-size:14.5px;color:#d9cbef;background:none;border:0;padding:6px 10px;text-decoration:underline;text-decoration-color:#e8b95a88;text-underline-offset:4px;cursor:pointer;opacity:.85}
 .caps{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%}
 .caps.col{flex-direction:column;align-items:center;gap:7px}
 .cap{font:inherit;font-size:16.5px;color:#f6dfae;height:38px;padding:0 18px;border-radius:999px;border:1.3px solid #e8b95a99;background:#2a126055;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all .3s;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
@@ -136,17 +140,27 @@ ph.addEventListener('pointerup',up);ph.addEventListener('pointercancel',up);
 ph.addEventListener('wheel',e=>{e.preventDefault();const r=ph.getBoundingClientRect();setZoom(z*(e.deltaY<0?1.08:.93),e.clientX-r.left,e.clientY-r.top)},{passive:false});
 let zt;zoom.addEventListener('input',()=>{touching(true);clearTimeout(zt);zt=setTimeout(()=>touching(false),700);setZoom(+zoom.value)});
 addEventListener('resize',()=>setTimeout(()=>{fit(true);sizeDust()},200));
+$('pf').addEventListener('transitionend',e=>{if(e.propertyName==='width')fit(true)});
 
 /* ---- hangolás: csak akkor jelenik meg, ha a felismerés bizonytalan vagy eltér az adatlaptól ---- */
 const Q=new URLSearchParams(location.search),CASE=Q.get('faj')||'biztos',PET={name:'Bodza',sp:'kutya'};
-let chosen=PET.sp;document.documentElement.classList.add('c-'+CASE);
+let chosen=PET.sp;
 function caps(list,col){const w=document.createElement('div');w.className='caps'+(col?' col':'');
  list.forEach(([key,label,sel])=>{const b=document.createElement('button');b.className='cap'+(sel?' sel':'');b.innerHTML=PAW+'<span>'+label+'</span>';
-  b.onclick=()=>{w.querySelectorAll('.cap').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');chosen=key;okBtn.disabled=false};w.appendChild(b)});return w}
-(()=>{const t=$('tune');
- if(CASE==='bizonytalan'){t.innerHTML='<div class="t">Energetikai rezgés hangolása:</div>';t.appendChild(caps([['kutya','Kutya'],['macska','Macska']]));chosen=null;okBtn.disabled=true;t.classList.add('on')}
+  b.onclick=()=>{w.querySelectorAll('.cap').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');chosen=key;okBtn.disabled=false;collapse(label)};w.appendChild(b)});return w}
+// választás után a hangolás egy diszkrét sorrá húzódik össze, hogy a portré újra teljes méretű legyen az igazításhoz
+let ct;function collapse(label){clearTimeout(ct);ct=setTimeout(()=>{const tn=$('tune');tn.innerHTML='';const m=document.createElement('button');m.className='modl';m.id='modl';m.textContent='✦ '+label+' · módosítás';
+  m.onclick=()=>{renderTune(true)};tn.appendChild(m);document.documentElement.classList.remove('c-elteres','c-vendeg');requestAnimationFrame(()=>fit(true))},650)}
+function renderTune(again){const t=$('tune');t.classList.remove('on');document.documentElement.classList.add('c-'+CASE);if(again)requestAnimationFrame(()=>fit(true));
+ if(CASE==='bizonytalan'){t.innerHTML='<div class="t">Energetikai rezgés hangolása:</div>';t.appendChild(caps([['kutya','Kutya',again&&chosen==='kutya'],['macska','Macska',again&&chosen==='macska']]));if(!again){chosen=null;okBtn.disabled=true}t.classList.add('on')}
+ else if(CASE==='elteres'){t.innerHTML='<div class="t it">Ezen a portrén most macskát érzékelek… '+PET.name+' adatlapján viszont kutya szerepel. Melyik energiájával hangoljam össze az elemzést?</div>';
+  t.appendChild(caps([['macska','A képen látható macska elemzése',again&&chosen==='macska'],['kutya','Maradok '+PET.name+' energiájánál',again&&chosen==='kutya']],true));if(!again){chosen=null;okBtn.disabled=true}t.classList.add('on')}
+ else if(CASE==='biztos'){const m=document.createElement('button');m.className='modl';m.id='modl';m.textContent='Faj módosítása';
+  if(again){t.innerHTML='<div class="t">Energetikai rezgés hangolása:</div>';t.appendChild(caps([['kutya','Kutya',chosen==='kutya'],['macska','Macska',chosen==='macska']]));t.classList.add('on')}
+  else{t.innerHTML='';m.onclick=()=>renderTune(true);t.appendChild(m)}}
  else if(CASE==='vendeg'){t.innerHTML='<div class="t it">Új, macskaszerű energiákat érzékelek a térben ✦</div>';
-  t.appendChild(caps([['macska','Vendég cica elemzése',true],['kutya','Maradok '+PET.name+' (kutya) energiájánál']],true));chosen='macska';t.classList.add('on')}})();
+  t.appendChild(caps([['macska','Vendég cica elemzése',chosen!=='kutya'],['kutya','Maradok '+PET.name+' (kutya) energiájánál',again&&chosen==='kutya']],true));if(!again)chosen='macska';t.classList.add('on')}}
+renderTune();
 
 /* ---- gombok ---- */
 okBtn.onclick=()=>{if(!iw)return;const d=$('done');d.textContent='A portré rögzítve ✦'+(chosen&&chosen!==PET.sp?'  ·  vendég '+chosen:'');d.classList.add('on');setTimeout(()=>d.classList.remove('on'),2600)};
