@@ -53,7 +53,6 @@ font-family:ui-rounded,"Nunito","Hiragino Maru Gothic ProN","Segoe UI",system-ui
 .legacy .pal{display:flex;gap:12px}
 .legacy .pal i{flex:1;height:56px;border-radius:18px;border:1px solid #fff4}
 .legacy label{display:block;margin:10px 0 4px;color:var(--dim);font-size:.9rem}
-.legacy #gate[hidden]{display:none}
 .legacy .card{background:var(--deep);border:1px solid var(--line);border-radius:28px;padding:24px;max-width:380px;text-align:center}
 .legacy .card p{color:var(--dim);line-height:1.5}
 .legacy .card .btn{margin-bottom:0}

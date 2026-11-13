@@ -21,8 +21,9 @@ function chrome() {
   $('#nav').innerHTML = navHtml(t, esc, S.tab);
   $('#nav').hidden = !TOP.includes(S.tab);
   $('#back').innerHTML = ICON.back; $('#back').setAttribute('aria-label', t('back'));
-  $('#gt').textContent = t('disc.title'); $('#gb').textContent = t('disc.body'); $('#gok').textContent = t('disc.ok');
 }
+// Vissza gomb: a főmenü termeiből mindig a kezdőlapra; az alterületekről az előző logikus szintre (szülő).
+const PARENT = { my: 'home', kb: 'home', styles: 'home', aura: 'home', cosmic: 'home', feng: 'home', pets: 'home', account: 'home' };
 const soon = () => `<div class="soon"><div class="star">✦</div><h2>${esc(t('soon.title'))}</h2><p>${esc(t('soon.body'))}</p></div>`;
 const sub = (title, body, lead = '') => `<h1 class="t">${esc(title)}</h1>${lead ? `<p class="lead2">${esc(lead)}</p>` : ''}${body}`;
 function accountView() {
@@ -134,13 +135,12 @@ async function scan(file) {
 }
 document.addEventListener('click', (e) => {
   const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
-  if (e.target.closest('#back')) { if (history.length > 1 && location.hash && location.hash !== '#home') history.back(); else go('home'); return; }
+  if (e.target.closest('#back')) { go(PARENT[S.tab] || 'home'); return; }
   const tab = e.target.closest('[data-tab]'); if (tab && tab.dataset.tab) { go(tab.dataset.tab); }
   if (e.target.id === 'scan') $('#file').click();
   const city = e.target.closest('[data-city]'); if (city) { const c = S.cities[+city.dataset.city]; S.pet = { ...S.pet, place: { n: c[0], cc: c[1], lat: c[2], lon: c[3] } }; localStorage.setItem('pet', JSON.stringify(S.pet)); render(); }
   if (e.target.id === 'pclear') { S.pet = { ...S.pet, place: null }; localStorage.setItem('pet', JSON.stringify(S.pet)); render(); }
   if (e.target.id === 'goscan') go('aura');
-  if (e.target.id === 'gok') { localStorage.setItem('ack', '1'); $('#gate').hidden = true; }
 });
 document.addEventListener('input', async (e) => {
   if (e.target.id !== 'pp') return;
@@ -159,4 +159,4 @@ document.addEventListener('change', (e) => {
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.go) go(e.target.dataset.go); });
 S.tab = location.hash.slice(1) || 'home'; if (!location.hash) history.replaceState(null, '', '#home');
-setLang(detect(navigator.languages, localStorage.getItem('lang'))).then(() => { $('#gate').hidden = localStorage.getItem('ack') === '1'; });
+setLang(detect(navigator.languages, localStorage.getItem('lang')));

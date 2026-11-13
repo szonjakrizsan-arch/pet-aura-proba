@@ -123,10 +123,4 @@ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .panel h3{margin:0 0 6px;font-family:'Cormorant Garamond',serif;font-size:18px;color:#f3d58a}
 /* a régi nézetek (horoszkóp, feng shui) – ideiglenesen a régi megjelenésben, az új keretben (3. szakaszban cserélődnek) */
 .legacy{font-family:ui-rounded,"Nunito","Segoe UI",system-ui,sans-serif;color:#f4efff;max-width:540px;margin:0 auto}
-/* kapu (játékos figyelmeztetés) */
-#gate[hidden]{display:none}
-#gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:#0d0820cc;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-#gate .card2{max-width:360px;text-align:center;background:linear-gradient(180deg,#2c1458f2,#1a0b36f7);border:1.6px solid #e8b95a;border-radius:20px;padding:22px 20px;box-shadow:0 0 24px #ffcf7a44}
-#gate h2{font-family:'Cormorant Garamond',serif;font-size:22px;color:#f3d58a;margin:0 0 8px}
-#gate p{font-size:15px;line-height:1.4;color:#e9dcf6;margin:0 0 14px}
 .btn-gold{font:inherit;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#2a1236;height:48px;padding:0 26px;border-radius:999px;border:2.4px solid transparent;cursor:pointer;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c) padding-box,linear-gradient(90deg,#c9631c,#ffe9b0 30%,#fff6d8 50%,#ffe9b0 70%,#c9631c) border-box;box-shadow:0 0 12px #ffb84a99,0 4px 12px #0009,inset 0 2px 4px #fff8}
