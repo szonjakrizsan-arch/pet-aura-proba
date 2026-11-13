@@ -2,4 +2,5 @@
 
 Kizárólag tesztoldalak valódi telefonos kipróbáláshoz (HTTPS, GitHub Pages). Az alkalmazás kódja nem itt van.
 
-- `kamera/` – Aura Scanner kamerapróba: élő hátlapi kamera a koronás portrékapuban (4:5).
+- `kamera/` – Aura Scanner fotózás képernyő: élő kamera a koronás portrékapuban, kozmikus iránytű-exponáló, effektek.
+- `kamera-meret/` – az első, statikus méretpróba (csak kamera + keret).

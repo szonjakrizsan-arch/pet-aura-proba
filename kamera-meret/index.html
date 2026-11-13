@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1a0f38">
+<title>Aura Scanner – kamerapróba</title>
+<style>
+@font-face{font-family:Cormorant;font-weight:600;src:url(cormorant-600.woff2) format("woff2")}
+html,body{margin:0;height:100%;background:#1a0f38;color:#f6e7c1;font-family:Cormorant,Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+body{background:#1a0f38 url(hatter.jpg) center top/cover no-repeat}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;
+ padding:calc(env(safe-area-inset-top) + 6px) 4px calc(env(safe-area-inset-bottom) + 10px);box-sizing:border-box}
+/* A keret eredeti arányai: 1024×1561, nyílás x 112–912, y 345–1345 (800×1000 = pontos 4:5) */
+.frame{position:relative;flex:none;aspect-ratio:1024/1561;width:min(100%,calc((100dvh - 128px - env(safe-area-inset-top) - env(safe-area-inset-bottom))*1024/1561))}
+.cam{position:absolute;left:calc(112/1024*100%);top:calc(345/1561*100%);width:calc(800/1024*100%);height:calc(1000/1561*100%);overflow:hidden;background:#0d0820}
+.cam video,.cam canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cam canvas{display:none}
+.frame>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;user-select:none}
+.msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:12%;font-size:19px;line-height:1.3;color:#f6e7c1}
+.msg button{margin-top:14px}
+.bar{flex:1;display:flex;align-items:center;justify-content:center;gap:34px;width:100%}
+button{font:inherit;cursor:pointer}
+.round{width:46px;height:46px;border-radius:50%;border:2px solid #e8b95a;background:radial-gradient(circle at 35% 30%,#6a3fb0,#2a1260);color:#f3d58a;font-size:20px;display:grid;place-items:center}
+.shot{width:74px;height:74px;border-radius:50%;border:none;background:radial-gradient(circle at 40% 32%,#fff3c8,#e8b95a 46%,#a8701e);box-shadow:0 0 0 4px #2a1260,0 0 0 6px #e8b95a;color:#2a1260;font-size:16px;font-weight:600}
+.round:focus-visible,.shot:focus-visible{outline:3px solid #fff3c8;outline-offset:3px}
+.info{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 2px);text-align:center;font:12px/1.3 system-ui,sans-serif;color:#d9cbef;opacity:.75;pointer-events:none}
+.pill{display:inline-block;padding:9px 18px;border-radius:999px;border:1.5px solid #e8b95a;background:#2a1260;color:#f6e7c1;font-size:18px}
+</style>
+</head>
+<body>
+<div class="screen">
+ <div class="frame" id="frame">
+  <div class="cam"><video id="v" playsinline muted autoplay></video><canvas id="c"></canvas>
+   <div class="msg" id="msg"><div>Kamera indítása…</div></div></div>
+  <img src="keret.png" alt="">
+ </div>
+ <div class="bar">
+  <button class="round" id="flip" aria-label="Kamera váltása" title="Kamera váltása">⟲</button>
+  <button class="shot" id="shot" aria-label="Fotó">Fotó</button>
+  <span class="round" style="visibility:hidden"></span>
+ </div>
+</div>
+<div class="info" id="info"></div>
+<script>
+const v=document.getElementById('v'),c=document.getElementById('c'),msg=document.getElementById('msg'),info=document.getElementById('info'),shot=document.getElementById('shot');
+let stream=null,facing='environment',frozen=false;
+function say(html){msg.innerHTML='<div>'+html+'</div>';msg.hidden=false;msg.style.display='flex'}
+function hide(){msg.style.display='none'}
+async function start(){
+ if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+ if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){say('Ez a böngésző itt nem enged kamerát.<br>Nyisd meg a https:// címet Chrome-ban.');return}
+ try{
+  stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:facing},width:{ideal:1920},height:{ideal:1080}}});
+  v.srcObject=stream;await v.play().catch(()=>{});hide();report();
+ }catch(e){
+  if(e.name==='NotAllowedError')say('A kamera engedélyét a böngésző elutasította.<br>A címsor melletti lakat ikonnál engedélyezd a Kamerát, majd<br><button class="pill" onclick="start()">Próbáld újra</button>');
+  else say('A kamera nem indult el ('+e.name+').<br><button class="pill" onclick="start()">Próbáld újra</button>');
+ }
+}
+function report(){
+ const r=v.parentElement.getBoundingClientRect(),t=stream&&stream.getVideoTracks()[0],s=t?t.getSettings():{};
+ info.textContent='Kamerakép: '+Math.round(r.width)+'×'+Math.round(r.height)+' px ('+Math.round(100*r.width/innerWidth)+'% szélesség) · kamera: '+(s.width||'?')+'×'+(s.height||'?');
+}
+v.addEventListener('loadedmetadata',report);addEventListener('resize',()=>setTimeout(report,300));
+document.getElementById('flip').onclick=()=>{facing=facing==='environment'?'user':'environment';v.style.transform=facing==='user'?'scaleX(-1)':'';frozen=false;c.style.display='none';shot.textContent='Fotó';start()};
+shot.onclick=()=>{
+ if(!stream)return;
+ if(frozen){frozen=false;c.style.display='none';shot.textContent='Fotó';return}
+ // ugyanaz a 4:5-ös kivágás, mint az előnézet (object-fit: cover)
+ const vw=v.videoWidth,vh=v.videoHeight;if(!vw)return;
+ let sw=vw,sh=vw*5/4;if(sh>vh){sh=vh;sw=vh*4/5}
+ c.width=Math.round(sw);c.height=Math.round(sh);
+ const x=c.getContext('2d');if(facing==='user'){x.translate(c.width,0);x.scale(-1,1)}
+ x.drawImage(v,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);
+ c.style.display='block';frozen=true;shot.textContent='Újra';
+ info.textContent='Elkészült fotó: '+c.width+'×'+c.height+' px (4:5)';
+};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&stream){stream.getTracks().forEach(t=>t.stop());stream=null}else if(!document.hidden&&!stream)start()});
+start();
+</script>
+</body>
+</html>

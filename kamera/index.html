@@ -4,80 +4,218 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#1a0f38">
-<title>Aura Scanner – kamerapróba</title>
+<title>Aura Scanner – fotózás</title>
 <style>
-@font-face{font-family:Cormorant;font-weight:600;src:url(cormorant-600.woff2) format("woff2")}
-html,body{margin:0;height:100%;background:#1a0f38;color:#f6e7c1;font-family:Cormorant,Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+@font-face{font-family:Cormorant;font-weight:600;src:url(cormorant-600.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cormorant;font-weight:600;src:url(cormorant-600-ext.woff2) format("woff2");unicode-range:U+0100-024F}
+:root{--gold:#e8b95a;--gold-hi:#fff0b8;--violet:#2a1260;--turq:#3cc8c0;--ink:#f6e7c1;
+ --unit:min(152px,21dvh);            /* iránytű-egység (gyűrű + betűk) */
+ --bottom:calc(var(--unit) + 16px)}  /* az egység + az állapotsor helye */
+html,body{margin:0;height:100%;background:#1a0f38;color:var(--ink);font-family:Cormorant,Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 body{background:#1a0f38 url(hatter.jpg) center top/cover no-repeat}
+canvas.fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#astro{position:fixed;left:50%;top:40%;width:150vmax;height:150vmax;margin:-75vmax 0 0 -75vmax;opacity:.22;pointer-events:none;animation:spin 240s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;
- padding:calc(env(safe-area-inset-top) + 6px) 4px calc(env(safe-area-inset-bottom) + 10px);box-sizing:border-box}
-/* A keret eredeti arányai: 1024×1561, nyílás x 112–912, y 345–1345 (800×1000 = pontos 4:5) */
-.frame{position:relative;flex:none;aspect-ratio:1024/1561;width:min(100%,calc((100dvh - 128px - env(safe-area-inset-top) - env(safe-area-inset-bottom))*1024/1561))}
+ padding:calc(env(safe-area-inset-top) + 4px) 4px calc(env(safe-area-inset-bottom) + 6px);box-sizing:border-box}
+/* ---------- portrékapu ---------- */
+.frame{position:relative;flex:none;z-index:2;aspect-ratio:1024/1561;
+ width:min(100%,calc((100dvh - var(--bottom) - 8px - env(safe-area-inset-top) - env(safe-area-inset-bottom))*1024/1561))}
+.frame::before{content:'';position:absolute;inset:-7% -10%;border-radius:45%;pointer-events:none;
+ background:radial-gradient(closest-side,transparent 60%,#b98cff50 74%,#ffcf7a2e 86%,transparent 100%);filter:blur(10px);animation:breath 7s ease-in-out infinite}
+@keyframes breath{0%,100%{opacity:.6;transform:scale(.98)}50%{opacity:1;transform:scale(1.02)}}
 .cam{position:absolute;left:calc(112/1024*100%);top:calc(345/1561*100%);width:calc(800/1024*100%);height:calc(1000/1561*100%);overflow:hidden;background:#0d0820}
-.cam video,.cam canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.cam canvas{display:none}
-.frame>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;user-select:none}
-.msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:12%;font-size:19px;line-height:1.3;color:#f6e7c1}
-.msg button{margin-top:14px}
-.bar{flex:1;display:flex;align-items:center;justify-content:center;gap:34px;width:100%}
-button{font:inherit;cursor:pointer}
-.round{width:46px;height:46px;border-radius:50%;border:2px solid #e8b95a;background:radial-gradient(circle at 35% 30%,#6a3fb0,#2a1260);color:#f3d58a;font-size:20px;display:grid;place-items:center}
-.shot{width:74px;height:74px;border-radius:50%;border:none;background:radial-gradient(circle at 40% 32%,#fff3c8,#e8b95a 46%,#a8701e);box-shadow:0 0 0 4px #2a1260,0 0 0 6px #e8b95a;color:#2a1260;font-size:16px;font-weight:600}
-.round:focus-visible,.shot:focus-visible{outline:3px solid #fff3c8;outline-offset:3px}
-.info{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 2px);text-align:center;font:12px/1.3 system-ui,sans-serif;color:#d9cbef;opacity:.75;pointer-events:none}
-.pill{display:inline-block;padding:9px 18px;border-radius:999px;border:1.5px solid #e8b95a;background:#2a1260;color:#f6e7c1;font-size:18px}
+.cam video,.cam canvas,.cam img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cam canvas,.cam img{display:none}
+/* varázstükör-vignetta: arany-lila derengés a kép szélén */
+.cam::after{content:'';position:absolute;inset:0;pointer-events:none;
+ box-shadow:inset 0 0 18px 4px #1a0838cc,inset 0 0 42px 10px #7a4fd033,inset 0 0 3px 1px #ffd99066}
+.vdust{position:absolute;inset:0;pointer-events:none;z-index:1}
+.frame>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+.gl{position:absolute;z-index:3;width:18px;height:18px;margin:-9px 0 0 -9px;pointer-events:none;opacity:0;
+ background:radial-gradient(circle,#fff 0 9%,#ffffffaa 18%,transparent 44%),linear-gradient(90deg,transparent 46%,#fffd 50%,transparent 54%),linear-gradient(0deg,transparent 46%,#fffd 50%,transparent 54%);
+ animation:tw var(--d,6s) ease-in-out var(--l,0s) infinite}
+@keyframes tw{0%,70%,100%{opacity:0;transform:scale(.2) rotate(0)}80%{opacity:1;transform:scale(1) rotate(25deg)}90%{opacity:0;transform:scale(.3) rotate(45deg)}}
+.msg{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:12%;font-size:19px;line-height:1.3}
+/* ---------- arany medál gombok ---------- */
+.medal{position:absolute;z-index:5;width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(arany_medal_w.png) center/contain no-repeat;cursor:pointer;display:grid;place-items:center;
+ filter:drop-shadow(0 2px 4px #0008);transition:transform .15s}
+.medal:active{transform:scale(.92)}
+.medal svg{width:24px;height:24px;position:relative;z-index:1}
+.medal::after,.lens::after{content:'';position:absolute;inset:0;border-radius:50%;pointer-events:none;
+ background:linear-gradient(115deg,transparent 40%,#fff6d6cc 50%,transparent 60%) no-repeat;background-size:260% 100%;background-position:120% 0;mix-blend-mode:screen;
+ animation:sweep var(--sw,9s) ease-in-out var(--sl,2s) infinite}
+@keyframes sweep{0%{background-position:120% 0}14%,100%{background-position:-20% 0}}
+#back{left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px)}
+/* ---------- kozmikus iránytű-exponáló ---------- */
+.bottom{position:relative;z-index:4;flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:-16px}
+.unit{position:relative;width:var(--unit);height:var(--unit);flex:none}
+.ringwrap{position:absolute;inset:0;transition:transform .35s ease-out}
+.ringwrap>img{position:absolute;inset:9%;width:82%;height:82%;filter:drop-shadow(0 0 4px #ffd99055);transition:filter .6s}
+.ringwrap .let{position:absolute;left:50%;top:50%;width:0;height:0}
+.ringwrap .let b{position:absolute;transform:translate(-50%,-50%);font-weight:600;font-size:14px;letter-spacing:.04em;color:var(--gold);text-shadow:0 0 6px #ffcf7a99,0 1px 2px #000;transition:color .5s,text-shadow .5s}
+.ringwrap .let b.lit{color:#fffbe8;text-shadow:0 0 6px #fff,0 0 14px #ffcf7a,0 0 22px var(--turq)}
+.wave{position:absolute;inset:9%;border-radius:50%;pointer-events:none;opacity:0;
+ background:conic-gradient(from 0deg,transparent 0 300deg,#3cc8c066 330deg,#9ffff6 352deg,transparent 360deg);
+ -webkit-mask:radial-gradient(closest-side,transparent 56%,#000 60%,#000 97%,transparent 100%);mask:radial-gradient(closest-side,transparent 56%,#000 60%,#000 97%,transparent 100%)}
+.wave.go{animation:wave 1.4s ease-out 1}
+@keyframes wave{0%{opacity:1;transform:rotate(0)}85%{opacity:1}100%{opacity:0;transform:rotate(360deg)}}
+.calib .ringwrap>img{animation:dim 2.4s ease-in-out infinite}
+@keyframes dim{0%,100%{filter:drop-shadow(0 0 2px #ffd99033) brightness(.75)}50%{filter:drop-shadow(0 0 7px #ffd990aa) brightness(1)}}
+.pointer{position:absolute;left:50%;top:-11px;width:12px;height:12px;margin-left:-6px;z-index:2;pointer-events:none;
+ background:linear-gradient(180deg,#fff3c8,#c58a2c);clip-path:polygon(50% 100%,0 0,100% 0);filter:drop-shadow(0 0 3px #ffcf7a)}
+.lens{position:absolute;left:50%;top:50%;width:calc(var(--unit)*.455);height:calc(var(--unit)*.455);transform:translate(-50%,-50%);border:0;padding:0;border-radius:50%;cursor:pointer;
+ background:url(kozmikus_lencse_w.png) center/contain no-repeat;filter:drop-shadow(0 3px 6px #000a);transition:transform .15s}
+.lens:active{transform:translate(-50%,-50%) scale(.93)}
+.lens .core{position:absolute;inset:30%;border-radius:50%;pointer-events:none;mix-blend-mode:screen;
+ background:radial-gradient(closest-side,#d9b8ffcc,#9a6cf066 55%,transparent 100%);opacity:0}
+.ready .lens .core{animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.15;transform:scale(.85)}50%{opacity:.85;transform:scale(1.1)}}
+.lens .core.flash{animation:flash 1s ease-out 1!important}
+@keyframes flash{0%{opacity:0;transform:scale(.8)}25%{opacity:1;transform:scale(1.5);filter:brightness(1.6)}100%{opacity:.2;transform:scale(1)}}
+#gal{right:calc(14px + env(safe-area-inset-right));top:50%;margin-top:-26px;position:absolute}
+.state{height:20px;margin-top:0;font-size:16px;font-style:italic;color:#f3d58a;text-shadow:0 0 8px #ffcf7a66,0 1px 2px #000;text-align:center;transition:opacity .4s;white-space:nowrap}
+.state.ok{color:#ffe7a6;text-shadow:0 0 10px #ffcf7aaa,0 0 18px #3cc8c066,0 1px 2px #000;font-style:normal}
+.medal:focus-visible,.lens:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
 <body>
+<svg id="astro" viewBox="-100 -100 200 200" aria-hidden="true"><g fill="none" stroke="#e8c27a" stroke-width=".3" id="ag"></g></svg>
+<canvas class="fx" id="dust"></canvas>
 <div class="screen">
  <div class="frame" id="frame">
-  <div class="cam"><video id="v" playsinline muted autoplay></video><canvas id="c"></canvas>
-   <div class="msg" id="msg"><div>Kamera indítása…</div></div></div>
+  <div class="cam" id="cam"><video id="v" playsinline muted autoplay></video><canvas id="c"></canvas><img id="gimg" alt="">
+   <canvas class="vdust" id="vd"></canvas>
+   <div class="msg" id="msg"><div>A varázstükör ébred…</div></div></div>
   <img src="keret.png" alt="">
  </div>
- <div class="bar">
-  <button class="round" id="flip" aria-label="Kamera váltása" title="Kamera váltása">⟲</button>
-  <button class="shot" id="shot" aria-label="Fotó">Fotó</button>
-  <span class="round" style="visibility:hidden"></span>
+ <div class="bottom">
+  <div class="unit" id="unit">
+   <span class="pointer"></span>
+   <div class="ringwrap" id="ring"><img src="astrolabium_gyuru_w.png" alt=""><div class="wave" id="wave"></div></div>
+   <button class="lens" id="lens" aria-label="Fotó készítése"><span class="core" id="core"></span></button>
+  </div>
+  <button class="medal" id="gal" aria-label="Fotó a galériából" style="--sw:11s;--sl:6s"><svg viewBox="0 0 24 24"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".5" stop-color="#f0c66a"/><stop offset="1" stop-color="#c58a2c"/></linearGradient></defs><rect x="3.5" y="5" width="17" height="14" rx="2" fill="none" stroke="url(#g1)" stroke-width="1.9"/><circle cx="9" cy="10" r="1.8" fill="url(#g1)"/><path d="M4.5 17.5l5-5 3.5 3.5 2.5-2.5 4 4" fill="none" stroke="url(#g1)" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"/></svg></button>
+  <div class="state" id="state">&nbsp;</div>
  </div>
 </div>
-<div class="info" id="info"></div>
+<button class="medal" id="back" aria-label="Vissza" style="--sw:10s;--sl:3.5s"><svg viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5" fill="none" stroke="url(#g1)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<input type="file" id="file" accept="image/*" hidden>
 <script>
-const v=document.getElementById('v'),c=document.getElementById('c'),msg=document.getElementById('msg'),info=document.getElementById('info'),shot=document.getElementById('shot');
-let stream=null,facing='environment',frozen=false;
-function say(html){msg.innerHTML='<div>'+html+'</div>';msg.hidden=false;msg.style.display='flex'}
-function hide(){msg.style.display='none'}
-async function start(){
+const $=id=>document.getElementById(id);
+const v=$('v'),c=$('c'),gimg=$('gimg'),msg=$('msg'),unit=$('unit'),ring=$('ring'),stateEl=$('state'),core=$('core');
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- háttér: halvány, lassan forgó asztrológiai kör ---- */
+(()=>{let s='';const L=(r1,r2,a)=>{const t=a*Math.PI/180;return `<line x1="${Math.sin(t)*r1}" y1="${-Math.cos(t)*r1}" x2="${Math.sin(t)*r2}" y2="${-Math.cos(t)*r2}"/>`};
+ [98,92,70,44,20].forEach(r=>s+=`<circle r="${r}"/>`);for(let i=0;i<12;i++)s+=L(70,92,i*30);for(let i=0;i<72;i++)s+=L(92,i%6?94:96,i*5);for(let i=0;i<12;i++)s+=L(20,44,i*30+15);
+ $('ag').innerHTML=s})();
+
+/* ---- drágakő-csillanások a kereten (a festett kövek helyén, eltérő ütemben) ---- */
+[[49.9,5.5],[32.8,13.8],[67.3,13.9],[22.6,19.7],[77.5,19.8],[50,22.1],[8.9,29.4],[91.1,29.4],[8.8,50.8],[91.2,50.8],[36.4,91],[63.7,91],[50.1,91.5],[10.2,18.2],[89.6,18.3]]
+ .forEach(([x,y],i)=>{const s=document.createElement('span');s.className='gl';s.style.left=x+'%';s.style.top=y+'%';
+  s.style.setProperty('--d',(5.5+((i*37)%50)/10)+'s');s.style.setProperty('--l',(-((i*53)%70)/10)+'s');$('frame').appendChild(s)});
+
+/* ---- égtájbetűk a gyűrű négy fő csúcsán kívül ---- */
+const DIRS=['É','K','D','Ny'];const letEls=[];
+DIRS.forEach((d,i)=>{const w=document.createElement('div');w.className='let';const b=document.createElement('b');b.textContent=d;w.appendChild(b);ring.appendChild(w);letEls.push(b)});
+function placeLetters(){const R=unit.clientWidth/2-6;letEls.forEach((b,i)=>{const a=i*90*Math.PI/180;b.style.left=Math.sin(a)*R+'px';b.style.top=-Math.cos(a)*R+'px'})}
+
+/* ---- csillagpor: a keret két oldalán és az iránytű körül, szabálytalan ütemben ---- */
+const dc=$('dust'),dx=dc.getContext('2d');let P=[],next=0;
+function sizeDust(){dc.width=innerWidth*devicePixelRatio;dc.height=innerHeight*devicePixelRatio}sizeDust();
+function spawn(){const f=$('frame').getBoundingClientRect(),u=unit.getBoundingClientRect(),z=Math.random();let x,y;
+ if(z<.55){const L=Math.random()<.5;x=L?f.left+f.width*(.02+Math.random()*.1):f.right-f.width*(.02+Math.random()*.1);y=f.top+f.height*(.2+Math.random()*.75)}
+ else{const a=Math.random()*Math.PI*2,r=u.width*(.5+Math.random()*.25);x=u.left+u.width/2+Math.cos(a)*r;y=u.top+u.height/2+Math.sin(a)*r}
+ const k=Math.random();
+ P.push(k<.55?{k:0,x,y,r:1+Math.random()*.9,v:12+Math.random()*18,dur:2.5+Math.random()*2.5,c:'255,214,130',star:Math.random()<.35}
+  :k<.88?{k:1,x,y,r:2+Math.random()*1.6,v:6+Math.random()*9,dur:4+Math.random()*4,c:Math.random()<.5?'110,232,222':'208,172,255'}
+  :{k:2,x,y,r:3.6+Math.random()*2.6,v:2.5+Math.random()*5,dur:6.5+Math.random()*5,c:['255,222,156','128,228,222','214,188,255'][Math.floor(Math.random()*3)]});
+ Object.assign(P[P.length-1],{life:0,sw:3+Math.random()*9,f:.3+Math.random()*.8,ph:Math.random()*7})}
+let tp=performance.now();
+function frameLoop(now){const dt=Math.min(.1,(now-tp)/1000);tp=now;const d=devicePixelRatio;dx.clearRect(0,0,dc.width,dc.height);
+ if(!RM){next-=dt;while(next<=0&&P.length<38){spawn();next+=-Math.log(1-Math.random())/4*(Math.random()<.2?3:1)}
+ P=P.filter(p=>{p.life+=dt/p.dur;if(p.life>=1)return false;p.y-=p.v*dt;
+  let al=Math.min(1,p.life/(p.k===2?.35:.15))*Math.pow(1-p.life,p.k===2?.7:1.2)*(.8+.2*Math.sin(now/1000*2.3+p.ph));
+  const x=(p.x+Math.sin(now/1000*p.f+p.ph)*p.sw*(p.k?1:.4))*d,y=p.y*d,rr=p.r*d,R4=rr*(p.k?4.5:3.5);
+  const g=dx.createRadialGradient(x,y,0,x,y,R4);g.addColorStop(0,p.k?`rgba(${p.c},${al})`:`rgba(255,250,228,${al})`);g.addColorStop(.18,`rgba(${p.c},${al*.9})`);g.addColorStop(.42,`rgba(${p.c},${al*.35})`);g.addColorStop(1,`rgba(${p.c},0)`);
+  dx.fillStyle=g;dx.beginPath();dx.arc(x,y,R4,0,7);dx.fill();
+  if(p.star){const L=rr*6*(.6+.4*Math.sin(now/1000*3.1+p.ph));dx.strokeStyle=`rgba(255,246,214,${al*.8})`;dx.lineWidth=Math.max(.6,rr*.35);dx.lineCap='round';dx.beginPath();dx.moveTo(x-L,y);dx.lineTo(x+L,y);dx.moveTo(x,y-L);dx.lineTo(x,y+L);dx.stroke()}
+  return true});}
+ vignetteDust(now);requestAnimationFrame(frameLoop)}
+/* a kamerakép peremén apró, lassan pislákoló csillagpor (varázstükör) */
+const vd=$('vd'),vx=vd.getContext('2d');let VP=[];
+function sizeV(){const r=$('cam').getBoundingClientRect();vd.width=r.width*devicePixelRatio;vd.height=r.height*devicePixelRatio;VP=[];
+ for(let i=0;i<34;i++){const e=Math.random()*4|0,t=Math.random(),m=Math.random()*.07;VP.push({x:e===0?m:e===1?1-m:t,y:e===2?m:e===3?1-m:t,r:.5+Math.random()*1.1,ph:Math.random()*7,s:.6+Math.random()*1.4,c:Math.random()<.6?'255,220,150':'206,176,255'})}}
+function vignetteDust(now){const d=devicePixelRatio;vx.clearRect(0,0,vd.width,vd.height);if(RM)return;
+ VP.forEach(p=>{const al=Math.max(0,Math.sin(now/1000*p.s+p.ph))*.75,x=p.x*vd.width,y=p.y*vd.height,R=p.r*d*3.2;
+  const g=vx.createRadialGradient(x,y,0,x,y,R);g.addColorStop(0,`rgba(255,250,230,${al})`);g.addColorStop(.3,`rgba(${p.c},${al*.6})`);g.addColorStop(1,`rgba(${p.c},0)`);vx.fillStyle=g;vx.beginPath();vx.arc(x,y,R,0,7);vx.fill()})}
+
+/* ---- kamera ---- */
+let stream=null,frozen=false,galleryMode=false;
+function say(h){msg.innerHTML='<div>'+h+'</div>';msg.style.display='flex'}
+async function startCam(){
  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
- if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){say('Ez a böngésző itt nem enged kamerát.<br>Nyisd meg a https:// címet Chrome-ban.');return}
- try{
-  stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:facing},width:{ideal:1920},height:{ideal:1080}}});
-  v.srcObject=stream;await v.play().catch(()=>{});hide();report();
- }catch(e){
-  if(e.name==='NotAllowedError')say('A kamera engedélyét a böngésző elutasította.<br>A címsor melletti lakat ikonnál engedélyezd a Kamerát, majd<br><button class="pill" onclick="start()">Próbáld újra</button>');
-  else say('A kamera nem indult el ('+e.name+').<br><button class="pill" onclick="start()">Próbáld újra</button>');
- }
-}
-function report(){
- const r=v.parentElement.getBoundingClientRect(),t=stream&&stream.getVideoTracks()[0],s=t?t.getSettings():{};
- info.textContent='Kamerakép: '+Math.round(r.width)+'×'+Math.round(r.height)+' px ('+Math.round(100*r.width/innerWidth)+'% szélesség) · kamera: '+(s.width||'?')+'×'+(s.height||'?');
-}
-v.addEventListener('loadedmetadata',report);addEventListener('resize',()=>setTimeout(report,300));
-document.getElementById('flip').onclick=()=>{facing=facing==='environment'?'user':'environment';v.style.transform=facing==='user'?'scaleX(-1)':'';frozen=false;c.style.display='none';shot.textContent='Fotó';start()};
-shot.onclick=()=>{
+ unit.classList.remove('ready');
+ if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){say('Ez a böngésző itt nem enged kamerát.');return}
+ try{stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}});
+  v.srcObject=stream;await v.play().catch(()=>{});msg.style.display='none';unit.classList.add('ready')}
+ catch(e){say(e.name==='NotAllowedError'?'A kamera nincs engedélyezve.<br>A címsor melletti lakat ikonnál engedélyezd a Kamerát.':'A kamera nem indult el ('+e.name+').')}}
+
+/* ---- iránymérés: a hátlapi kamera nézési iránya ---- */
+const NAMES=['Észak','Északkelet','Kelet','Délkelet','Dél','Délnyugat','Nyugat','Északnyugat'];
+let heading=null,shown=0,hist=[],locked=null,gotEvent=false,iosAsked=false;
+function camHeading(a,b,g){const r=Math.PI/180,ca=Math.cos(a*r),sa=Math.sin(a*r),sb=Math.sin(b*r),cg=Math.cos(g*r),sg=Math.sin(g*r);
+ const E=-(ca*sg+sa*sb*cg),N=-(sa*sg-ca*sb*cg);if(Math.hypot(E,N)<.2)return null;return (Math.atan2(E,N)*180/Math.PI+360)%360}
+function onOri(e){let h=null;
+ if(typeof e.webkitCompassHeading==='number'){h=e.webkitCompassHeading}                // iOS: a készülék tetejének iránya
+ else if(e.absolute&&e.alpha!=null){h=camHeading(e.alpha,e.beta,e.gamma)}
+ if(h==null)return;gotEvent=true;heading=h}
+if('ondeviceorientationabsolute' in window)addEventListener('deviceorientationabsolute',onOri);else addEventListener('deviceorientation',onOri);
+function angDiff(a,b){return ((a-b+540)%360)-180}
+function setState(t,ok){stateEl.textContent=t;stateEl.classList.toggle('ok',!!ok)}
+let idle=0;
+function compassTick(){
+ if(galleryMode){requestAnimationFrame(compassTick);return}
+ if(heading!=null){
+  shown+=angDiff(heading,shown)*.12;ring.style.transform=`rotate(${-shown}deg)`;letEls.forEach(b=>b.style.transform=`translate(-50%,-50%) rotate(${shown}deg)`);
+  const now=performance.now();hist.push([now,heading]);hist=hist.filter(h=>now-h[0]<1600);
+  const spread=Math.max(...hist.map(h=>Math.abs(angDiff(h[1],heading))));
+  if(locked===null){unit.classList.add('calib');setState('Az irányt keresem… tartsd egy pillanatig mozdulatlanul');
+   if(hist.length>12&&now-hist[0][0]>1400&&spread<7)lock(heading)}
+  else if(Math.abs(angDiff(heading,locked.h))>28){locked=null;letEls.forEach(b=>b.classList.remove('lit'))}
+ }else{idle+=.08;ring.style.transform=`rotate(${idle}deg)`;letEls.forEach(b=>b.style.transform=`translate(-50%,-50%) rotate(${-idle}deg)`);
+  if(performance.now()-t0>4500&&!gotEvent)setState('Iránymérés ezen az eszközön nem érhető el');else if(!gotEvent)setState('Az irányt keresem…')}
+ requestAnimationFrame(compassTick)}
+function lock(h){const i=Math.round(h/45)%8;locked={h,i};unit.classList.remove('calib');
+ const w=$('wave');w.classList.remove('go');void w.offsetWidth;w.classList.add('go');
+ core.classList.remove('flash');void core.offsetWidth;core.classList.add('flash');setTimeout(()=>core.classList.remove('flash'),1100);
+ letEls.forEach((b,k)=>b.classList.toggle('lit',[0,2,4,6][k]===i||(i%2&&( [0,2,4,6][k]===i-1||[0,2,4,6][k]===(i+1)%8))));
+ setState('Kozmikus irány rögzítve: '+NAMES[i]+' ✦',true)}
+const t0=performance.now();
+
+/* ---- exponálás és galéria (próba: a kép kimerevítése) ---- */
+$('lens').onclick=()=>{
+ if(!iosAsked&&window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission){iosAsked=true;DeviceOrientationEvent.requestPermission().catch(()=>{})}
+ if(galleryMode){galleryMode=false;gimg.style.display='none';startCam();setState('');return}
  if(!stream)return;
- if(frozen){frozen=false;c.style.display='none';shot.textContent='Fotó';return}
- // ugyanaz a 4:5-ös kivágás, mint az előnézet (object-fit: cover)
- const vw=v.videoWidth,vh=v.videoHeight;if(!vw)return;
- let sw=vw,sh=vw*5/4;if(sh>vh){sh=vh;sw=vh*4/5}
- c.width=Math.round(sw);c.height=Math.round(sh);
- const x=c.getContext('2d');if(facing==='user'){x.translate(c.width,0);x.scale(-1,1)}
- x.drawImage(v,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);
- c.style.display='block';frozen=true;shot.textContent='Újra';
- info.textContent='Elkészült fotó: '+c.width+'×'+c.height+' px (4:5)';
-};
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&stream){stream.getTracks().forEach(t=>t.stop());stream=null}else if(!document.hidden&&!stream)start()});
-start();
+ if(frozen){frozen=false;c.style.display='none';v.play();setState(locked?'Kozmikus irány rögzítve: '+NAMES[locked.i]+' ✦':'',!!locked);return}
+ const vw=v.videoWidth,vh=v.videoHeight;if(!vw)return;let sw=vw,sh=vw*5/4;if(sh>vh){sh=vh;sw=vh*4/5}
+ c.width=Math.round(sw);c.height=Math.round(sh);c.getContext('2d').drawImage(v,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);
+ c.style.display='block';frozen=true;core.classList.remove('flash');void core.offsetWidth;core.classList.add('flash');
+ setState('A kép elkészült ✦ érintsd meg újra az újrakezdéshez',true)};
+$('gal').onclick=()=>$('file').click();
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;gimg.src=URL.createObjectURL(f);gimg.style.display='block';galleryMode=true;
+ if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}unit.classList.remove('calib','ready');
+ setState('Galériás fotó – iránymérés nélkül');e.target.value=''};
+$('back').onclick=()=>{if(history.length>1)history.back()};
+
+function layout(){sizeDust();sizeV();placeLetters()}
+addEventListener('resize',()=>setTimeout(layout,200));
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&stream){stream.getTracks().forEach(t=>t.stop());stream=null}else if(!document.hidden&&!stream&&!galleryMode)startCam()});
+document.fonts&&document.fonts.ready.then(placeLetters);
+layout();startCam();requestAnimationFrame(frameLoop);requestAnimationFrame(compassTick);
 </script>
 </body>
 </html>
