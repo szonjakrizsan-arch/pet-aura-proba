@@ -204,17 +204,23 @@ $('lens').onclick=()=>{
  const vw=v.videoWidth,vh=v.videoHeight;if(!vw)return;let sw=vw,sh=vw*5/4;if(sh>vh){sh=vh;sw=vh*4/5}
  c.width=Math.round(sw);c.height=Math.round(sh);c.getContext('2d').drawImage(v,(vw-sw)/2,(vh-sh)/2,sw,sh,0,0,c.width,c.height);
  c.style.display='block';frozen=true;core.classList.remove('flash');void core.offsetWidth;core.classList.add('flash');
- setState('A kép elkészült ✦ érintsd meg újra az újrakezdéshez',true)};
+ setState('A kép elkészült ✦',true);toAlign(c.toDataURL('image/jpeg',.9))};
+// a kész fotó átadása az igazítás képernyőnek
+function toAlign(data){try{sessionStorage.setItem('aura_foto',data);sessionStorage.setItem('aura_irany',locked&&!galleryMode?NAMES[locked.i]:'')}catch(e){}
+ setTimeout(()=>{location.href='../igazitas/'+location.search},650)}
 $('gal').onclick=()=>$('file').click();
-$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;gimg.src=URL.createObjectURL(f);gimg.style.display='block';galleryMode=true;
+$('file').onchange=e=>{const f=e.target.files[0];if(!f)return;const u=URL.createObjectURL(f);gimg.src=u;gimg.style.display='block';galleryMode=true;
  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}unit.classList.remove('calib','ready');
- setState('Galériás fotó – iránymérés nélkül');e.target.value=''};
+ setState('Galériás fotó – iránymérés nélkül');e.target.value='';
+ const im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.naturalWidth,im.naturalHeight)),cv=document.createElement('canvas');cv.width=Math.round(im.naturalWidth*k);cv.height=Math.round(im.naturalHeight*k);
+  cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);toAlign(cv.toDataURL('image/jpeg',.9))};im.src=u};
 $('back').onclick=()=>{if(history.length>1)history.back()};
 
 function layout(){sizeDust();sizeV();placeLetters()}
 addEventListener('resize',()=>setTimeout(layout,200));
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&stream){stream.getTracks().forEach(t=>t.stop());stream=null}else if(!document.hidden&&!stream&&!galleryMode)startCam()});
 document.fonts&&document.fonts.ready.then(placeLetters);
+addEventListener('pageshow',e=>{if(e.persisted){frozen=false;galleryMode=false;c.style.display='none';gimg.style.display='none';startCam()}});
 layout();startCam();requestAnimationFrame(frameLoop);requestAnimationFrame(compassTick);
 </script>
 </body>

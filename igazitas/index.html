@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#1a0f38">
+<title>Aura Scanner – portré igazítása</title>
+<style>
+@font-face{font-family:Cormorant;font-weight:600;src:url(cormorant-600.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cormorant;font-weight:600;src:url(cormorant-600-ext.woff2) format("woff2");unicode-range:U+0100-024F}
+:root{--gold:#e8b95a;--gold-hi:#fff0b8;--ink:#f6e7c1}
+html,body{margin:0;height:100%;background:#1a0f38;color:var(--ink);font-family:Cormorant,Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;touch-action:none}
+body{background:#1a0f38 url(hatter.jpg) center top/cover no-repeat}
+canvas.fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;
+ padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 14px);box-sizing:border-box}
+.medal{position:fixed;z-index:5;left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px);width:52px;height:52px;border:0;padding:0;border-radius:50%;
+ background:url(arany_medal_w.png) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer}
+.medal svg{width:24px;height:24px}
+h1{margin:6px 58px 0;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-weight:600;color:#f3d58a;text-shadow:0 0 10px #ffcf7a66;text-align:center}
+.sub{font-size:16px;font-style:italic;color:#e9dcf6;margin:2px 0 0;text-align:center;text-shadow:0 1px 3px #000a}
+/* ---------- a portré: a képernyő ékköve ---------- */
+.pf{position:relative;flex:none;width:min(86vw,350px,calc(100dvh - 392px));aspect-ratio:1;margin-top:10px}
+.halo{position:absolute;inset:-16%;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,#2a0f5ccc 0 58%,#3a1680aa 70%,transparent 100%)}
+.wreath{position:absolute;inset:-22%;pointer-events:none;animation:wbreath 9s ease-in-out infinite,wturn 26s ease-in-out infinite alternate}
+.wreath i{position:absolute;inset:0;border-radius:50%;filter:blur(9px)}
+.wreath .wg{background:radial-gradient(closest-side,transparent 56%,#ffcf7a55 66%,#f3b45a26 78%,transparent 96%);animation:wfade 6.5s ease-in-out infinite}
+.wreath .wt{background:radial-gradient(circle at 17% 46%,#5fe3d680 0,#3cc8c038 20%,transparent 38%);animation:wfade 7.7s ease-in-out -2s infinite}
+.wreath .wv{background:radial-gradient(circle at 83% 54%,#c49aff95 0,#a274f845 21%,transparent 39%);animation:wfade 8.9s ease-in-out -5.5s infinite}
+@keyframes wbreath{0%,100%{transform:scale(.95)}50%{transform:scale(1.05)}}
+@keyframes wturn{from{rotate:-14deg}to{rotate:14deg}}
+@keyframes wfade{0%,100%{opacity:.42}50%{opacity:1}}
+.ph{position:absolute;left:12%;top:12%;width:76%;height:76%;border-radius:50%;overflow:hidden;background:#0d0820;touch-action:none;cursor:grab}
+.ph img{position:absolute;left:0;top:0;transform-origin:0 0;max-width:none;pointer-events:none;will-change:transform}
+.geo{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .45s ease;pointer-events:none}
+.ph.touch .geo{opacity:.2}
+.pf>img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.c-vendeg .pf{width:min(86vw,350px,calc(100dvh - 432px))}
+.shine{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;overflow:hidden;border-radius:50%;-webkit-mask:url(portrekeret.png) center/100% 100%;mask:url(portrekeret.png) center/100% 100%}
+.shine i{position:absolute;inset:-10%;background:conic-gradient(from 0deg,transparent 0 268deg,#ffd98a2e 292deg,#ffeec090 310deg,#ffd98a2e 328deg,transparent 350deg);animation:spin 10s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:14%;font-size:17px}
+/* ---------- nagyító csúszka ---------- */
+.hint{font-size:15.5px;color:#f3d58a;margin-top:8px;text-shadow:0 1px 3px #000a}
+.zoom{display:flex;align-items:center;gap:12px;width:min(80vw,310px);margin-top:4px}
+.zoom span{font-size:22px;line-height:1;color:#f3d58a;text-shadow:0 0 6px #ffcf7a88;width:14px;text-align:center}
+.zoom input{flex:1;-webkit-appearance:none;appearance:none;height:28px;margin:0;background:transparent;touch-action:pan-x}
+.zoom input::-webkit-slider-runnable-track{height:8px;border-radius:999px;border:1px solid var(--gold);
+ background:linear-gradient(90deg,#c49aff 0,#8a5ad0 var(--p,0%),#2a1260 var(--p,0%));box-shadow:0 0 8px #b98cff66,inset 0 0 4px #000a}
+.zoom input::-moz-range-track{height:8px;border-radius:999px;border:1px solid var(--gold);background:#2a1260;box-shadow:0 0 8px #b98cff66}
+.zoom input::-moz-range-progress{height:8px;border-radius:999px;background:linear-gradient(90deg,#c49aff,#8a5ad0)}
+.zoom input::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;border:2px solid #f0c66a;background:#4a2788 url(ekko.png) center/cover;box-shadow:0 0 0 1px #8a5716,0 0 10px #c49affcc,0 2px 4px #000a}
+.zoom input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:2px solid #f0c66a;background:#4a2788 url(ekko.png) center/cover;box-shadow:0 0 10px #c49affcc}
+/* ---------- hangolás (csak ha kell) – doboz nélkül, lebegve ---------- */
+.tune{margin-top:8px;display:none;flex-direction:column;align-items:center;gap:7px;width:100%}
+.tune.on{display:flex;animation:appear .8s ease both}
+@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tune .t{font-size:16px;color:#f3d58a;text-shadow:0 0 10px #ffcf7a77,0 1px 3px #000;text-align:center}
+.tune .t.it{font-style:italic}
+.caps{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%}
+.caps.col{flex-direction:column;align-items:center;gap:7px}
+.cap{font:inherit;font-size:16.5px;color:#f6dfae;height:38px;padding:0 18px;border-radius:999px;border:1.3px solid #e8b95a99;background:#2a126055;display:flex;align-items:center;gap:8px;cursor:pointer;transition:all .3s;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.cap svg{width:16px;height:16px;fill:#f0c66a;flex:none}
+.cap.sel{border-color:#ffe7a6;background:linear-gradient(180deg,#5a2fa0aa,#2a1260cc);color:#fffbe8;box-shadow:0 0 10px #ffcf7a88,0 0 18px #b98cff66,inset 0 0 8px #ffcf7a33}
+/* ---------- gombsor (az indító képernyő jóváhagyott gombjai) ---------- */
+.acts{margin-top:auto;display:flex;flex-direction:column;gap:10px;width:min(100%,360px)}
+.acts button{font:inherit;position:relative;height:52px;display:flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;border:2.4px solid transparent;font-size:20px;font-weight:700;letter-spacing:.02em;cursor:pointer;overflow:hidden}
+.acts button::before{content:'';position:absolute;inset:3.5px;border-radius:999px;border:1px solid #f0a54f80;pointer-events:none}
+.acts .main{color:#2a1236;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c) padding-box,linear-gradient(90deg,#c9631c,#ffe9b0 30%,#fff6d8 50%,#ffe9b0 70%,#c9631c) border-box;
+ box-shadow:0 0 12px #ffb84a99,0 0 26px #ff9f3a55,0 4px 12px #0009,inset 0 2px 4px #fff8,inset 0 -3px 8px #a8641e66;animation:pulse 3.2s ease-in-out infinite;transition:opacity .4s,filter .4s}
+.acts .main::after{content:'';position:absolute;inset:0;border-radius:999px;pointer-events:none;background:linear-gradient(105deg,transparent 42%,#fffdf0b0 50%,transparent 58%) no-repeat;background-size:300% 100%;background-position:100% 0;animation:sheen 5s ease-in-out 2s infinite}
+@keyframes sheen{0%{background-position:100% 0}42%,100%{background-position:0 0}}
+@keyframes pulse{0%,100%{box-shadow:0 0 12px #ffb84a99,0 0 26px #ff9f3a55,0 4px 12px #0009,inset 0 2px 4px #fff8,inset 0 -3px 8px #a8641e66}50%{box-shadow:0 0 18px #ffc860cc,0 0 36px #ff9f3a88,0 4px 12px #0009,inset 0 2px 4px #fff8,inset 0 -3px 8px #a8641e66}}
+.acts .main:disabled{opacity:.45;filter:saturate(.6);animation:none;cursor:default}
+.acts .main:disabled::after{display:none}
+.acts .sec{height:46px;font-size:18px;color:#f6dfae;background:linear-gradient(180deg,#311747f2,#1a0b2bf5) padding-box,linear-gradient(90deg,#c9631c,#f0a040 14%,#ffd889 32%,#ffc560 50%,#ffd889 68%,#f0a040 86%,#c9631c) border-box;box-shadow:0 0 8px #ff9f3a99,0 3px 10px #0008,inset 0 0 14px #0008}
+.acts button:active{transform:translateY(1px)}
+.done{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 132px);text-align:center;font-size:17px;color:#ffe7a6;text-shadow:0 0 10px #ffcf7aaa,0 1px 2px #000;opacity:0;transition:opacity .5s;pointer-events:none}
+.done.on{opacity:1}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<canvas class="fx" id="dust"></canvas>
+<button class="medal" id="back" aria-label="Vissza"><svg viewBox="0 0 24 24"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".5" stop-color="#f0c66a"/><stop offset="1" stop-color="#c58a2c"/></linearGradient></defs><path d="M14.5 5.5 8 12l6.5 6.5" fill="none" stroke="url(#g1)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<div class="screen">
+ <h1>PORTRÉ IGAZÍTÁSA</h1>
+ <div class="sub">Helyezd kedvenced arcát a kör közepére</div>
+ <div class="pf" id="pf">
+  <div class="halo"></div>
+  <div class="wreath"><i class="wg"></i><i class="wt"></i><i class="wv"></i></div>
+  <div class="ph" id="ph"><img id="img" alt="">
+   <svg class="geo" viewBox="-100 -100 200 200" aria-hidden="true"><g fill="none" stroke="#ffd98a" stroke-width=".7" id="geo"></g></svg>
+   <div class="empty" id="empty"><div>Még nincs fotó.</div><button class="cap" id="pick">Fotó kiválasztása</button></div></div>
+  <img src="portrekeret.png" alt="">
+  <div class="shine"><i></i></div>
+ </div>
+ <div class="hint">Húzd az ujjaddal · két ujjal nagyíts</div>
+ <div class="zoom"><span>−</span><input type="range" id="zoom" min="1" max="4" step="0.01" value="1" aria-label="Nagyítás"><span>+</span></div>
+ <div class="tune" id="tune"></div>
+ <div class="acts"><button class="main" id="ok">✦ Ez lesz az!</button><button class="sec" id="again">↺ Új fotó</button></div>
+</div>
+<div class="done" id="done">A portré rögzítve ✦</div>
+<input type="file" id="file" accept="image/*" hidden>
+<script>
+const $=id=>document.getElementById(id),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ph=$('ph'),img=$('img'),zoom=$('zoom'),okBtn=$('ok');
+const PAW='<svg viewBox="0 0 24 24"><ellipse cx="12" cy="16" rx="5" ry="4.2"/><ellipse cx="5.5" cy="10.5" rx="2" ry="2.6"/><ellipse cx="9.5" cy="6.5" rx="2" ry="2.7"/><ellipse cx="14.5" cy="6.5" rx="2" ry="2.7"/><ellipse cx="18.5" cy="10.5" rx="2" ry="2.6"/></svg>';
+
+/* ---- szent geometria: csak érintés közben látszik ---- */
+(()=>{const F=1.618;let s='<line x1="-100" y1="0" x2="100" y2="0"/><line x1="0" y1="-100" x2="0" y2="100"/>';
+ [100/F,100/F/F,100/F/F/F].forEach(r=>s+=`<circle r="${r}"/>`);
+ for(let i=0;i<6;i++){const a=i*60*Math.PI/180,r=100/F/F;s+=`<circle cx="${Math.cos(a)*r}" cy="${Math.sin(a)*r}" r="${r}"/>`}
+ const p=k=>[0,1,2].map(i=>{const a=(k+i*120)*Math.PI/180;return (Math.sin(a)*100/F)+','+(-Math.cos(a)*100/F)}).join(' ');
+ s+=`<polygon points="${p(0)}"/><polygon points="${p(180)}"/>`;$('geo').innerHTML=s})();
+
+/* ---- a fotó mozgatása és nagyítása a körben ---- */
+let iw=0,ih=0,D=0,base=1,z=1,tx=0,ty=0;
+function clamp(){const s=base*z;tx=Math.min(0,Math.max(D-iw*s,tx));ty=Math.min(0,Math.max(D-ih*s,ty))}
+function apply(){clamp();img.style.transform=`translate(${tx}px,${ty}px) scale(${base*z})`;zoom.value=z;zoom.style.setProperty('--p',((z-1)/3*100)+'%')}
+function fit(keep){D=ph.clientWidth;if(!iw)return;const cx=keep?(D/2-tx)/(base*z):iw/2,cy=keep?(D/2-ty)/(base*z):ih*.42;
+ base=Math.max(D/iw,D/ih);if(!keep)z=1;tx=D/2-cx*base*z;ty=D/2-cy*base*z;apply()}
+function setZoom(nz,px,py){nz=Math.min(4,Math.max(1,nz));const s0=base*z,s1=base*nz;px=px??D/2;py=py??D/2;tx=px-(px-tx)*s1/s0;ty=py-(py-ty)*s1/s0;z=nz;apply()}
+function load(src){img.onload=()=>{iw=img.naturalWidth;ih=img.naturalHeight;$('empty').style.display='none';fit(false)};img.src=src}
+const pts=new Map();let pinch=null;
+const touching=on=>ph.classList.toggle('touch',on);
+ph.addEventListener('pointerdown',e=>{if(!iw)return;ph.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);touching(true);
+ if(pts.size===2){const [a,b]=[...pts.values()];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),z}}});
+ph.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;const p=pts.get(e.pointerId),r=ph.getBoundingClientRect();
+ if(pts.size===1){tx+=e.clientX-p[0];ty+=e.clientY-p[1];pts.set(e.pointerId,[e.clientX,e.clientY]);apply()}
+ else if(pts.size===2&&pinch){pts.set(e.pointerId,[e.clientX,e.clientY]);const [a,b]=[...pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);
+  setZoom(pinch.z*d/pinch.d,(a[0]+b[0])/2-r.left,(a[1]+b[1])/2-r.top)}});
+const up=e=>{pts.delete(e.pointerId);pinch=null;if(!pts.size)touching(false)};
+ph.addEventListener('pointerup',up);ph.addEventListener('pointercancel',up);
+ph.addEventListener('wheel',e=>{e.preventDefault();const r=ph.getBoundingClientRect();setZoom(z*(e.deltaY<0?1.08:.93),e.clientX-r.left,e.clientY-r.top)},{passive:false});
+let zt;zoom.addEventListener('input',()=>{touching(true);clearTimeout(zt);zt=setTimeout(()=>touching(false),700);setZoom(+zoom.value)});
+addEventListener('resize',()=>setTimeout(()=>{fit(true);sizeDust()},200));
+
+/* ---- hangolás: csak akkor jelenik meg, ha a felismerés bizonytalan vagy eltér az adatlaptól ---- */
+const Q=new URLSearchParams(location.search),CASE=Q.get('faj')||'biztos',PET={name:'Bodza',sp:'kutya'};
+let chosen=PET.sp;document.documentElement.classList.add('c-'+CASE);
+function caps(list,col){const w=document.createElement('div');w.className='caps'+(col?' col':'');
+ list.forEach(([key,label,sel])=>{const b=document.createElement('button');b.className='cap'+(sel?' sel':'');b.innerHTML=PAW+'<span>'+label+'</span>';
+  b.onclick=()=>{w.querySelectorAll('.cap').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');chosen=key;okBtn.disabled=false};w.appendChild(b)});return w}
+(()=>{const t=$('tune');
+ if(CASE==='bizonytalan'){t.innerHTML='<div class="t">Energetikai rezgés hangolása:</div>';t.appendChild(caps([['kutya','Kutya'],['macska','Macska']]));chosen=null;okBtn.disabled=true;t.classList.add('on')}
+ else if(CASE==='vendeg'){t.innerHTML='<div class="t it">Új, macskaszerű energiákat érzékelek a térben ✦</div>';
+  t.appendChild(caps([['macska','Vendég cica elemzése',true],['kutya','Maradok '+PET.name+' (kutya) energiájánál']],true));chosen='macska';t.classList.add('on')}})();
+
+/* ---- gombok ---- */
+okBtn.onclick=()=>{if(!iw)return;const d=$('done');d.textContent='A portré rögzítve ✦'+(chosen&&chosen!==PET.sp?'  ·  vendég '+chosen:'');d.classList.add('on');setTimeout(()=>d.classList.remove('on'),2600)};
+$('again').onclick=$('back').onclick=()=>{location.href='../kamera/'};
+$('pick').onclick=()=>$('file').click();
+$('file').onchange=e=>{const f=e.target.files[0];if(f)load(URL.createObjectURL(f))};
+try{const s=sessionStorage.getItem('aura_foto');if(s)load(s)}catch(e){}
+
+/* ---- csillagpor a portré körül és a gombsor mellett ---- */
+const dc=$('dust'),dx=dc.getContext('2d');let P=[],next=0,tp=performance.now();
+function sizeDust(){dc.width=innerWidth*devicePixelRatio;dc.height=innerHeight*devicePixelRatio}sizeDust();
+function spawn(){const f=$('pf').getBoundingClientRect(),a=document.querySelector('.acts').getBoundingClientRect();let x,y;
+ if(Math.random()<.7){const t=Math.random()*Math.PI*2,r=f.width*(.5+Math.random()*.16);x=f.left+f.width/2+Math.cos(t)*r;y=f.top+f.height/2+Math.sin(t)*r}
+ else{x=Math.random()<.5?a.left-4+Math.random()*18:a.right+4-Math.random()*18;y=a.top+Math.random()*a.height}
+ const k=Math.random();P.push(Object.assign(k<.55?{k:0,r:1+Math.random()*.9,v:12+Math.random()*18,dur:2.5+Math.random()*2.5,c:'255,214,130',star:Math.random()<.35}
+  :k<.88?{k:1,r:2+Math.random()*1.6,v:6+Math.random()*9,dur:4+Math.random()*4,c:Math.random()<.5?'110,232,222':'208,172,255'}
+  :{k:2,r:3.6+Math.random()*2.6,v:2.5+Math.random()*5,dur:6.5+Math.random()*5,c:['255,222,156','128,228,222','214,188,255'][Math.floor(Math.random()*3)]},
+  {x,y,life:0,sw:3+Math.random()*9,f:.3+Math.random()*.8,ph:Math.random()*7}))}
+(function loop(now){const dt=Math.min(.1,(now-tp)/1000);tp=now;const d=devicePixelRatio;dx.clearRect(0,0,dc.width,dc.height);
+ if(!RM){next-=dt;while(next<=0&&P.length<32){spawn();next+=-Math.log(1-Math.random())/3.5*(Math.random()<.2?3:1)}
+ P=P.filter(p=>{p.life+=dt/p.dur;if(p.life>=1)return false;p.y-=p.v*dt;
+  const al=Math.min(1,p.life/(p.k===2?.35:.15))*Math.pow(1-p.life,p.k===2?.7:1.2)*(.8+.2*Math.sin(now/1000*2.3+p.ph));
+  const x=(p.x+Math.sin(now/1000*p.f+p.ph)*p.sw*(p.k?1:.4))*d,y=p.y*d,rr=p.r*d,R4=rr*(p.k?4.5:3.5);
+  const g=dx.createRadialGradient(x,y,0,x,y,R4);g.addColorStop(0,p.k?`rgba(${p.c},${al})`:`rgba(255,250,228,${al})`);g.addColorStop(.18,`rgba(${p.c},${al*.9})`);g.addColorStop(.42,`rgba(${p.c},${al*.35})`);g.addColorStop(1,`rgba(${p.c},0)`);
+  dx.fillStyle=g;dx.beginPath();dx.arc(x,y,R4,0,7);dx.fill();
+  if(p.star){const L=rr*6*(.6+.4*Math.sin(now/1000*3.1+p.ph));dx.strokeStyle=`rgba(255,246,214,${al*.8})`;dx.lineWidth=Math.max(.6,rr*.35);dx.lineCap='round';dx.beginPath();dx.moveTo(x-L,y);dx.lineTo(x+L,y);dx.moveTo(x,y-L);dx.lineTo(x,y+L);dx.stroke()}
+  return true})}
+ requestAnimationFrame(loop)})(tp);
+</script>
+</body>
+</html>
