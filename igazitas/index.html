@@ -163,7 +163,11 @@ function renderTune(again){const t=$('tune');t.classList.remove('on');document.d
 renderTune();
 
 /* ---- gombok ---- */
-okBtn.onclick=()=>{if(!iw)return;const d=$('done');d.textContent='A portré rögzítve ✦'+(chosen&&chosen!==PET.sp?'  ·  vendég '+chosen:'');d.classList.add('on');setTimeout(()=>d.classList.remove('on'),2600)};
+okBtn.onclick=()=>{if(!iw)return;
+ // a körben látható kivágás átadása az elemzésnek (négyzetes portré)
+ const N=720,k=N/D,cv=document.createElement('canvas');cv.width=cv.height=N;cv.getContext('2d').drawImage(img,tx*k,ty*k,iw*base*z*k,ih*base*z*k);
+ try{sessionStorage.setItem('aura_portre',cv.toDataURL('image/jpeg',.9));sessionStorage.setItem('aura_faj',chosen||PET.sp)}catch(e){}
+ const d=$('done');d.textContent='A portré rögzítve ✦';d.classList.add('on');setTimeout(()=>{location.href='../elemzes/'+location.search},700)};
 $('again').onclick=$('back').onclick=()=>{location.href='../kamera/'};
 $('pick').onclick=()=>$('file').click();
 $('file').onchange=e=>{const f=e.target.files[0];if(f)load(URL.createObjectURL(f))};
