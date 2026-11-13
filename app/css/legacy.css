@@ -1,0 +1,77 @@
+/* A korábbi nézetek stílusa (horoszkóp, feng shui, régi aura) – a .legacy konténer alá zárva. A 3. szakaszban cserélődik. */
+.legacy{--night:#100b24;--deep:#1d1640;--glass:#ffffff0f;--line:#ffffff1f;--mist:#f4efff;--dim:#b3a8da;--mint:#7ff0cf;--rose:#ff8db5;--gold:#ffd27a;--r:28px;
+font-family:ui-rounded,"Nunito","Hiragino Maru Gothic ProN","Segoe UI",system-ui,sans-serif}
+@keyframes tw{to{opacity:.25}}
+.legacy h2{margin:0 0 6px;font-size:1.25rem}
+.legacy h3{margin:0 0 10px;font-size:1.02rem;font-weight:700}
+.legacy input[type=text],.legacy input[type=date]{background:#ffffff14;color:var(--mist);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;width:100%}
+.legacy .glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:14px 0;backdrop-filter:blur(14px)}
+.legacy .glass.soft{border-style:dashed}
+.legacy .lead{text-align:center;color:var(--dim);margin:6px 0}
+.legacy .slot{background:var(--img,none) center/cover}
+.legacy /* hero orb (home) */
+.hero{position:relative;width:min(80vw,330px);aspect-ratio:1;margin:18px auto 8px;display:grid;place-items:center}
+.legacy .hero::before,.legacy .hero::after{content:"";position:absolute;border-radius:50%;inset:-9%;background:conic-gradient(from 0deg,var(--mint),var(--rose),var(--gold),var(--mint));filter:blur(22px);opacity:.55;animation:spin 18s linear infinite}
+.legacy .hero::after{inset:-2%;filter:none;opacity:1;padding:3px;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.legacy .hero .core{position:relative;width:88%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 50% 35%,#3a2a78,#150f33);display:grid;place-items:center;z-index:1}
+.legacy .hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.legacy .hero .art{width:56%;color:#ffffffcc;filter:drop-shadow(0 0 14px var(--mint))}
+@keyframes spin{to{transform:rotate(1turn)}}
+.legacy .btn{display:block;margin:14px auto;background:linear-gradient(90deg,var(--mint),var(--gold));color:#1d1640;border:0;border-radius:999px;padding:15px 34px;font:inherit;font-weight:800;cursor:pointer;box-shadow:0 10px 30px #7ff0cf44;transition:transform .15s}
+.legacy .btn:active{transform:scale(.97)}
+.legacy .duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.legacy .duo .glass{margin:6px 0;text-align:center;cursor:pointer;padding:14px}
+.legacy .duo small,.legacy .sub{color:var(--dim);display:block}
+.legacy .moon{width:68px;filter:drop-shadow(0 0 14px #ffe9a8aa)}
+.legacy /* result */
+.res{position:relative;border-radius:36px;overflow:hidden;aspect-ratio:1;margin:12px 0;box-shadow:0 0 60px var(--glow,#7ff0cf55);border:1px solid var(--line)}
+.legacy .res canvas{width:100%;height:100%;display:block}
+.legacy .res .cap{position:absolute;left:0;right:0;bottom:0;padding:48px 18px 16px;background:linear-gradient(transparent,#100b24ee);display:flex;justify-content:space-between;align-items:end}
+.legacy .res .cap strong{font-size:1.5rem}
+.legacy .chip{background:#ffffff22;border:1px solid #ffffff44;border-radius:999px;padding:6px 14px;font-weight:700;backdrop-filter:blur(8px)}
+.legacy .orbs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 6px;justify-items:center}
+.legacy .orb{position:relative;width:100%;max-width:78px;text-align:center;font-size:.72rem;color:var(--dim)}
+.legacy .orb svg{width:100%;display:block}
+.legacy .trk{fill:none;stroke:#ffffff18;stroke-width:6}
+.legacy .val{fill:none;stroke:hsl(var(--h) 90% 68%);stroke-width:6;stroke-linecap:round;filter:drop-shadow(0 0 4px hsl(var(--h) 90% 60%))}
+.legacy .orb b{position:absolute;top:0;left:0;right:0;aspect-ratio:1;display:grid;place-items:center;color:var(--mist);font-size:.9rem}
+.legacy .orb span{display:block;margin-top:4px}
+.legacy .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.legacy .stat{text-align:center}
+.legacy .stat b{font-size:1.25rem;display:block}
+.legacy .stat i{display:block;width:30px;height:30px;border-radius:50%;margin:0 auto 2px;border:2px solid #fff6}
+.legacy .note{text-align:center;color:var(--dim);font-size:.8rem;margin:10px 0 0}
+.legacy /* cosmic / feng */
+.scene{position:relative;text-align:center;padding:26px 18px;overflow:hidden;background:linear-gradient(160deg,#3a2a7866,#0f786a33),var(--img,none) center/cover}
+.legacy .scene .moon{width:120px}
+.legacy .scene .sign{position:absolute;right:18px;top:14px;font-size:2.2rem;opacity:.9}
+.legacy .kv{display:flex;align-items:center;gap:14px}
+.legacy .kv .art,.legacy .kv svg{width:52px;flex:none;color:var(--gold)}
+.legacy .lucky{width:52px;height:52px;border-radius:50%;flex:none;box-shadow:0 0 28px currentColor}
+.legacy .curve{width:100%;height:90px;display:block}
+.legacy .compass{width:min(62vw,230px);display:block;margin:6px auto;color:var(--mint)}
+.legacy .pal{display:flex;gap:12px}
+.legacy .pal i{flex:1;height:56px;border-radius:18px;border:1px solid #fff4}
+.legacy label{display:block;margin:10px 0 4px;color:var(--dim);font-size:.9rem}
+.legacy #gate[hidden]{display:none}
+.legacy .card{background:var(--deep);border:1px solid var(--line);border-radius:28px;padding:24px;max-width:380px;text-align:center}
+.legacy .card p{color:var(--dim);line-height:1.5}
+.legacy .card .btn{margin-bottom:0}
+.legacy .fade{animation:in .5s ease both}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.legacy :focus-visible{outline:3px solid var(--mint);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.legacy *::before,.legacy *::after{animation:none!important}}
+.legacy .duo{grid-template-columns:repeat(2,minmax(0,1fr))}
+.legacy .duo .compass,.legacy .duo .moon{width:84px;height:84px;margin:0 auto 6px}
+.legacy .duo .glass{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:150px}
+.legacy .more{margin-top:12px}
+.legacy .more summary{cursor:pointer;color:var(--gold);font-weight:700;padding:6px 0}
+.legacy .big3{align-items:flex-start;margin:12px 0}
+.legacy .big3 .sg{font-size:2rem;width:44px;text-align:center;color:var(--gold)}
+.legacy .big3 p{margin:4px 0 0;color:var(--dim);line-height:1.45}
+.legacy .big3 b{display:block}
+.legacy .chip button{background:none;border:0;color:var(--mist);cursor:pointer;margin-left:6px;font:inherit}
+.legacy .chk{display:flex;gap:10px;align-items:center;margin-top:14px;color:var(--mist)}
+.legacy .chk input{width:20px;height:20px;accent-color:var(--mint)}
+.legacy .city{display:block;width:100%;text-align:left;background:#ffffff0f;color:var(--mist);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:6px;font:inherit;cursor:pointer}
+.legacy input[type=time]{background:#ffffff14;color:var(--mist);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;width:100%}

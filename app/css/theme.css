@@ -1,0 +1,132 @@
+/* Pet Aura – egységes megjelenés (Zodiac stílus). A kezdőlap a jóváhagyott design/kezdolap/forras/template.html alapján. */
+@import url(../assets/betuk/fonts.css);
+:root{--gold:#f3cf7a;--gold2:#c8913a;--ink:#2a1450}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+html,body{height:100%;background:#120826}
+body{display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;color:#fff3dc;padding:0}
+.phone{position:relative;width:min(100vw,400px);height:min(100dvh,866px);overflow:hidden;border-radius:28px;box-shadow:0 0 0 1px #ffffff18,0 30px 80px #000a;container-type:size;--ct:282px}
+@media (max-width:440px),(max-height:900px){.phone{border-radius:0;width:100vw;height:100dvh}}
+.bg{position:absolute;inset:0;background:url(../assets/kezdolap/bg.jpg) 86% top/cover}
+canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.moonglow{position:absolute;right:-6%;top:6%;width:52%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#ffe9b855 0,#ffd27a22 35%,transparent 65%);animation:breathe 6s ease-in-out infinite}
+.top{position:absolute;top:calc(18px + env(safe-area-inset-top));left:0;right:0;display:flex;justify-content:space-between;padding:0 18px;z-index:5}
+.round{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;border:2.5px solid transparent;background:radial-gradient(circle at 38% 30%,#6b3aa6,#2a1450 72%) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 30%,#8a5a16 55%,#f6d27a 80%,#b07a26) border-box;box-shadow:0 0 14px #f3cf7a77,0 3px 8px #0009,inset 0 0 10px #000a}
+.round svg{width:28px;height:28px;filter:drop-shadow(0 0 3px #ffcf6aaa)}
+.round .chev{position:absolute;bottom:4px;left:50%;width:10px;height:6px;transform:translateX(-50%)}
+.title{position:absolute;top:56px;width:100%;text-align:center;z-index:4}
+.title h1{display:inline-block;font-family:'Great Vibes',cursive;font-weight:400;font-size:64px;line-height:1;padding:.3em .2em .15em;margin:-.3em 0 -.15em;background:linear-gradient(105deg,#c8913a 0%,#e9b85c 34%,#ffd56a 44%,#ffe7a0 50%,#ffd56a 56%,#e9b85c 66%,#c8913a 100%);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 6px #0009) drop-shadow(0 0 2px #ffcf6a00);animation:shimmer 2s ease-in-out infinite}
+.title p{font-size:17px;font-weight:600;letter-spacing:.3px;color:#fff3dc;text-shadow:0 1px 6px #000c;margin-top:2px}
+.zodiac{position:absolute;left:50%;top:21%;width:72%;aspect-ratio:1;transform:translateX(-46%);z-index:2;opacity:.9}
+.zodiac svg{width:100%;height:100%;animation:spin 120s linear infinite;filter:drop-shadow(0 0 6px #f3cf7a99)}
+.pets{position:absolute;left:0;right:0;bottom:calc(var(--ct) + 12cqw);height:62cqw;z-index:3}
+.dog{position:absolute;left:-4%;bottom:0;width:60%;transform-origin:50% 100%}
+.cat{position:absolute;right:9%;bottom:0;width:48%;transform-origin:50% 100%}
+.pets img{filter:drop-shadow(0 8px 14px #0008)}
+.halo{position:absolute;left:30%;bottom:-6%;width:40%;height:40%;border-radius:50%;background:radial-gradient(ellipse,#ffd98a88,transparent 70%);filter:blur(6px);animation:breathe 4s ease-in-out infinite}
+.cards{position:absolute;left:0;right:0;bottom:118px;display:flex;justify-content:space-evenly;padding:0 6px;z-index:5}
+.cards{height:164px}
+.card{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent;flex:none;height:100%;aspect-ratio:512/796;container-type:inline-size}
+.card .fill{position:absolute;inset:2.5% 4% 4.5% 4%;border-radius:50% 50% 22% 22% / 37% 37% 12% 12%;background:radial-gradient(circle at 50% 32%,#6a3aa8,#2a1450 72%)}
+.card .frame{position:absolute;inset:0;background:url(../assets/kezdolap/frame2.png) center/100% 100% no-repeat;filter:drop-shadow(0 0 3px #ffcf6a77)}
+.card .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center}
+.card .glow{position:absolute;inset:0;background:url(../assets/kezdolap/frame2.png) center/100% 100% no-repeat;filter:drop-shadow(0 0 6px #ffd27a) drop-shadow(0 0 16px #ffc24f) drop-shadow(0 0 28px #ffb340);opacity:.12;animation:glow 4.8s ease-in-out infinite;pointer-events:none}
+.card:nth-child(2) .glow{animation-delay:1.6s}.card:nth-child(3) .glow{animation-delay:3.2s}
+
+.orb{width:60cqw;height:60cqw;margin:35cqw auto 0;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 40% 35%,#ffffffcc,#c9a2ff66 30%,#5a2f8f00 70%);box-shadow:0 0 22px #c9a2ff88}
+.orb svg{width:36cqw;height:36cqw}
+.card b{position:absolute;left:9%;right:9%;top:80.9%;height:10%;display:flex;align-items:center;justify-content:center;font-size:clamp(12px,12.5cqw,15px);font-weight:700;line-height:1;white-space:nowrap;color:#fff3dc;text-shadow:0 1px 4px #000}
+@property --fa{syntax:'<angle>';inherits:false;initial-value:0deg}
+.nav{position:absolute;left:12px;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));height:84px;border-radius:999px;border:2.2px solid transparent;background:linear-gradient(180deg,#311747f4,#1a0b2bf7) padding-box,linear-gradient(90deg,#c9631c,#f0a040 14%,#ffd889 32%,#ffc560 50%,#ffd889 68%,#f0a040 86%,#c9631c) border-box;box-shadow:0 0 8px #ff9f3aaa,0 0 20px #ff8c2a55,0 -2px 14px #0006,inset 0 0 18px #0008;display:flex;z-index:6}
+.nav::before{content:'';pointer-events:none;position:absolute;inset:4px;border-radius:999px;border:1px solid #f0a54f80;box-shadow:inset 0 0 6px #ffb34022}
+.nav::after{content:'';pointer-events:none;position:absolute;inset:-3px;border-radius:999px;padding:4px;background:conic-gradient(from var(--fa),transparent 0deg,transparent 318deg,#ffd98a55 334deg,#fffaf0 347deg,#ffd98a55 354deg,transparent 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);filter:drop-shadow(0 0 4px #ffd27a) drop-shadow(0 0 8px #ffb340);opacity:.9;animation:navrun 7s linear infinite}
+@keyframes navrun{to{--fa:360deg}}
+.nav .fl{pointer-events:none;position:absolute;width:46px;height:10px;transform:translate(-50%,-50%);background:radial-gradient(ellipse at center,#fffbea 0,#ffd98acc 18%,#ffb3404d 45%,transparent 70%);z-index:1}
+.nav .fl::after{content:'';position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;transform:translate(-50%,-50%);background:#fff;box-shadow:0 0 6px 2px #ffe7aa}
+.nav a{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#f1dcb0;text-decoration:none;font-size:14px;font-weight:600;letter-spacing:.2px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.nav a.on{color:#ffe08a;text-shadow:0 0 8px #f3cf7a}
+.nav a.on::before{content:'';position:absolute;inset:6px 2px;border-radius:24px;background:radial-gradient(ellipse 62% 72% at 50% 55%,#ffad4055,#ff9f3a1f 55%,transparent 82%);pointer-events:none}
+.nav a.on svg{filter:drop-shadow(0 0 4px #ffcf6a) drop-shadow(0 0 10px #ffb84a99);transform:scale(1.08)}
+.nav svg{width:30px;height:30px;filter:drop-shadow(0 0 2px #ffcf6a66);opacity:.92}
+.nav a.on svg{opacity:1}
+
+/* Rövid (kis) képernyő: arányosan átrendezett elrendezés */
+@media (min-aspect-ratio: 1/2){
+ .top{top:12px}.round{width:46px;height:46px}.round svg{width:24px;height:24px}
+ .title{top:40px}.title h1{font-size:52px}.title p{font-size:15px}
+ .zodiac{top:16%;width:58%;transform:translateX(-48%)}
+ .phone{--ct:248px}.pets{height:52cqw;bottom:calc(var(--ct) + 10.5cqw)}
+ .book{width:80cqw}
+ .lantern{width:16cqw;left:-4.5cqw}
+ .crystals{width:11cqw;left:8cqw}
+ .moonstone{width:11cqw;right:1.5cqw}
+ .lav.l{width:36cqw}.lav.r{width:30cqw}
+ .dog{left:-2%;width:56%}
+ .cat{right:8%;bottom:0;width:45%}
+ .halo{bottom:0}
+ .cards{bottom:96px;padding:0 4px}
+ .card b{font-size:12px;letter-spacing:-.2px}
+ 
+ .cards{height:150px}
+ .orb{width:52cqw;height:52cqw;margin-top:39cqw}.orb svg{width:30cqw;height:30cqw}
+
+ .nav{bottom:12px;height:72px}.nav svg{width:26px;height:26px}.nav a{font-size:13px;gap:3px;padding-bottom:6px}
+}
+.orb.painted{width:66cqw;height:auto;margin-top:26cqw;background:none;box-shadow:none;border-radius:0;display:block}
+.orb.painted img{display:block;width:100%;height:auto;filter:drop-shadow(0 0 5px #c9a2ffaa)}
+.card .fill.scene{background-size:cover;background-position:50% 0;background-repeat:no-repeat}
+.book{position:absolute;left:50%;bottom:calc(var(--ct) - 1cqw);width:86cqw;transform:translateX(-50%);z-index:2;filter:drop-shadow(0 8px 12px #000b) drop-shadow(0 0 8px #ffcf6a44)}
+.beam{position:absolute;left:50%;bottom:calc(var(--ct) + 9cqw);width:40cqw;height:62cqw;transform:translateX(-50%);background:radial-gradient(ellipse 34% 60% at 50% 96%,#fff0b8ee,#ffc24f99 32%,#ffb3401f 55%,transparent 72%);mix-blend-mode:screen;filter:blur(4px);animation:bookpulse 4.5s ease-in-out infinite;z-index:4;pointer-events:none}
+.lantern{position:absolute;left:-5cqw;bottom:calc(var(--ct) - 2cqw);width:18cqw;z-index:4;filter:drop-shadow(0 6px 10px #000a)}
+.crystals{position:absolute;left:9cqw;bottom:calc(var(--ct) - 1cqw);width:12cqw;z-index:4;filter:drop-shadow(0 4px 6px #000a) drop-shadow(0 0 6px #c9a2ff55)}
+.moonstone{position:absolute;right:3cqw;bottom:calc(var(--ct) + 2.5cqw);width:12cqw;z-index:4;filter:drop-shadow(0 4px 5px #000b)}
+.moonstone img{display:block;width:100%}
+.moonstone .mg{position:absolute;left:50%;top:45%;width:170%;aspect-ratio:1.6;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(ellipse,#8fd8ff33 0,#7aa8ff18 40%,transparent 68%);mix-blend-mode:screen;animation:moonglow 7s ease-in-out infinite;pointer-events:none}
+@keyframes moonglow{0%,100%{opacity:.35}50%{opacity:.8}}
+.lav{position:absolute;z-index:4;pointer-events:none;filter:drop-shadow(0 -2px 6px #0008) saturate(.9) brightness(.92)}
+.lav.l{left:-9cqw;bottom:calc(var(--ct) - 9cqw);width:42cqw}
+.lav.r{right:-8cqw;bottom:calc(var(--ct) - 6cqw);width:34cqw}
+.lantern img{display:block;width:100%}
+.lantern .lg{position:absolute;left:50%;top:60%;width:260%;aspect-ratio:1;transform:translate(-50%,-50%) scale(var(--ls,1));border-radius:50%;background:radial-gradient(circle,#ffd98a66 0,#ffb34033 22%,#ff9f3a12 42%,transparent 62%);mix-blend-mode:screen;opacity:var(--lo,.8);pointer-events:none}
+.lantern .li{position:absolute;left:24%;right:24%;top:40%;bottom:16%;border-radius:30%;background:radial-gradient(ellipse at 50% 62%,#fff1c2aa 0,#ffc56055 40%,transparent 75%);mix-blend-mode:screen;opacity:var(--lo,.8);pointer-events:none}
+.lantern .lf{position:absolute;left:calc(50% + var(--lx,0px));top:61%;width:12%;height:9%;transform:translate(-50%,-50%);border-radius:50% 50% 45% 45%/70% 70% 30% 30%;background:radial-gradient(ellipse at 50% 70%,#fffbe6 0,#ffe08acc 35%,transparent 72%);mix-blend-mode:screen;opacity:var(--lo,.8);pointer-events:none}
+@keyframes bookpulse{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes breathe{50%{opacity:.55;transform:scale(1.06)}}
+@keyframes breathe2{50%{transform:scale(1.012)}}
+@keyframes shimmer{0%{background-position:115% 0;filter:drop-shadow(0 2px 6px #0009) drop-shadow(0 0 2px #ffcf6a00)}35%{filter:drop-shadow(0 2px 6px #0009) drop-shadow(0 0 12px #ffc84fb0)}70%,100%{background-position:-15% 0;filter:drop-shadow(0 2px 6px #0009) drop-shadow(0 0 2px #ffcf6a00)}}
+@keyframes glow{0%,100%{opacity:.12}45%{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+
+/* ---------- képernyők ---------- */
+.screen{position:absolute;inset:0;display:none}
+.screen.on{display:block}
+.screen.sub{overflow:auto;padding:calc(env(safe-area-inset-top) + 70px) 16px calc(env(safe-area-inset-bottom) + 112px);-webkit-overflow-scrolling:touch}
+.screen.sub.nonav{padding-bottom:calc(env(safe-area-inset-bottom) + 24px)}
+.bgsub{position:absolute;inset:0;background:#1a0f38 url(../assets/ui/hatter_aura.jpg) center top/cover no-repeat;z-index:0}
+.sub>*{position:relative;z-index:1}
+.medal{position:absolute;z-index:5;left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px);width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(../assets/ui/arany_medal.png) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.medal svg{width:24px;height:24px}
+.medal:active{transform:scale(.92)}
+.sub h1.t{margin:0 58px 2px;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-weight:600;color:#f3d58a;text-shadow:0 0 10px #ffcf7a66;text-align:center;font-family:'Cormorant Garamond',serif}
+.sub .lead2{font-size:16px;font-style:italic;color:#e9dcf6;margin:0 0 14px;text-align:center;text-shadow:0 1px 3px #000a}
+/* a még nem elkészült termek */
+.soon{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60dvh;text-align:center;gap:10px}
+.soon .star{font-size:38px;color:#f3d58a;text-shadow:0 0 18px #ffcf7a99;animation:breathe 4s ease-in-out infinite}
+.soon h2{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;color:#f3d58a;margin:0}
+.soon p{font-style:italic;color:#e9dcf6;margin:0}
+/* fiók: nyelv */
+.panel{background:linear-gradient(180deg,#2c1458d9,#1a0b36e6);border:1.5px solid #e8b95a;border-radius:16px;padding:14px 16px;margin:0 0 14px;box-shadow:0 0 14px #ffcf7a33,inset 0 0 12px #0007}
+.panel label{display:block;font-size:15px;color:#f3d58a;margin-bottom:6px}
+.panel select{width:100%;font:inherit;font-size:17px;color:#f6e7c1;background:#2a1260;border:1.3px solid #e8b95a99;border-radius:999px;padding:10px 14px}
+.panel p{margin:0;font-size:15px;line-height:1.35;color:#e9dcf6}
+.panel h3{margin:0 0 6px;font-family:'Cormorant Garamond',serif;font-size:18px;color:#f3d58a}
+/* a régi nézetek (horoszkóp, feng shui) – ideiglenesen a régi megjelenésben, az új keretben (3. szakaszban cserélődnek) */
+.legacy{font-family:ui-rounded,"Nunito","Segoe UI",system-ui,sans-serif;color:#f4efff;max-width:540px;margin:0 auto}
+/* kapu (játékos figyelmeztetés) */
+#gate[hidden]{display:none}
+#gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:20px;background:#0d0820cc;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#gate .card2{max-width:360px;text-align:center;background:linear-gradient(180deg,#2c1458f2,#1a0b36f7);border:1.6px solid #e8b95a;border-radius:20px;padding:22px 20px;box-shadow:0 0 24px #ffcf7a44}
+#gate h2{font-family:'Cormorant Garamond',serif;font-size:22px;color:#f3d58a;margin:0 0 8px}
+#gate p{font-size:15px;line-height:1.4;color:#e9dcf6;margin:0 0 14px}
+.btn-gold{font:inherit;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#2a1236;height:48px;padding:0 26px;border-radius:999px;border:2.4px solid transparent;cursor:pointer;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c) padding-box,linear-gradient(90deg,#c9631c,#ffe9b0 30%,#fff6d8 50%,#ffe9b0 70%,#c9631c) border-box;box-shadow:0 0 12px #ffb84a99,0 4px 12px #0009,inset 0 2px 4px #fff8}
