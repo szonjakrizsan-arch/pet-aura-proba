@@ -1,5 +1,14 @@
 <!doctype html>
-<html lang="hu"><head><meta charset="utf-8">
+<html lang="hu"><head><style>#pick,.pick,.tp{display:none!important}
+/* az eredmény a fehér takarás mögött készül elő, és egyszer, fokozatosan jelenik meg belőle */
+html.veil::before{content:'';position:fixed;inset:0;z-index:2147483647;pointer-events:none;background:radial-gradient(circle at 50% 42%,#fffaf0,#efe2ff 60%,#d9c4ff);opacity:1;transition:opacity 1.9s ease}
+html.veil.veil-out::before{opacity:0}
+html.veil{background:#efe2ff}</style>
+<script>(function(){var d=document.documentElement;d.classList.add('veil');
+var go=function(){requestAnimationFrame(function(){requestAnimationFrame(function(){setTimeout(function(){d.classList.add('veil-out');setTimeout(function(){d.classList.remove('veil','veil-out')},2100)},250)})})};
+var ready=function(){(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go,go)};
+if(document.readyState==='complete')ready();else addEventListener('load',ready);
+setTimeout(function(){if(!d.classList.contains('veil-out'))go()},6000)})();</script><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Aura fénypróba</title>
 <style>
@@ -426,4 +435,4 @@ const q=+(new URLSearchParams(location.search).get('p')||2)-1;
 setup(q);addEventListener('resize',()=>{sizeStars();bgQ()});
 document.fonts&&document.fonts.ready.then(()=>{layoutCells();bgQ()});
 requestAnimationFrame(frame);
-</script><style>#pick,.pick,.tp{display:none!important}#veil0{position:fixed;inset:0;z-index:99;pointer-events:none;background:radial-gradient(circle at 50% 42%,#fffaf0,#efe2ff 60%,#d9c4ff);animation:v0 1.8s ease .25s forwards}@keyframes v0{to{opacity:0;visibility:hidden}}</style><div id="veil0"></div></body></html>
+</script></body></html>

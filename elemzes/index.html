@@ -74,7 +74,7 @@ canvas.fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
 .veil{position:fixed;inset:-20%;pointer-events:none;opacity:0;z-index:9;background:linear-gradient(115deg,transparent 30%,#fff6e6cc 46%,#f3e6ffee 52%,#e6fbffcc 58%,transparent 72%);background-size:300% 100%;background-position:120% 0}
 .fin .veil{animation:veil 2.2s ease-in-out 1.5s forwards}
 @keyframes veil{0%{opacity:0;background-position:120% 0}30%{opacity:1}100%{opacity:1;background-position:-10% 0}}
-.white{position:fixed;inset:0;background:radial-gradient(circle at 50% 42%,#fffaf0,#efe2ff 60%,#d9c4ff);opacity:0;pointer-events:none;z-index:10;transition:opacity 1.1s ease}
+.white{position:fixed;inset:0;background:radial-gradient(circle at 50% 42%,#fffaf0,#efe2ff 60%,#d9c4ff);opacity:0;pointer-events:none;z-index:10;transition:opacity 1.4s ease}
 .white.on{opacity:1}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important}}
 </style>
@@ -121,8 +121,8 @@ const capOn=id=>document.querySelectorAll('.cap span').forEach(s=>s.classList.to
 setTimeout(()=>{scr.classList.add('hold');capOn('c4');setTimeout(()=>{phasesDone=true;tryFinish()},RM?400:2200)},500+steps.length*PH);
 function tryFinish(){if(finished||!serverDone||!phasesDone)return;finished=true;
  capOn('c5');scr.classList.add('fin');document.body.classList.add('fin');   // egyesülés: fénykoszorú + felirat, majd lágy elfehéredés
- setTimeout(()=>$('white').classList.add('on'),RM?300:2900);
- setTimeout(()=>{location.href='../eredmeny/'+(location.search||'')},RM?900:4100)}
+ setTimeout(()=>$('white').classList.add('on'),RM?300:2350);   // a fátyol közben már fehéredik: egyetlen, folyamatos világosodás
+ setTimeout(()=>{location.href='../eredmeny/'+(location.search||'')},RM?900:4000)}
 
 /* csillagpor: lassan a portré felé áramló fénypontok */
 const dc=$('dust'),dx=dc.getContext('2d');let P=[],next=0,tp=performance.now();
