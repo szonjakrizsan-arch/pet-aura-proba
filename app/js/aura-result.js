@@ -1,7 +1,7 @@
 // Eredményoldal: a jóváhagyott auraportré-oldal (design/aura_scanner/forras/template.html) az app keretében.
 // A rajzoló kód a sablonból változatlan. Az összetétel és az üzenet a 4. szakaszig mintaadat (a valódi elemzőmotor adja majd).
-import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.6';
-import { FLOW } from './aura.js?v=0.6.6';
+import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.8';
+import { FLOW } from './aura.js?v=0.6.8';
 const GOLD='<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#e9c46f"/><stop offset="1" stop-color="#b07f2c"/></linearGradient></defs>';
 const ICON={
  astro:`<svg viewBox="0 0 32 32">${GOLD}<path fill="url(#gg)" d="M19 5a11 11 0 1 0 8 18A9 9 0 1 1 19 5z"/><path fill="url(#gg)" d="M24 6l1.1 2.9L28 10l-2.9 1.1L24 14l-1.1-2.9L20 10l2.9-1.1z"/></svg>`,
@@ -25,13 +25,13 @@ export function resultScreen(ctx){
   <canvas id="aura"></canvas><div class="name" id="nm">${esc(name)}</div>
   <div class="comp"><div class="ctitle"><span class="ln"></span><span class="st"></span>${esc(t('au.res.comp'))}<span class="st"></span><span class="ln r"></span></div>
    <div class="bands"><canvas id="bandcv"></canvas><svg id="bandfr"></svg><div class="brow" id="brow"></div></div></div>
-  <div class="scroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.png" alt=""><img class="p-bot" src="assets/aura/perg_also.png" alt=""><div class="p-ti">${esc(t('au.res.msg'))}</div><div class="p-in" id="msg"></div></div>
+  <div class="scroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt=""><div class="p-ti">${esc(t('au.res.msg'))}</div><div class="p-in" id="msg"></div></div>
   <div class="vet">${esc(t('au.res.vet'))}</div>
   <nav class="acts"><a id="bBack" role="button" tabindex="0">${IC_RBACK}<span>${esc(t('back'))}</span></a><a id="bShare" role="button" tabindex="0">${IC_RSHARE}<span>${esc(t('au.res.share'))}</span></a><a id="bSave" role="button" tabindex="0">${IC_RSAVE}<span>${esc(t('au.res.save'))}</span></a></nav>
  </div></div><div class="veil0" id="veil0"></div></div>`;
  const mount=(root)=>{
   const q=(s)=>root.querySelector(s),sa=q('#sa');let alive=true;
-  const FRAMEIMG=new Image();FRAMEIMG.src='assets/aura/portrekeret.png';
+  const FRAMEIMG=new Image();FRAMEIMG.src='assets/aura/portrekeret.webp';
   const L=sampleComposition(t),LNAME={astro:t('au.res.l.astro'),qi:t('au.res.l.qi'),etho:t('au.res.l.etho')};
   // csillagok
   const sc=q('#stars'),sx=sc.getContext('2d');let ST=[];const sizeStars=()=>{sc.width=root.clientWidth*devicePixelRatio;sc.height=root.clientHeight*devicePixelRatio;ST=Array.from({length:40},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.3+.3,p:Math.random()*6}))};sizeStars();
@@ -44,7 +44,7 @@ export function resultScreen(ctx){
   const W={3:[.30,.30,.40],ce:[.4286,0,.5714],qe:[0,.4286,.5714],cq:[.5,.5,0]};
 
 
-  const BGIMG=new Image();BGIMG.src='assets/ui/hatter_aura.jpg';
+  const BGIMG=new Image();BGIMG.src='assets/ui/hatter_aura.webp';
   const bgc=q('#bgcv');let bgPix=null,bgKey='';
   function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
   function vnoise(seed){const R=rng(seed),P=new Float32Array(256*256);for(let i=0;i<P.length;i++)P[i]=R();

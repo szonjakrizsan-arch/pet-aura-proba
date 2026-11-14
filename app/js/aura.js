@@ -1,8 +1,8 @@
 // Aura Scanner képernyők: indító · fotózás · portré igazítása · elemzés · sikertelen próba · eredmény.
 // A jóváhagyott próbaoldalak (pet-aura-proba) logikája, az app keretébe illesztve. Minden felirat a szótárból (t) jön.
-import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.6';
-import { ICON } from './home.js?v=0.6.6';
-import { resultScreen } from './aura-result.js?v=0.6.6';
+import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.8';
+import { ICON } from './home.js?v=0.6.8';
+import { resultScreen } from './aura-result.js?v=0.6.8';
 
 const A = (f) => `assets/aura/${f}`;
 const RM = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -50,10 +50,10 @@ function startScreen(ctx) {
   const html = `<div class="au au-start"><canvas class="fx" id="stars"></canvas><canvas class="fx" id="dust" style="z-index:1"></canvas>
   <div class="wrap">
    <div class="top ap" style="--d:.05s"><a class="round" id="back" role="button" tabindex="0" aria-label="${esc(t('back'))}">${ICON.back}</a><h1>${esc(t('au.start.title'))}</h1></div>
-   <div class="pet ap" id="pet" style="--d:.2s"><div class="wreath"><i class="wg"></i><i class="wt"></i><i class="wv"></i></div><div class="ph swap" id="ph" role="button" tabindex="0" aria-label="${esc(t('au.start.photo'))}">${pet.photo ? '' : `<span class="nophoto">${ICON.paw}<small>${esc(t('au.start.photo'))}</small></span>`}</div><img id="frm" src="${A('portrekeret.png')}" alt=""><div class="shine" id="shine"><i></i></div><span class="tw"></span><span class="tw" style="animation-delay:1.6s"></span><span class="tw" style="animation-delay:3.1s"></span></div>
+   <div class="pet ap" id="pet" style="--d:.2s"><div class="wreath"><i class="wg"></i><i class="wt"></i><i class="wv"></i></div><div class="ph swap" id="ph" role="button" tabindex="0" aria-label="${esc(t('au.start.photo'))}">${pet.photo ? '' : `<span class="nophoto">${ICON.paw}<small>${esc(t('au.start.photo'))}</small></span>`}</div><img id="frm" src="${A('portrekeret.webp')}" alt=""><div class="shine" id="shine"><i></i></div><span class="tw"></span><span class="tw" style="animation-delay:1.6s"></span><span class="tw" style="animation-delay:3.1s"></span></div>
    <a class="name ap" id="name" style="--d:.45s" role="button" tabindex="0" aria-label="${esc(t('au.start.swap'))}"><span id="nm" class="swap">${esc(name)}</span>${IC_SWAP}</a>
    <div class="fl"></div>
-   <div class="scroll ap" style="--d:.7s"><div class="p-mid"></div><img class="p-top" src="${A('perg_felso.png')}" alt=""><img class="p-bot" src="${A('perg_also.png')}" alt=""><div class="plight"><i></i></div>${SEAL_SHARDS}
+   <div class="scroll ap" style="--d:.7s"><div class="p-mid"></div><img class="p-top" src="${A('perg_felso.webp')}" alt=""><img class="p-bot" src="${A('perg_also.webp')}" alt=""><div class="plight"><i></i></div>${SEAL_SHARDS}
     <div class="p-in"><h2>${esc(t('au.start.h'))}</h2><div class="lead">${esc(t('au.start.lead'))}</div>
      <ul>${[1, 2, 3, 4, 5].map((i) => `<li>${esc(t('au.start.p' + i))}</li>`).join('')}</ul>
      ${sptxt}<div class="ok">${esc(t('au.start.ok'))}</div></div></div>
@@ -63,7 +63,7 @@ function startScreen(ctx) {
   const mount = (root) => {
     const q = (s) => root.querySelector(s), ph = q('#ph');
     if (pet.photo) ph.style.backgroundImage = `url(${pet.photo})`;
-    { const sh = q('#shine'); sh.style.webkitMaskImage = sh.style.maskImage = `url(${A('portrekeret.png')})`; }
+    { const sh = q('#shine'); sh.style.webkitMaskImage = sh.style.maskImage = `url(${A('portrekeret.webp')})`; }
     root.querySelectorAll('.tw').forEach((s) => { const mv = () => { const a = Math.random() * Math.PI * 2, r = 41 + Math.random() * 5; s.style.left = (50 + r * Math.cos(a)) + '%'; s.style.top = (50 + r * Math.sin(a)) + '%'; }; mv(); s.addEventListener('animationiteration', mv); });
     const petEl = q('#pet'), R0 = q('.au-start');
     function fit() { const vh = root.clientHeight, vw = root.clientWidth, m = (s) => { const e = q(s); return { top: e.offsetTop, bottom: e.offsetTop + e.offsetHeight }; };
@@ -94,8 +94,8 @@ function startScreen(ctx) {
 function cameraScreen(ctx) {
   const { t, esc, go, back } = ctx;
   const html = `<div class="au au-cam"><svg id="astro" viewBox="-100 -100 200 200" aria-hidden="true"><g fill="none" stroke="#e8c27a" stroke-width=".3" id="ag"></g></svg><canvas class="fx" id="dust"></canvas>
-  <div class="screen"><div class="frame" id="frame"><div class="cam" id="cam"><video id="v" playsinline muted autoplay></video><canvas id="c"></canvas><canvas class="vdust" id="vd"></canvas><div class="msg" id="msg"><div>${esc(t('au.cam.wake'))}</div></div></div><img src="${A('kamerakeret.png')}" alt=""></div>
-   <div class="bottom"><div class="unit" id="unit"><span class="pointer"></span><div class="ringwrap" id="ring"><img src="${A('gyuru.png')}" alt=""><div class="wave" id="wave"></div></div><button class="lens" id="lens" aria-label="${esc(t('au.cam.shot'))}"><span class="core" id="core"></span></button></div>
+  <div class="screen"><div class="frame" id="frame"><div class="cam" id="cam"><video id="v" playsinline muted autoplay></video><canvas id="c"></canvas><canvas class="vdust" id="vd"></canvas><div class="msg" id="msg"><div>${esc(t('au.cam.wake'))}</div></div></div><img src="${A('kamerakeret.webp')}" alt=""></div>
+   <div class="bottom"><div class="unit" id="unit"><span class="pointer"></span><div class="ringwrap" id="ring"><img src="${A('gyuru.webp')}" alt=""><div class="wave" id="wave"></div></div><button class="lens" id="lens" aria-label="${esc(t('au.cam.shot'))}"><span class="core" id="core"></span></button></div>
    ${medal('gal', esc(t('au.start.gallery')), IC_GAL, 'style="--sw:11s;--sl:6s"')}<div class="state" id="state">&nbsp;</div></div></div>
   ${medal('back', esc(t('back')), ICON.back, 'style="--sw:10s;--sl:3.5s"')}</div>`;
   const mount = (root) => {
@@ -161,7 +161,7 @@ function alignScreen(ctx) {
   <div class="screen"><h1>${esc(t('au.al.title'))}</h1><div class="sub">${esc(t('au.al.sub'))}</div>
    <div class="pf" id="pf"><div class="halo"></div><div class="wreath"><i class="wg"></i><i class="wt"></i><i class="wv"></i></div>
     <div class="ph" id="ph"><img id="img" alt=""><svg class="geo" viewBox="-100 -100 200 200" aria-hidden="true"><g fill="none" stroke="#ffd98a" stroke-width=".7" id="geo"></g></svg><div class="empty" id="empty"><div>${esc(t('au.al.nophoto'))}</div><button class="cap" id="pick">${esc(t('au.al.pick'))}</button></div></div>
-    <img src="${A('portrekeret.png')}" alt=""><div class="shine"><i></i></div></div>
+    <img src="${A('portrekeret.webp')}" alt=""><div class="shine"><i></i></div></div>
    <div class="hint">${esc(t('au.al.hint'))}</div>
    <div class="zoom"><span>−</span><input type="range" id="zoom" min="1" max="4" step="0.01" value="1" aria-label="${esc(t('au.al.zoom'))}"><span>+</span></div>
    <div class="tune" id="tune"></div>
@@ -214,7 +214,7 @@ function analysisScreen(ctx) {
     <div class="rings"><svg viewBox="-100 -100 200 200"><g class="r1" id="r1"></g><g class="r2" id="r2"></g><g class="r3" id="r3"></g><g class="rose" id="rose"></g></svg></div>
     <div class="lay gold"></div><div class="lay turq"></div><div class="lay viol"></div><div class="crown"></div>
     <div class="ph"><img id="img" alt=""><svg class="geo" viewBox="-100 -100 200 200" id="geo"></svg></div>
-    <img class="frame" src="${A('portrekeret.png')}" alt=""><div class="shine"><i></i></div></div>
+    <img class="frame" src="${A('portrekeret.webp')}" alt=""><div class="shine"><i></i></div></div>
    <div class="cap" id="cap" aria-live="polite"><span id="c1">${esc(t('au.an.c1'))}</span><span id="c2">${esc(t('au.an.c2'))}</span><span id="c3">${esc(t('au.an.c3'))}</span><span id="c4">${esc(t(GALLERY ? 'au.an.c4b' : 'au.an.c4'))}</span><span id="c5">${esc(t('au.an.c5'))}</span></div>
    <div class="gems" id="gems"><i></i><i${GALLERY ? ' class="skip"' : ''}></i><i></i></div></div>
   <div class="veil"></div><div class="white" id="white"></div></div>`;
@@ -251,8 +251,8 @@ function failScreen(ctx) {
   const { t, esc, pet, go, back } = ctx, name = pet.name || t('au.start.noname'), ok = FLOW.fail || 'arc';
   const html = `<div class="au au-fail"><canvas class="fx" id="dust"></canvas>${medal('back', esc(t('back')), ICON.back)}
   <div class="screen"><h1>${esc(t('au.fail.title'))}</h1><div class="sub">${esc(t('au.fail.sub'))}</div>
-   <div class="pf"><div class="halo"></div><div class="wreath"><i class="wg"></i><i class="wv"></i></div><div class="ph"><img id="img" alt=""><div class="mist"></div><div class="q">✦</div></div><img src="${A('portrekeret.png')}" alt=""></div>
-   <div class="scroll"><div class="p-mid"></div><img class="p-top" src="${A('perg_felso.png')}" alt=""><img class="p-bot" src="${A('perg_also.png')}" alt=""><div class="plight"><i></i></div>
+   <div class="pf"><div class="halo"></div><div class="wreath"><i class="wg"></i><i class="wv"></i></div><div class="ph"><img id="img" alt=""><div class="mist"></div><div class="q">✦</div></div><img src="${A('portrekeret.webp')}" alt=""></div>
+   <div class="scroll"><div class="p-mid"></div><img class="p-top" src="${A('perg_felso.webp')}" alt=""><img class="p-bot" src="${A('perg_also.webp')}" alt=""><div class="plight"><i></i></div>
     <div class="p-in"><h2>${esc(t('au.fail.h', { name }))}</h2><p>${esc(t('au.fail.p', { name }))}</p><p class="tip">✦ ${esc(t('au.fail.tip.' + (['arc', 'homalyos', 'sotet', 'tavol'].includes(ok) ? ok : 'arc')))}</p></div></div>
    <div class="note">${esc(t('au.fail.note'))}</div>
    <div class="acts"><button class="main" id="again">✦ ${esc(t('au.fail.again'))}</button><button class="sec" id="gal">${esc(t('au.start.gallery'))}</button></div></div></div>`;

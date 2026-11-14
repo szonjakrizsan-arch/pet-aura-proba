@@ -2,7 +2,7 @@
 #s-aura *{box-sizing:content-box;margin:revert}
 #s-aura button{box-sizing:border-box}
 #s-aura{position:absolute;inset:0;overflow:hidden;font-family:'Cormorant Garamond',Cormorant,Georgia,serif;color:#f6e7c1;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-#s-aura .au{position:absolute;inset:0;overflow:hidden;background:#1a0f38 url(../assets/ui/hatter_aura.jpg) center top/cover no-repeat}
+#s-aura .au{position:absolute;inset:0;overflow:hidden;background:#1a0f38 url(../assets/ui/hatter_aura.webp) center top/cover no-repeat}
 #s-aura canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 /* ===== kamera/index.html ===== */
 #s-aura .au-cam{--gold:#e8b95a;--gold-hi:#fff0b8;--violet:#2a1260;--turq:#3cc8c0;--ink:#f6e7c1;
@@ -10,7 +10,7 @@
  --bottom:calc(var(--unit) + 16px)}
 #s-aura .au-cam 
 #s-aura .au-cam{margin:0;height:100%;background:#1a0f38;color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-#s-aura .au-cam{background:#1a0f38 url(../assets/ui/hatter_aura.jpg) center top/cover no-repeat}
+#s-aura .au-cam{background:#1a0f38 url(../assets/ui/hatter_aura.webp) center top/cover no-repeat}
 #s-aura .au-cam canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #s-aura .au-cam #astro{position:absolute;left:50%;top:40%;width:150cqmax;height:150cqmax;margin:-75cqmax 0 0 -75cqmax;opacity:.22;pointer-events:none;animation:au-spin 240s linear infinite}
 @keyframes au-spin{to{transform:rotate(360deg)}}
@@ -36,7 +36,7 @@
 @keyframes au-tw{0%,70%,100%{opacity:0;transform:scale(.2) rotate(0)}80%{opacity:1;transform:scale(1) rotate(25deg)}90%{opacity:0;transform:scale(.3) rotate(45deg)}}
 #s-aura .au-cam .msg{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:12%;font-size:19px;line-height:1.3}
 #s-aura .au-cam /* ---------- arany medál gombok ---------- */
-.medal{position:absolute;z-index:5;width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(../assets/ui/arany_medal.png) center/contain no-repeat;cursor:pointer;display:grid;place-items:center;
+.medal{position:absolute;z-index:5;width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(../assets/ui/arany_medal.webp) center/contain no-repeat;cursor:pointer;display:grid;place-items:center;
  filter:drop-shadow(0 2px 4px #0008);transition:transform .15s}
 #s-aura .au-cam .medal:active{transform:scale(.92)}
 #s-aura .au-cam .medal svg{width:24px;height:24px;position:relative;z-index:1}
@@ -63,7 +63,7 @@
 #s-aura .au-cam .pointer{position:absolute;left:50%;top:-11px;width:12px;height:12px;margin-left:-6px;z-index:2;pointer-events:none;
  background:linear-gradient(180deg,#fff3c8,#c58a2c);clip-path:polygon(50% 100%,0 0,100% 0);filter:drop-shadow(0 0 3px #ffcf7a)}
 #s-aura .au-cam .lens{position:absolute;left:50%;top:50%;width:calc(var(--unit)*.455);height:calc(var(--unit)*.455);transform:translate(-50%,-50%);border:0;padding:0;border-radius:50%;cursor:pointer;
- background:url(../assets/aura/lencse.png) center/contain no-repeat;filter:drop-shadow(0 3px 6px #000a);transition:transform .15s}
+ background:url(../assets/aura/lencse.webp) center/contain no-repeat;filter:drop-shadow(0 3px 6px #000a);transition:transform .15s}
 #s-aura .au-cam .lens:active{transform:translate(-50%,-50%) scale(.93)}
 #s-aura .au-cam .lens .core{position:absolute;inset:30%;border-radius:50%;pointer-events:none;mix-blend-mode:screen;
  background:radial-gradient(closest-side,#d9b8ffcc,#9a6cf066 55%,transparent 100%);opacity:0}
@@ -79,12 +79,12 @@
 /* ===== igazitas/index.html ===== */
 #s-aura .au-al{--gold:#e8b95a;--gold-hi:#fff0b8;--ink:#f6e7c1}
 #s-aura .au-al,#s-aura .au-al{margin:0;height:100%;background:#1a0f38;color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;touch-action:none}
-#s-aura .au-al{background:#1a0f38 url(../assets/ui/hatter_aura.jpg) center top/cover no-repeat}
+#s-aura .au-al{background:#1a0f38 url(../assets/ui/hatter_aura.webp) center top/cover no-repeat}
 #s-aura .au-al canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #s-aura .au-al .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
  padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 14px);box-sizing:border-box}
 #s-aura .au-al .medal{position:absolute;z-index:5;left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px);width:52px;height:52px;border:0;padding:0;border-radius:50%;
- background:url(../assets/ui/arany_medal.png) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer}
+ background:url(../assets/ui/arany_medal.webp) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer}
 #s-aura .au-al .medal svg{width:24px;height:24px}
 #s-aura .au-al h1{margin:6px 58px 0;font-size:clamp(17px,5cqw,20px);letter-spacing:.2em;font-weight:600;color:#f3d58a;text-shadow:0 0 10px #ffcf7a66;text-align:center}
 #s-aura .au-al .sub{font-size:16px;font-style:italic;color:#e9dcf6;margin:2px 0 0;text-align:center;text-shadow:0 1px 3px #000a}
@@ -108,7 +108,7 @@
 #s-aura .au-al .c-elteres .pf{width:min(86cqw,350px,calc(100cqh - 462px))}
 #s-aura .au-al .c-elteres .tune .t{font-size:15.5px;line-height:1.22;max-width:340px}
 #s-aura .au-al .c-elteres .cap{height:36px;font-size:16px}
-#s-aura .au-al .shine{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;overflow:hidden;border-radius:50%;-webkit-mask:url(../assets/aura/portrekeret.png) center/100% 100%;mask:url(../assets/aura/portrekeret.png) center/100% 100%}
+#s-aura .au-al .shine{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;overflow:hidden;border-radius:50%;-webkit-mask:url(../assets/aura/portrekeret.webp) center/100% 100%;mask:url(../assets/aura/portrekeret.webp) center/100% 100%}
 #s-aura .au-al .shine i{position:absolute;inset:-10%;background:conic-gradient(from 0deg,transparent 0 268deg,#ffd98a2e 292deg,#ffeec090 310deg,#ffd98a2e 328deg,transparent 350deg);animation:au-spin 10s linear infinite}
 @keyframes au-spin{to{transform:rotate(360deg)}}
 #s-aura .au-al .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:14%;font-size:17px}
@@ -121,8 +121,8 @@
  background:linear-gradient(90deg,#c49aff 0,#8a5ad0 var(--p,0%),#2a1260 var(--p,0%));box-shadow:0 0 8px #b98cff66,inset 0 0 4px #000a}
 #s-aura .au-al .zoom input::-moz-range-track{height:8px;border-radius:999px;border:1px solid var(--gold);background:#2a1260;box-shadow:0 0 8px #b98cff66}
 #s-aura .au-al .zoom input::-moz-range-progress{height:8px;border-radius:999px;background:linear-gradient(90deg,#c49aff,#8a5ad0)}
-#s-aura .au-al .zoom input::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;border:2px solid #f0c66a;background:#4a2788 url(../assets/aura/ekko.png) center/cover;box-shadow:0 0 0 1px #8a5716,0 0 10px #c49affcc,0 2px 4px #000a}
-#s-aura .au-al .zoom input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:2px solid #f0c66a;background:#4a2788 url(../assets/aura/ekko.png) center/cover;box-shadow:0 0 10px #c49affcc}
+#s-aura .au-al .zoom input::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-11px;border-radius:50%;border:2px solid #f0c66a;background:#4a2788 url(../assets/aura/ekko.webp) center/cover;box-shadow:0 0 0 1px #8a5716,0 0 10px #c49affcc,0 2px 4px #000a}
+#s-aura .au-al .zoom input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:2px solid #f0c66a;background:#4a2788 url(../assets/aura/ekko.webp) center/cover;box-shadow:0 0 10px #c49affcc}
 #s-aura .au-al /* ---------- hangolás (csak ha kell) – doboz nélkül,#s-aura .au-al lebegve ---------- */
 .tune{margin-top:8px;display:flex;flex-direction:column;align-items:center;gap:7px;width:100%}
 #s-aura .au-al .tune.on{animation:au-appear .8s ease both}
@@ -154,7 +154,7 @@
 @media (prefers-reduced-motion:reduce){#s-aura .au-al *{animation:none!important}}
 /* ===== elemzes/index.html ===== */
 #s-aura .au-an,#s-aura .au-an{margin:0;height:100%;background:#1a0f38;color:#f6e7c1;font-family:'Cormorant Garamond',Georgia,serif;overflow:hidden;-webkit-user-select:none;user-select:none}
-#s-aura .au-an{background:#1a0f38 url(../assets/ui/hatter_aura.jpg) center top/cover no-repeat}
+#s-aura .au-an{background:#1a0f38 url(../assets/ui/hatter_aura.webp) center top/cover no-repeat}
 #s-aura .au-an canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #s-aura .au-an .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);box-sizing:border-box}
 #s-aura .au-an .stage{position:relative;width:min(84cqw,360px,52cqh);aspect-ratio:1;margin-top:-6cqh}
@@ -204,7 +204,7 @@
 @keyframes au-draw{to{stroke-dashoffset:0}}
 @keyframes au-geofade{0%{opacity:0}15%,70%{opacity:.55}100%{opacity:0}}
 #s-aura .au-an .frame{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-#s-aura .au-an .shine{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;overflow:hidden;border-radius:50%;opacity:0;transition:opacity .8s;-webkit-mask:url(../assets/aura/portrekeret.png) center/100% 100%;mask:url(../assets/aura/portrekeret.png) center/100% 100%}
+#s-aura .au-an .shine{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;overflow:hidden;border-radius:50%;opacity:0;transition:opacity .8s;-webkit-mask:url(../assets/aura/portrekeret.webp) center/100% 100%;mask:url(../assets/aura/portrekeret.webp) center/100% 100%}
 #s-aura .au-an .shine i{position:absolute;inset:-10%;background:conic-gradient(from 0deg,transparent 0 240deg,#ffd98a55 280deg,#fff3c8ee 312deg,#ffd98a55 340deg,transparent 360deg);animation:au-cw 2.6s linear infinite}
 #s-aura .au-an .p1 .shine{opacity:1}
 #s-aura .au-an .p2 .shine,#s-aura .au-an .p3 .shine,#s-aura .au-an .hold .shine{opacity:.45}
@@ -234,10 +234,10 @@
 /* ===== sikertelen/index.html ===== */
 #s-aura .au-fail{--gold:#e8b95a;--gold-hi:#fff0b8;--ink:#f6e7c1}
 #s-aura .au-fail,#s-aura .au-fail{margin:0;height:100%;background:#1a0f38;color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-#s-aura .au-fail{background:#1a0f38 url(../assets/ui/hatter_aura.jpg) center top/cover no-repeat}
+#s-aura .au-fail{background:#1a0f38 url(../assets/ui/hatter_aura.webp) center top/cover no-repeat}
 #s-aura .au-fail canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #s-aura .au-fail .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 14px);box-sizing:border-box}
-#s-aura .au-fail .medal{position:absolute;z-index:5;left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px);width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(../assets/ui/arany_medal.png) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer}
+#s-aura .au-fail .medal{position:absolute;z-index:5;left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px);width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(../assets/ui/arany_medal.webp) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer}
 #s-aura .au-fail .medal svg{width:24px;height:24px}
 #s-aura .au-fail h1{margin:6px 58px 0;font-size:clamp(17px,5cqw,20px);letter-spacing:.2em;font-weight:600;color:#f3d58a;text-shadow:0 0 10px #ffcf7a66;text-align:center}
 #s-aura .au-fail .sub{font-size:16px;font-style:italic;color:#e9dcf6;margin:2px 0 0;text-align:center;text-shadow:0 1px 3px #000a}
@@ -272,7 +272,7 @@
 #s-aura .au-fail .scroll .p-top,#s-aura .au-fail .scroll .p-bot{position:absolute;left:0;width:100%;display:block;pointer-events:none}
 #s-aura .au-fail .scroll .p-top{top:0;-webkit-mask:linear-gradient(#000 calc(100% - 3cqw),transparent);mask:linear-gradient(#000 calc(100% - 3cqw),transparent)}
 #s-aura .au-fail .scroll .p-bot{bottom:0;-webkit-mask:linear-gradient(transparent,#000 3cqw);mask:linear-gradient(transparent,#000 3cqw)}
-#s-aura .au-fail .scroll .p-mid{position:absolute;left:0;width:100%;top:7.4cqw;bottom:7.4cqw;background:url(../assets/aura/perg_kozep.png) top center/100% auto repeat-y;pointer-events:none}
+#s-aura .au-fail .scroll .p-mid{position:absolute;left:0;width:100%;top:7.4cqw;bottom:7.4cqw;background:url(../assets/aura/perg_kozep.webp) top center/100% auto repeat-y;pointer-events:none}
 #s-aura .au-fail .p-in{position:relative;color:#47290f;text-align:center;padding:10.5cqw 11cqw 11cqw}
 #s-aura .au-fail .p-in h2{margin:0 0 5px;font-size:18px;font-weight:700;color:#5b3510;line-height:1.15}
 #s-aura .au-fail .p-in p{margin:0 0 6px;font-size:15px;line-height:1.28}
@@ -321,7 +321,7 @@
 #s-aura .au-start 
 .scroll .p-top{-webkit-mask:linear-gradient(#000 calc(100% - 3cqw),transparent);mask:linear-gradient(#000 calc(100% - 3cqw),transparent)}
 #s-aura .au-start .scroll .p-bot{-webkit-mask:linear-gradient(transparent,#000 3cqw);mask:linear-gradient(transparent,#000 3cqw)}
-#s-aura .au-start .scroll .p-mid{position:absolute;left:0;width:100%;top:7.4cqw;bottom:7.4cqw;background:url(../assets/aura/perg_kozep.png) top center/100% auto repeat-y;pointer-events:none}
+#s-aura .au-start .scroll .p-mid{position:absolute;left:0;width:100%;top:7.4cqw;bottom:7.4cqw;background:url(../assets/aura/perg_kozep.webp) top center/100% auto repeat-y;pointer-events:none}
 #s-aura .au-start .p-in{position:relative;color:#47290f;text-align:left;padding:11cqw 10.5cqw 11.8cqw}
 #s-aura .au-start .p-in h2{margin:0 0 1px;text-align:center;font-size:18.5px;font-weight:700;color:#5b3510;line-height:1.15}
 #s-aura .au-start .p-in .lead{text-align:center;font-style:italic;font-size:15px;margin-bottom:2px}
@@ -450,7 +450,7 @@
 #s-aura .au-res .scroll .p-bot{bottom:0}
 #s-aura .au-res .scroll .p-top{-webkit-mask:linear-gradient(#000 calc(100% - 3cqw),transparent);mask:linear-gradient(#000 calc(100% - 3cqw),transparent)}
 #s-aura .au-res .scroll .p-bot{-webkit-mask:linear-gradient(transparent,#000 3cqw);mask:linear-gradient(transparent,#000 3cqw)}
-#s-aura .au-res .scroll .p-mid{position:absolute;left:0;width:100%;top:7.4cqw;bottom:7.4cqw;background:url(../assets/aura/perg_kozep.png) top center/100% auto repeat-y;pointer-events:none}
+#s-aura .au-res .scroll .p-mid{position:absolute;left:0;width:100%;top:7.4cqw;bottom:7.4cqw;background:url(../assets/aura/perg_kozep.webp) top center/100% auto repeat-y;pointer-events:none}
 #s-aura .au-res .scroll .p-in{position:relative;color:#47290f;font-style:italic;font-weight:500;font-size:17.5px;line-height:1.42;text-align:center}
 #s-aura .au-res .scroll .p-ti{position:absolute;left:0;right:0;top:5.6cqw;text-align:center;font-size:21px;font-weight:700;color:#5b3510;letter-spacing:.02em;z-index:1}
 #s-aura .au-res .vet{font-size:14px;color:#eadcbc;opacity:.8;margin-top:6px;font-style:italic}

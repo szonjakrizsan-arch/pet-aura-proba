@@ -1,12 +1,12 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.6';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.6';
-import { analyze, chakraScores } from './analysis.js?v=0.6.6';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.6';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.6';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.6';
-import { auraScreen, FLOW } from './aura.js?v=0.6.6';
-import { cosmicView as cosmicNew, mountCosmic } from './cosmic.js?v=0.6.6';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.6';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.8';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.8';
+import { analyze, chakraScores } from './analysis.js?v=0.6.8';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.8';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.8';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.8';
+import { auraScreen, FLOW } from './aura.js?v=0.6.8';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.8';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.8';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -115,17 +115,18 @@ function render() {
     homePet(); S.shown = 'home';
     return;
   }
-  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => `<div class="km">${cosmicNew({ t, esc, lang: S.lang, pet: S.pet, multi: PETS.list.length > 1 })}</div>`, 'regi-kozmikus': () => legacy(cosmicView()), feng: () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: accountView, my: () => sub(t('nav.my'), soon()), kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
+  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => `<div class="km" data-more="${esc(t('cos.read'))}">${S.sub ? readerView({ t, esc, id: S.sub }) : cosmicNew({ t, esc, lang: S.lang, pet: S.pet, multi: PETS.list.length > 1 })}</div>`, 'regi-kozmikus': () => legacy(cosmicView()), feng: () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: accountView, my: () => sub(t('nav.my'), soon()), kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
   const html = (views[S.tab] || views.home)(); if (html == null) { back('pets'); return; }
   $('#view').innerHTML = html;
-  const route = curRoute(); if (S.shown !== route) { $('#s-sub').scrollTop = 0; S.shown = route; } // ugyanazon az oldalon (pl. faj választása) nem ugrik a tetejére
+  const route = curRoute(); if (S.shown !== route) { const sc = $('#s-sub'); SCROLL[S.shown] = sc.scrollTop; const y = SCROLL[route] || 0; sc.scrollTop = y; if (y) setTimeout(() => { if (curRoute() === route) sc.scrollTop = y; }, 250); S.shown = route; } // ugyanazon az oldalon (pl. faj választása) nem ugrik a tetejére
   if (S.stopCosmic) { S.stopCosmic(); S.stopCosmic = null; }
-  if (S.tab === 'cosmic') S.stopCosmic = mountCosmic($('#view'));
+  if (S.tab === 'cosmic' && S.sub) mountReader($('#view'), S.lang, S.sub, esc);
+  else if (S.tab === 'cosmic') S.stopCosmic = mountCosmic($('#view'), S.lang, esc);
   if (S.tab === 'pets') mountPets($('#view'), { t, esc, lang: S.lang, go, back, render }, S.sub);
   if (S.tab === 'regi-aura' && S.scan) drawAura($('#cv'), S.scan);
 }
 // Navigáció: saját útvonal-verem, hogy a vissza gomb (arany medál) és a telefon vissza gombja ugyanoda vigyen.
-const STACK = [];
+const STACK = [], SCROLL = {}; // SCROLL: oldalankénti görgetési helyzet (az olvasóból visszatérve ugyanott folytatódik)
 function go(route, replace = false) {
   const [tab, sub = ''] = route.split('/'); if (!route || (tab === S.tab && sub === S.sub)) return; S.tab = tab; S.sub = sub;
   if (replace) { history.replaceState(null, '', '#' + route); STACK[STACK.length - 1] = route; } else { history.pushState(null, '', '#' + route); STACK.push(route); }
@@ -133,8 +134,9 @@ function go(route, replace = false) {
 }
 // Kedvenceim: oda tér vissza, ahonnan jött (pl. az aura-indító névcsere-gombjáról vagy a Kozmikus Mancsból); az adatlapról a listára.
 function petsBack() {
+  if (S.tab === 'cosmic' && S.sub) return 'cosmic';
   if (S.tab !== 'pets') return PARENT[S.tab] || 'home';
-  if (S.sub) return 'pets';
+  if (S.sub) return S.tab;
   const prev = STACK[STACK.length - 2]; return prev && !prev.startsWith('pets') ? prev : 'home';
 }
 // Vissza egy logikai szülőre: ha az előző lépés éppen az, valódi „vissza” (a telefon gombjával egyezően); különben odaugrik.
@@ -169,6 +171,7 @@ async function scan(file) {
 }
 document.addEventListener('click', (e) => {
   const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
+  const ksp = e.target.closest('[data-ksp]'); if (ksp) { savePet({ species: ksp.dataset.ksp }); render(); return; }
   if (e.target.closest('#s-sub #back')) { back(petsBack()); return; }
   const tab = e.target.closest('[data-tab]'); if (tab && tab.dataset.tab) { go(tab.dataset.tab); }
   if (e.target.id === 'scan') $('#file').click();
@@ -185,8 +188,9 @@ const imgReady = (src) => new Promise((r) => { const i = new Image(); i.onload =
 const boot = () => { const b = $('#boot'); if (!b || b.classList.contains('out')) return; b.classList.add('out'); setTimeout(() => b.remove(), 700); };
 setLang(detect(navigator.languages, localStorage.getItem('lang'))).then(() => {
   const imgs = [...document.querySelectorAll('#s-home img, #s-aura img')].map((i) => i.src);
-  ['bg.jpg', 'frame2.png', 'scene_aura.jpg', 'scene_horo.jpg', 'scene_feng.jpg'].forEach((f) => imgs.push('assets/kezdolap/' + f));
-  imgs.push('assets/ui/hatter_aura.jpg', 'assets/ui/arany_medal.png');
-  Promise.all([...imgs.map(imgReady), document.fonts ? document.fonts.ready : null]).then(() => requestAnimationFrame(() => requestAnimationFrame(boot)));
+  ['bg.webp', 'frame2.webp', 'scene_aura.webp', 'scene_horo.webp', 'scene_feng.webp'].forEach((f) => imgs.push('assets/kezdolap/' + f));
+  // A takarás csak a kezdőlap képeire és a betűkre vár; az aloldalak képei a megjelenés után, a háttérben töltődnek.
+  const later = () => ['assets/ui/hatter_aura.webp', 'assets/ui/arany_medal.webp', 'assets/aura/portrekeret.webp', 'assets/aura/perg_felso.webp', 'assets/aura/perg_kozep.webp', 'assets/aura/perg_also.webp'].forEach(imgReady);
+  Promise.all([...imgs.map(imgReady), document.fonts ? document.fonts.ready : null]).then(() => requestAnimationFrame(() => requestAnimationFrame(() => { boot(); setTimeout(later, 300); })));
   setTimeout(boot, 5000);
 });

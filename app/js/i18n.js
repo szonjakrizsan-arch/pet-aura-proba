@@ -27,8 +27,9 @@ export const fmtPct = (lang, n) => new Intl.NumberFormat(lang, { style: 'percent
 export const fmtDate = (lang, d) => new Intl.DateTimeFormat(lang, { dateStyle: 'long' }).format(d);
 // Only codes listed in SUPPORTED have a file (e.g. "pt" is just a lookup step, never fetched).
 export async function loadDicts(lang, fetchJson = (u) => fetch(u).then((r) => (r.ok ? r.json() : Promise.reject(new Error(u))))) {
-  const known = SUPPORTED.map((s) => s.code), out = {};
-  for (const c of chain(lang).filter((c) => known.includes(c))) { try { out[c] = await fetchJson(`locales/${c}.json?v=0.6.6`); } catch { continue; }
-    if (KB_READY.includes(c)) { try { Object.assign(out[c], await fetchJson(`locales/kb.${c}.json?v=0.6.6`)); } catch { /* optional */ } } }
+  // Minden szükséges nyelvi fájl egyszerre (párhuzamosan) töltődik – gyorsabb indulás.
+  const known = SUPPORTED.map((s) => s.code), out = {}, codes = chain(lang).filter((c) => known.includes(c));
+  const got = await Promise.all(codes.map((c) => Promise.all([fetchJson(`locales/${c}.json?v=0.6.8`).catch(() => null), KB_READY.includes(c) ? fetchJson(`locales/kb.${c}.json?v=0.6.8`).catch(() => null) : null])));
+  codes.forEach((c, i) => { const [main, kb] = got[i]; if (main) out[c] = kb ? Object.assign(main, kb) : main; });
   return out;
 }

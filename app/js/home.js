@@ -26,12 +26,12 @@ export function homeHtml(t, esc) {
     <g id="z" font-family="serif" font-size="13" fill="#f6dc9a" stroke="none" text-anchor="middle" dominant-baseline="central"></g>
     <g opacity=".6"><path d="M70 110 82 92 100 98 118 84 132 100"/><circle cx="70" cy="110" r="1.6" fill="#fff"/><circle cx="82" cy="92" r="1.6" fill="#fff"/><circle cx="100" cy="98" r="1.6" fill="#fff"/><circle cx="118" cy="84" r="1.6" fill="#fff"/><circle cx="132" cy="100" r="1.6" fill="#fff"/></g>
   </svg></div>
-  <div class="pets"><div class="halo"></div><img class="dog" src="${IMG('dog2.png')}" alt=""><img class="cat" src="${IMG('cat2.png')}" alt=""></div>
-  <img class="book" src="${IMG('book.png')}" alt=""><div class="lantern" id="lant"><div class="lg"></div><img src="${IMG('lantern.png')}" alt=""><div class="li"></div><div class="lf"></div></div>
-  <img class="crystals" src="${IMG('crystals.png')}" alt=""><div class="moonstone"><div class="mg"></div><img src="${IMG('moon.png')}" alt=""></div>
-  <img class="lav l" src="${IMG('lav.png')}" alt=""><img class="lav r" src="${IMG('lav_r.png')}" alt="">
+  <div class="pets"><div class="halo"></div><img class="dog" src="${IMG('dog2.webp')}" alt=""><img class="cat" src="${IMG('cat2.webp')}" alt=""></div>
+  <img class="book" src="${IMG('book.webp')}" alt=""><div class="lantern" id="lant"><div class="lg"></div><img src="${IMG('lantern.webp')}" alt=""><div class="li"></div><div class="lf"></div></div>
+  <img class="crystals" src="${IMG('crystals.webp')}" alt=""><div class="moonstone"><div class="mg"></div><img src="${IMG('moon.webp')}" alt=""></div>
+  <img class="lav l" src="${IMG('lav.webp')}" alt=""><img class="lav r" src="${IMG('lav_r.webp')}" alt="">
   <canvas id="dust" style="z-index:4"></canvas>
-  <div class="cards">${card('aura', 'scene_aura.jpg', t('home.card.aura'))}${card('cosmic', 'scene_horo.jpg', t('home.card.horo'))}${card('feng', 'scene_feng.jpg', t('home.card.feng'))}</div>`;
+  <div class="cards">${card('aura', 'scene_aura.webp', t('home.card.aura'))}${card('cosmic', 'scene_horo.webp', t('home.card.horo'))}${card('feng', 'scene_feng.webp', t('home.card.feng'))}</div>`;
 }
 export function navHtml(t, esc, active) {
   const items = [['home', 'home', 'nav.home'], ['my', 'my', 'nav.my'], ['kb', 'kb', 'nav.kb'], ['styles', 'styles', 'nav.styles']];

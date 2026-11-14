@@ -7,7 +7,7 @@ html,body{height:100%;background:#120826;overflow:hidden;overscroll-behavior:non
 body{display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;color:#fff3dc;padding:0}
 .phone{position:relative;width:min(100vw,400px);height:min(100dvh,866px);overflow:hidden;border-radius:28px;box-shadow:0 0 0 1px #ffffff18,0 30px 80px #000a;container-type:size;--ct:282px}
 @media (max-width:440px),(max-height:900px){.phone{border-radius:0;width:100vw;height:100dvh}}
-#s-home .bg{position:absolute;inset:0;background:url(../assets/kezdolap/bg.jpg) 86% top/cover}
+#s-home .bg{position:absolute;inset:0;background:url(../assets/kezdolap/bg.webp) 86% top/cover}
 #s-home canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #s-home .moonglow{position:absolute;right:-6%;top:6%;width:52%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#ffe9b855 0,#ffd27a22 35%,transparent 65%);animation:breathe 6s ease-in-out infinite}
 #s-home .top{position:absolute;top:calc(18px + env(safe-area-inset-top));left:0;right:0;display:flex;justify-content:space-between;padding:0 18px;z-index:5}
@@ -28,9 +28,9 @@ body{display:flex;align-items:center;justify-content:center;font-family:'Cormora
 #s-home .cards{height:164px}
 #s-home .card{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent;flex:none;height:100%;aspect-ratio:512/796;container-type:inline-size}
 #s-home .card .fill{position:absolute;inset:2.5% 4% 4.5% 4%;border-radius:50% 50% 22% 22% / 37% 37% 12% 12%;background:radial-gradient(circle at 50% 32%,#6a3aa8,#2a1450 72%)}
-#s-home .card .frame{position:absolute;inset:0;background:url(../assets/kezdolap/frame2.png) center/100% 100% no-repeat;filter:drop-shadow(0 0 3px #ffcf6a77)}
+#s-home .card .frame{position:absolute;inset:0;background:url(../assets/kezdolap/frame2.webp) center/100% 100% no-repeat;filter:drop-shadow(0 0 3px #ffcf6a77)}
 #s-home .card .in{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center}
-#s-home .card .glow{position:absolute;inset:0;background:url(../assets/kezdolap/frame2.png) center/100% 100% no-repeat;filter:drop-shadow(0 0 6px #ffd27a) drop-shadow(0 0 16px #ffc24f) drop-shadow(0 0 28px #ffb340);opacity:.12;animation:glow 4.8s ease-in-out infinite;pointer-events:none}
+#s-home .card .glow{position:absolute;inset:0;background:url(../assets/kezdolap/frame2.webp) center/100% 100% no-repeat;filter:drop-shadow(0 0 6px #ffd27a) drop-shadow(0 0 16px #ffc24f) drop-shadow(0 0 28px #ffb340);opacity:.12;animation:glow 4.8s ease-in-out infinite;pointer-events:none}
 #s-home .card:nth-child(2) .glow{animation-delay:1.6s}
 #s-home .card:nth-child(3) .glow{animation-delay:3.2s}
 #s-home .orb{width:60cqw;height:60cqw;margin:35cqw auto 0;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 40% 35%,#ffffffcc,#c9a2ff66 30%,#5a2f8f00 70%);box-shadow:0 0 22px #c9a2ff88}
@@ -106,10 +106,10 @@ body{display:flex;align-items:center;justify-content:center;font-family:'Cormora
 .pane.on{display:block}
 #s-sub{overflow:auto;padding:calc(env(safe-area-inset-top) + 70px) 16px calc(env(safe-area-inset-bottom) + 112px);-webkit-overflow-scrolling:touch}
 #s-sub.nonav{padding-bottom:calc(env(safe-area-inset-bottom) + 24px)}
-.bgsub{position:absolute;inset:0;background:#1a0f38 url(../assets/ui/hatter_aura.jpg) center top/cover no-repeat;z-index:0}
+.bgsub{position:absolute;inset:0;background:#1a0f38 url(../assets/ui/hatter_aura.webp) center top/cover no-repeat;z-index:0}
 #s-sub>*{position:relative;z-index:1}
 #s-sub>.bgsub{position:fixed;inset:0;z-index:0} /* a háttér kitölti a képernyőt és nem gördül el */
-#s-sub .medal{position:absolute;z-index:5;left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px);width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(../assets/ui/arany_medal.png) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#s-sub .medal{position:absolute;z-index:5;left:calc(10px + env(safe-area-inset-left));top:calc(env(safe-area-inset-top) + 10px);width:52px;height:52px;border:0;padding:0;border-radius:50%;background:url(../assets/ui/arany_medal.webp) center/contain no-repeat;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #0008);cursor:pointer;-webkit-tap-highlight-color:transparent}
 #s-sub .medal svg{width:24px;height:24px}
 #s-sub .medal:active{transform:scale(.92)}
 #s-sub h1.t{margin:0 58px 2px;font-size:clamp(17px,5vw,20px);letter-spacing:.2em;font-weight:600;color:#f3d58a;text-shadow:0 0 10px #ffcf7a66;text-align:center;font-family:'Cormorant Garamond',serif}
@@ -129,7 +129,7 @@ body{display:flex;align-items:center;justify-content:center;font-family:'Cormora
 .legacy{font-family:ui-rounded,"Nunito","Segoe UI",system-ui,sans-serif;color:#f4efff;max-width:540px;margin:0 auto}
 .btn-gold{font:inherit;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:#2a1236;height:48px;padding:0 26px;border-radius:999px;border:2.4px solid transparent;cursor:pointer;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c) padding-box,linear-gradient(90deg,#c9631c,#ffe9b0 30%,#fff6d8 50%,#ffe9b0 70%,#c9631c) border-box;box-shadow:0 0 12px #ffb84a99,0 4px 12px #0009,inset 0 2px 4px #fff8}
 /* indulás: amíg a kezdőlap rétegei és betűi be nem töltöttek, egyszínű takarás; utána egyszer, lágyan eltűnik */
-#boot{position:fixed;inset:0;z-index:100;background:#120826;pointer-events:none;transition:opacity .6s ease}
+#boot{position:fixed;inset:-40px;z-index:100;background:#120826;pointer-events:none;transition:opacity .45s ease;filter:blur(16px)}
 #boot.out{opacity:0}
 /* ---- Kedvenceim (lista + adatlap) ---- */
 #s-sub .pav,#s-sub .pbig,#s-sub .cpav,#s-home .hpav{flex:none;border-radius:50%;background:#2a1450 center/cover no-repeat;display:grid;place-items:center;border:2.5px solid transparent;background-clip:padding-box;box-shadow:0 0 0 2px #e8b95a,0 0 12px #ffcf7a55,inset 0 0 10px #0008}

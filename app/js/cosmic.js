@@ -1,11 +1,11 @@
 // Kozmikus Mancs – új külső (3. szakasz). A számítás változatlan: horoscope.js (égi profil), cosmos.js (Hold, jegy, szerencseszín).
 // A díszítések saját rajzú, arany vonalas SVG-k (url(#au) = a közös arany színátmenet az index.html-ben).
-import { KB_READY, fmtDate } from './i18n.js?v=0.6.6';
-import { birthProfile } from './horoscope.js?v=0.6.6';
-import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.6';
-import { ICON } from './home.js?v=0.6.6';
-import { IC_SWAP } from './aura-deco.js?v=0.6.6';
-import { ZG, PG } from './zodiac-glyphs.js?v=0.6.6';
+import { fmtDate } from './i18n.js?v=0.6.8';
+import { birthProfile } from './horoscope.js?v=0.6.8';
+import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.8';
+import { ICON } from './home.js?v=0.6.8';
+import { IC_SWAP } from './aura-deco.js?v=0.6.8';
+import { ZG, PG } from './zodiac-glyphs.js?v=0.6.8';
 
 const ELEM = ['fire', 'earth', 'air', 'water'];
 const RULER = [4, 3, 2, 1, 0, 2, 3, 9, 5, 6, 7, 8]; // jegy → uralkodó bolygó (modern rend): Kos–Mars, Bika–Vénusz, …, Halak–Neptunusz
@@ -111,49 +111,95 @@ function energy(vals, t, esc) {
 }
 
 // --- szerencsekő: valódi fénytöréssel renderelt, áttetsző csiszolt kő (design/kozmikus_mancs/forras/gem_render.py), a napi szín szerint ---
-const gem = (hn) => `<img class="kgem" src="assets/kozmikus/ko_${hn}.png" alt="">`;
+const gem = (hn) => `<img class="kgem" src="assets/kozmikus/ko_${hn}.webp" alt="">`;
 
 let cache = { k: '', v: null };
 const profile = (p) => { const k = [p.bday, p.btime, p.place && p.place.lat + ',' + p.place.lon].join('|'); if (cache.k !== k) { try { cache = { k, v: birthProfile(p) }; } catch { cache = { k, v: null }; } } return cache.v; };
 
 export function cosmicView({ t, esc, lang, pet: p, multi }) {
-  const now = new Date(), m = moonPhase(now), kb = KB_READY.includes(lang);
+  const now = new Date(), m = moonPhase(now);
   const b = p.bday ? new Date(p.bday + 'T12:00:00') : null, ok = b && !isNaN(b);
-  const pf = ok && kb ? profile(p) : null, sun = pf ? pf.sun : ok ? zodiac(b.getMonth() + 1, b.getDate()).idx : null;
+  const pf = ok ? profile(p) : null, sun = pf ? pf.sun : ok ? zodiac(b.getMonth() + 1, b.getDate()).idx : null;
   const name = p.name || t('au.start.noname'), el = sun !== null ? ELEM[sun % 4] : null, pl = sun !== null ? RULER[sun] : null;
   const side = (cls, svg, label) => `<div class="kside ${cls}"><span class="kemb">${svg}</span><small>${esc(label)}</small></div>`;
   const head = `<h1 class="t">${esc(t('nav.cosmic'))}</h1>
   <div class="ktop">${astrolabe()}
    ${el ? side('kl', sideElem(el), t('cos.elem', { el: t('au.el.' + el) })) : ''}
-   <div class="kpet"><div class="kwr"><i></i><i></i><i></i></div><div class="kph${p.photo ? '' : ' none'}"${p.photo ? ` style="background-image:url(${p.photo})"` : ''}>${p.photo ? '' : ICON.paw}</div><img src="assets/aura/portrekeret.png" alt="">${sun !== null ? `<span class="ksign">${zodiacMedal(sun)}</span>` : ''}</div>
+   <div class="kpet"><div class="kwr"><i></i><i></i><i></i></div><div class="kph${p.photo ? '' : ' none'}"${p.photo ? ` style="background-image:url(${p.photo})"` : ''}>${p.photo ? '' : ICON.paw}</div><img src="assets/aura/portrekeret.webp" alt="">${sun !== null ? `<span class="ksign">${zodiacMedal(sun)}</span>` : ''}</div>
    ${pl !== null ? side('kr', sidePlanet(pl), t('cos.ruler', { p: t('pl.' + pl) })) : ''}</div>
   ${p.id ? `<a class="kname" data-go="pets" role="button" tabindex="0" aria-label="${esc(t('pets.change'))}"><span>${esc(name)}</span>${multi ? IC_SWAP : ''}</a>` : ''}
   <div class="ksky">${moonDisc(m.frac)}<span>${esc(fmtDate(lang, now))}<br><i>${esc(t('moonph.' + m.idx))}</i></span></div>`;
-  const perg = (inner) => `<div class="kscroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.png" alt=""><img class="p-bot" src="assets/aura/perg_also.png" alt=""><div class="p-in">${inner}</div></div>`;
+  const perg = (inner) => `<div class="kscroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt=""><div class="p-in">${inner}</div></div>`;
   if (!p.id) return head + perg(`${birthStar()}<h2>${esc(t('cos.title'))}</h2><p class="kc">${esc(t('pets.empty'))}</p><div class="kbtn"><button class="btn-gold" data-go="pets/uj">${esc(t('pets.add'))}</button></div>`);
   if (!ok) return head + perg(`${birthStar()}<h2>${esc(t('cos.title'))}</h2><p class="kc">${esc(t('cos.need'))}</p><div class="kbtn"><button class="btn-gold" data-go="pets/${p.id}">${esc(t('pets.edit'))}</button></div>`);
 
-  const row = (lab, i, txt, glow) => `<div class="krow${txt ? '' : ' solo'}">${zodiacMedal(i, glow)}<div>${lab ? `<small>${esc(t(lab))}</small>` : ''}<b>${esc(t('zs.' + i))}</b>${txt ? `<p>${esc(txt)}</p>` : ''}</div></div>`;
-  let big;
-  if (pf) big = `<h2>${esc(t('h.big3'))}</h2>${row('h.sun', pf.sun, t('sun.' + pf.sun), 'g-sun')}${divider()}${row('h.moon', pf.moon, t('moon.' + pf.moon), 'g-moon')}${divider()}
-    ${pf.asc !== null ? row('h.asc', pf.asc, t('asc.' + pf.asc), 'g-asc') : `<div class="knote">${esc(t('h.noAsc'))} <a data-go="pets/${p.id}" role="button" tabindex="0">${esc(t('pets.edit'))}</a></div>`}
-    ${pf.approx ? `<div class="knote">${esc(t('h.approx'))}</div>` : ''}`;
-  else big = `<h2>${esc(t('cos.sign'))}</h2>${row('', sun, '', 'g-sun')}`;
+  // --- A teljes szövegtár (data/horoscope/<nyelv>/<azonosító>.json): a címet és az első bekezdést a mount tölti be, a teljes szöveg az olvasóban.
+  const sp = p.species === 'cat' ? 'cat' : p.species === 'dog' ? 'dog' : null;
+  if (!sp) return head + perg(`<h2>${esc(t('cos.ch.big3'))}</h2><p class="kc">${esc(t('cos.pickSp'))}</p><div class="kspk"><button class="btn-gold" data-ksp="dog">${esc(t('au.al.dog'))}</button><button class="btn-gold" data-ksp="cat">${esc(t('au.al.cat'))}</button></div>`);
+  const tx = (id) => `<div class="ktx" data-tx="${id}"><i class="kload">${esc(t('cos.loading'))}</i></div>`;
+  const row = (lab, i, id, glow) => `<div class="krow">${zodiacMedal(i, glow)}<div><small>${esc(t(lab))}</small><b>${esc(t('zs.' + i))}</b>${tx(id)}</div></div>`;
+  const big = `<h2>${esc(t('cos.ch.big3'))}</h2>${row('cos.k.sun', pf.sun, `sun_sign.${pf.sun}.${sp}`, 'g-sun')}${divider()}${row('cos.k.moon', pf.moon, `moon_sign.${pf.moon}.${sp}`, 'g-moon')}${divider()}
+    ${pf.asc !== null ? row('cos.k.asc', pf.asc, `asc_sign.${pf.asc}.${sp}`, 'g-asc') : `<div class="knote">${esc(t('cos.needAsc'))} <a data-go="pets/${p.id}" role="button" tabindex="0">${esc(t('pets.edit'))}</a></div>`}
+    ${pf.approx ? `<div class="knote">${esc(t('cos.approx'))}</div>` : ''}`;
+  const PI = { sun: 0, moon: 1, mercury: 2, venus: 3, mars: 4, jupiter: 5, saturn: 6, uranus: 7, neptune: 8, pluto: 9 };
+  const pmedal = (k) => `<span class="zm pm"><svg viewBox="-14 -14 128 128" aria-hidden="true"><path d="${PG[PI[k]]}" fill="url(#au)"/></svg></span>`;
+  const link = (id, inner) => `<a class="kline" data-go="cosmic/${id}" role="button" tabindex="0">${inner}<span class="karr">›</span></a>`;
+  const signs = pf.planets.filter((q) => q.key !== 'sun' && q.key !== 'moon').map((q) => link(`planet_sign.${q.key}.${q.sign}.${sp}`, `${pmedal(q.key)}<span class="kl"><b>${esc(t('pl.' + PI[q.key]))} · ${esc(t('zs.' + q.sign))}</b><span class="kt" data-title="planet_sign.${q.key}.${q.sign}.${sp}"></span></span>`)).join('');
+  const ROM = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'], hn2 = (n) => (lang === 'ja' ? String(n) : ROM[n]);
+  const houses = pf.planets[0].house ? pf.planets.map((q) => link(`planet_house.${q.key}.${q.house}.${sp}`, `${pmedal(q.key)}<span class="kl"><b>${esc(t('pl.' + PI[q.key]))} · ${esc(t('cos.house', { n: hn2(q.house) }))}</b><span class="kt" data-title="planet_house.${q.key}.${q.house}.${sp}"></span></span>`)).join('')
+    : `<div class="knote">${esc(t('cos.needHouses'))} <a data-go="pets/${p.id}" role="button" tabindex="0">${esc(t('pets.edit'))}</a></div>`;
+  const ASYM = { conjunction: '☌', sextile: '⚹', square: '□', trigon: '△', opposition: '☍' };
+  const byType = {}; pf.aspects.forEach((a) => (byType[a.type] = byType[a.type] || []).push(`${t('pl.' + PI[a.a])} – ${t('pl.' + PI[a.b])}`));
+  const aspects = Object.keys(ASYM).filter((k) => byType[k]).map((k) => link(`aspect.${k}`, `<span class="zm pm asym">${ASYM[k]}</span><span class="kl"><b>${esc(t('asp.' + k))}</b><span class="kpairs">${esc(byType[k].join(' · '))}</span></span>`)).join('');
+  const chapter = (title, body) => `<div class="kchap"><h2>${esc(title)}</h2>${body}</div>`;
+  const chapters = perg(chapter(t('cos.ch.signs'), signs)) + perg(chapter(t('cos.ch.houses'), houses)) + (aspects ? perg(chapter(t('cos.ch.aspects'), aspects)) : '');
 
   const key = now.toISOString().slice(0, 10), g = GL[sun];
   const hue = luckyHue(key, g), vals = Array.from({ length: 8 }, (_, i) => 35 + (hash(key + g + i) % 55)), hn = hueName(hue);
   // Az elem-szöveg „Föld energia: …” alakú: a kettőspont előtti rész a cím, így nem ismétlődik.
   const et = t('el.' + el), cut = et.search(/[:：]/), eh = cut > 0 ? et.slice(0, cut) : t('au.el.' + el), eb = cut > 0 ? et.slice(cut + 1).trim() : et;
-  return head + perg(big) + `
+  return head + perg(big) + chapters + `
+  <h2 class="ktoday">${esc(t('cos.today'))}</h2>
   <div class="kglass kel">${orn('t')}${elemArt(el, 'kbgm')}<span class="kico">${elemArt(el, 'kicon')}</span><div><h3>${esc(eh)}</h3><p>${esc(eb)}</p></div>${orn('b')}</div>
   <div class="kglass ken">${orn('t')}<h3>${esc(t('cos.energy'))}</h3>${energy(vals, t, esc)}${orn('b')}</div>
   <div class="kglass kluck">${orn('t')}<span class="kgemw" style="--gm:hsl(${{ red: 2, yellow: 45, green: 135, blue: 220, purple: 285 }[hn]} 90% 60% / .7)"><span class="kmist"></span>${gem(hn)}<i class="ks s1"></i><i class="ks s2"></i><i class="ks s3"></i></span><div><h3>${esc(t('cos.lucky'))}</h3><b class="kcol">${esc(t('hue.' + hn))}</b><p>${esc(t('luck.' + hn))}</p></div>${orn('b')}</div>`;
 }
 
+// --- szövegtár betöltése (nyelvenként, azonosítónként egy kis JSON; egyszer töltjük le, utána a memóriából) ---
+const LIB = new Map();
+export function libText(lang, id) {
+  const k = lang + '/' + id; if (!LIB.has(k)) LIB.set(k, fetch(`data/horoscope/${lang}/${id}.json?v=0.6.8`).then((r) => (r.ok ? r.json() : null)).catch(() => null));
+  return LIB.get(k);
+}
+// Teljes szöveg az olvasóban (útvonal: #cosmic/<azonosító>), a pergamenen.
+export function readerView({ t, esc, id }) {
+  // a szöveg helye a horoszkópban, pl. „Nap-jegy · Bika · Kutya”, „Mars · I. ház · Macska”, „Fényszögek · Kvadrát”
+  const PIX = { sun: 0, moon: 1, mercury: 2, venus: 3, mars: 4, jupiter: 5, saturn: 6, uranus: 7, neptune: 8, pluto: 9 }, ROM = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+  const q = id.split('.'), spn = (x) => (x === 'cat' ? t('au.al.cat') : x === 'dog' ? t('au.al.dog') : '');
+  const ctx = q[0] === 'aspect' ? [t('cos.ch.aspects'), t('asp.' + q[1])]
+    : q[0] === 'planet_sign' ? [t('pl.' + PIX[q[1]]), t('zs.' + q[2]), spn(q[3])]
+    : q[0] === 'planet_house' ? [t('pl.' + PIX[q[1]]), t('cos.house', { n: ROM[+q[2]] || q[2] }), spn(q[3])]
+    : [t({ sun_sign: 'cos.k.sun', moon_sign: 'cos.k.moon', asc_sign: 'cos.k.asc' }[q[0]] || 'nav.cosmic'), t('zs.' + q[1]), spn(q[2])];
+  return `<h1 class="t">${esc(t('nav.cosmic'))}</h1><p class="kctx">${esc(ctx.filter(Boolean).join(' · '))}</p><div class="kreader"><div class="kscroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt=""><div class="p-in" id="kread"><i class="kload">${esc(t('cos.loading'))}</i></div></div></div>
+   <div class="kbtn"><button class="pbtn" data-go="cosmic">${esc(t('cos.back'))}</button></div>`;
+}
+export function mountReader(root, lang, id, esc) {
+  libText(lang, id).then((d) => {
+    const box = root.querySelector('#kread'); if (!box || !d) return;
+    let n = d.n; if (n.length && n[0][0] === 'h' && n[0][1] === d.title) n = n.slice(1); // a cím ne ismétlődjön
+    box.innerHTML = `<h2 class="krt">${esc(d.title)}</h2>${divider()}` + n.map(([k, x]) => (k === 'h' ? `<h3 class="krh">${esc(x)}</h3>` : k === 'q' ? `<blockquote class="krq">${esc(x)}</blockquote>` : `<p class="krp">${esc(x)}</p>`)).join('')
+      + (d.sig ? `${divider()}<p class="krs">${esc(d.sig)}</p>` : '');
+  });
+}
+
 // Mozgás: az asztrolábium görgetésre lassan fordul; a fénygömb végighalad az égi pályán (csökkentett mozgásnál áll).
 // Mozgás: az asztrolábium CSS-ből, önállóan és nagyon lassan forog (a görgetéstől független).
 // A fénygömb csak balról jobbra halad (az idő múlását követve); a végén elhalványul, és elölről indul.
-export function mountCosmic(root) {
+export function mountCosmic(root, lang, esc) {
+  root.querySelectorAll('[data-tx]').forEach((el) => libText(lang, el.dataset.tx).then((d) => { if (!d) { el.innerHTML = ''; return; }
+    const first = d.n.find((x) => x[0] === 'p');
+    el.innerHTML = `<i class="ktt">${esc(d.title)}</i>${first ? `<p>${esc(first[1])}</p>` : ''}<a class="kmore" data-go="cosmic/${el.dataset.tx}" role="button" tabindex="0">${esc(el.closest('.km').dataset.more)} ›</a>`; }));
+  root.querySelectorAll('[data-title]').forEach((el) => libText(lang, el.dataset.title).then((d) => { if (d) el.textContent = d.title; }));
   const path = root.querySelector('#kpath'), orb = root.querySelector('#korbit'), svg = path && path.ownerSVGElement;
   let raf = 0; const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (path && orb) {
