@@ -1,4 +1,6 @@
 /* ---------- Aura Scanner képernyők – a jóváhagyott próbaoldalakból (pet-aura-proba) átemelve, a .phone keretbe zárva (cqh/cqw = a keret mérete) ---------- */
+#s-aura *{box-sizing:content-box;margin:revert}
+#s-aura button{box-sizing:border-box}
 #s-aura{position:absolute;inset:0;overflow:hidden;font-family:'Cormorant Garamond',Cormorant,Georgia,serif;color:#f6e7c1;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 #s-aura .au{position:absolute;inset:0;overflow:hidden;background:#1a0f38 url(../assets/ui/hatter_aura.jpg) center top/cover no-repeat}
 #s-aura canvas.fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -467,4 +469,4 @@
 #s-aura .au-start .ph .nophoto small{font-size:12.5px;font-style:italic;color:#e9dcf6;text-align:center;padding:0 10%}
 #s-aura .au-start .ph{cursor:pointer}
 #s-aura .au-start .round,#s-aura .au-start .name,#s-aura .au-start .acts a{cursor:pointer}
-#s-aura .au-cam .screen,#s-aura .au-al .screen,#s-aura .au-an .screen,#s-aura .au-fail .screen{display:flex}
+#s-aura .au-res #stars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}

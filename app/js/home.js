@@ -1,7 +1,7 @@
 // Kezdőlap: a jóváhagyott jelenet (design/kezdolap) felépítése és finom animációi.
 // Minden felirat a szótárból jön (t), a képek az assets/kezdolap mappából.
 const IMG = (f) => `assets/kezdolap/${f}`;
-const AU = `<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="au" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".35" stop-color="#f6d27a"/><stop offset=".7" stop-color="#d79a3a"/><stop offset="1" stop-color="#a86f20"/></linearGradient></defs></svg>`;
+// Az arany színátmenet (#au) az index.html-ben van, mindig látható helyen: így az alsó menü ikonjai minden képernyőn aranyak (korábban a rejtett kezdőlapban volt, és aloldalakon kiesett).
 const G = 'fill="url(#au)" stroke="#7a4c12" stroke-width=".6" stroke-linejoin="round"';
 export const ICON = {
   paw: `<svg viewBox="0 0 24 24"><g ${G}><ellipse cx="5.6" cy="10" rx="2.1" ry="2.6" transform="rotate(-20 5.6 10)"/><ellipse cx="9.4" cy="5.8" rx="2.1" ry="2.7"/><ellipse cx="14.6" cy="5.8" rx="2.1" ry="2.7"/><ellipse cx="18.4" cy="10" rx="2.1" ry="2.6" transform="rotate(20 18.4 10)"/><path d="M12 10.6c-3.4 0-6.4 4-6.4 6.6 0 2 1.7 2.8 3.3 2.3 1.2-.4 2-.8 3.1-.8s1.9.4 3.1.8c1.6.5 3.3-.3 3.3-2.3 0-2.6-3-6.6-6.4-6.6Z"/></g></svg>`,
@@ -15,7 +15,7 @@ export const ICON = {
 // t: fordító függvény, esc: HTML-escape
 export function homeHtml(t, esc) {
   const card = (route, scene, label) => `<div class="card" data-go="${route}" role="button" tabindex="0"><div class="glow"></div><div class="fill scene" style="background-image:url(${IMG(scene)})"></div><div class="frame"></div><div class="in"><b>${esc(label)}</b></div></div>`;
-  return `${AU}<div class="bg"></div><div class="moonglow"></div><canvas id="stars"></canvas>
+  return `<div class="bg"></div><div class="moonglow"></div><canvas id="stars"></canvas>
   <div class="top">
     <div class="round" data-go="pets" role="button" tabindex="0" title="${esc(t('top.pets'))}" aria-label="${esc(t('top.pets'))}">${ICON.paw}<svg class="chev" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="#f6d27a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="round" data-go="account" role="button" tabindex="0" title="${esc(t('top.account'))}" aria-label="${esc(t('top.account'))}">${ICON.user}</div>

@@ -1,8 +1,8 @@
 // Aura Scanner képernyők: indító · fotózás · portré igazítása · elemzés · sikertelen próba · eredmény.
 // A jóváhagyott próbaoldalak (pet-aura-proba) logikája, az app keretébe illesztve. Minden felirat a szótárból (t) jön.
-import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.1';
-import { ICON } from './home.js?v=0.6.1';
-import { resultScreen } from './aura-result.js?v=0.6.1';
+import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.2';
+import { ICON } from './home.js?v=0.6.2';
+import { resultScreen } from './aura-result.js?v=0.6.2';
 
 const A = (f) => `assets/aura/${f}`;
 const RM = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -45,7 +45,7 @@ const medal = (id, label, svg, extra = '') => `<button class="medal" id="${id}" 
 
 // ================= 1. INDÍTÓ =================
 function startScreen(ctx) {
-  const { t, esc, pet, go } = ctx, name = pet.name || t('au.start.noname'), sp = pet.species;
+  const { t, esc, pet, go, back } = ctx, name = pet.name || t('au.start.noname'), sp = pet.species;
   const sptxt = (sp === 'dog' ? [['au.start.dog']] : sp === 'cat' ? [['au.start.cat']] : [['au.start.dog'], ['au.start.cat']]).map(([k]) => `<div class="sp">${t(k).replace(/^([^:：]+[:：])/, '<b>$1</b>')}</div>`).join('');
   const html = `<div class="au au-start"><canvas class="fx" id="stars"></canvas><canvas class="fx" id="dust" style="z-index:1"></canvas>
   <div class="wrap">
@@ -80,7 +80,7 @@ function startScreen(ctx) {
       else if (z < .72) { const L = Math.random() < .5; x = L ? sc.left - 4 + Math.random() * (edge + 4) : sc.right + 4 - Math.random() * (edge + 4); y = sc.top + sc.height * (.2 + Math.random() * .78); p = kind(x, y, { sw: 2 + Math.random() * 3, dr: 0, lim: sc.top + 6 }); p.v *= .8; p.k = p.k === 2 ? 2 : 1; p.star = false; p.r = p.k === 2 ? 3.4 + Math.random() * 1.8 : 2.2 + Math.random() * 1.4; p.c = Math.random() < .5 ? '40,196,192' : '150,96,240'; p.crisp = true; }
       else { const L = Math.random() < .5; x = L ? ac.left - 6 + Math.random() * 22 : ac.right + 6 - Math.random() * 22; y = ac.top + Math.random() * ac.height + 10; p = kind(x, y); }
       return p; });
-    q('#back').onclick = () => go('home');
+    q('#back').onclick = () => back('home');
     q('#shoot').onclick = () => { FLOW.fromGallery = false; go('aura/kamera'); };
     q('#gal').onclick = () => pickFile(async (f) => { FLOW.photo = await fileToData(f); FLOW.fromGallery = true; FLOW.dir = null; go('aura/igazitas'); });
     ph.onclick = () => pickFile(async (f) => { const d = await fileToData(f, 512, .85); ctx.savePet({ photo: d }); ph.style.backgroundImage = `url(${d})`; const n = ph.querySelector('.nophoto'); if (n) n.remove(); });
@@ -92,7 +92,7 @@ function startScreen(ctx) {
 
 // ================= 2. FOTÓZÁS =================
 function cameraScreen(ctx) {
-  const { t, esc, go } = ctx;
+  const { t, esc, go, back } = ctx;
   const html = `<div class="au au-cam"><svg id="astro" viewBox="-100 -100 200 200" aria-hidden="true"><g fill="none" stroke="#e8c27a" stroke-width=".3" id="ag"></g></svg><canvas class="fx" id="dust"></canvas>
   <div class="screen"><div class="frame" id="frame"><div class="cam" id="cam"><video id="v" playsinline muted autoplay></video><canvas id="c"></canvas><canvas class="vdust" id="vd"></canvas><div class="msg" id="msg"><div>${esc(t('au.cam.wake'))}</div></div></div><img src="${A('kamerakeret.png')}" alt=""></div>
    <div class="bottom"><div class="unit" id="unit"><span class="pointer"></span><div class="ringwrap" id="ring"><img src="${A('gyuru.png')}" alt=""><div class="wave" id="wave"></div></div><button class="lens" id="lens" aria-label="${esc(t('au.cam.shot'))}"><span class="core" id="core"></span></button></div>
@@ -142,7 +142,7 @@ function cameraScreen(ctx) {
       core.classList.remove('flash'); void core.offsetWidth; core.classList.add('flash'); setState(t('au.cam.done') + ' ✦', true);
       FLOW.photo = c.toDataURL('image/jpeg', .9); FLOW.fromGallery = false; FLOW.dir = locked ? DIRS[locked.i] : null; setTimeout(() => go('aura/igazitas'), 650); };
     q('#gal').onclick = () => pickFile(async (f) => { FLOW.photo = await fileToData(f); FLOW.fromGallery = true; FLOW.dir = null; go('aura/igazitas'); });
-    q('#back').onclick = () => go('aura');
+    q('#back').onclick = () => back('aura');
     const layout = () => { sizeV(); placeLetters(); }; layout(); const onR = () => setTimeout(layout, 200); addEventListener('resize', onR); document.fonts && document.fonts.ready.then(placeLetters);
     const onVis = () => { if (document.hidden && stream) { stream.getTracks().forEach((x) => x.stop()); stream = null; } else if (!document.hidden && !stream) startCam(); }; document.addEventListener('visibilitychange', onVis);
     startCam();
@@ -153,7 +153,7 @@ function cameraScreen(ctx) {
 
 // ================= 3. PORTRÉ IGAZÍTÁSA =================
 function alignScreen(ctx) {
-  const { t, esc, pet, go } = ctx;
+  const { t, esc, pet, go, back } = ctx;
   const PAW = '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="16" rx="5" ry="4.2"/><ellipse cx="5.5" cy="10.5" rx="2" ry="2.6"/><ellipse cx="9.5" cy="6.5" rx="2" ry="2.7"/><ellipse cx="14.5" cy="6.5" rx="2" ry="2.7"/><ellipse cx="18.5" cy="10.5" rx="2" ry="2.6"/></svg>';
   // Eset: biztos (az adatlapi faj; nincs kérdés) · bizonytalan (hangolás) · elteres (nagyon biztos eltérés). A felismerő a 4. szakaszban jön; addig: ismert faj → biztos, ismeretlen → bizonytalan. Próba: FLOW.test.faj.
   const CASE = FLOW.test.faj || (pet.species ? 'biztos' : 'bizonytalan'), seen = CASE === 'elteres' ? (pet.species === 'cat' ? 'dog' : 'cat') : null, name = pet.name || t('au.start.noname');
@@ -195,8 +195,8 @@ function alignScreen(ctx) {
       else { if (again) { tn.innerHTML = `<div class="t">${esc(t('au.al.tune'))}</div>`; tn.appendChild(caps([['dog', spLabel('dog'), chosen === 'dog'], ['cat', spLabel('cat'), chosen === 'cat']])); tn.classList.add('on'); } else { const m = document.createElement('button'); m.className = 'modl'; m.textContent = t('au.al.modify'); m.onclick = () => renderTune(true); tn.appendChild(m); } } }
     renderTune(false);
     okBtn.onclick = () => { if (!iw) return; const N = 720, k = N / D, cv = document.createElement('canvas'); cv.width = cv.height = N; cv.getContext('2d').drawImage(img, tx * k, ty * k, iw * base * z * k, ih * base * z * k);
-      FLOW.portrait = cv.toDataURL('image/jpeg', .9); FLOW.species = chosen || pet.species || 'dog'; const d = q('#done'); d.classList.add('on'); setTimeout(() => go('aura/elemzes'), 700); };
-    q('#again').onclick = () => go('aura/kamera'); q('#back').onclick = () => go('aura/kamera');
+      FLOW.portrait = cv.toDataURL('image/jpeg', .9); FLOW.species = chosen || pet.species || 'dog'; const d = q('#done'); d.classList.add('on'); setTimeout(() => go('aura/elemzes', true), 700); };
+    q('#again').onclick = q('#back').onclick = () => back('aura/kamera');
     q('#pick').onclick = () => pickFile(async (f) => { FLOW.photo = await fileToData(f); FLOW.fromGallery = true; FLOW.dir = null; load(FLOW.photo); });
     if (FLOW.photo) load(FLOW.photo);
     const onR = () => setTimeout(() => fit(true), 200); addEventListener('resize', onR);
@@ -236,9 +236,9 @@ function analysisScreen(ctx) {
     steps.forEach(([cls, cap, gem], i) => timers.push(setTimeout(() => show(cls, cap, gem), 500 + i * PH)));
     timers.push(setTimeout(() => { scr.classList.add('hold'); capOn('c4'); timers.push(setTimeout(() => { phasesDone = true; tryFinish(); }, rm ? 400 : 2200)); }, 500 + steps.length * PH));
     function tryFinish() { if (finished || !serverDone || !phasesDone || !alive) return; finished = true;
-      if (FLOW.test.ok) { FLOW.fail = FLOW.test.ok; scr.classList.remove('hold'); scr.classList.add('fail'); root.querySelectorAll('.cap span').forEach((s) => s.classList.remove('on')); timers.push(setTimeout(() => go('aura/csend'), rm ? 400 : 1900)); return; }
+      if (FLOW.test.ok) { FLOW.fail = FLOW.test.ok; scr.classList.remove('hold'); scr.classList.add('fail'); root.querySelectorAll('.cap span').forEach((s) => s.classList.remove('on')); timers.push(setTimeout(() => go('aura/csend', true), rm ? 400 : 1900)); return; }
       capOn('c5'); scr.classList.add('fin'); q('.au-an').classList.add('fin');
-      timers.push(setTimeout(() => q('#white').classList.add('on'), rm ? 300 : 2350)); timers.push(setTimeout(() => { FLOW.arrivedFromAnalysis = true; go('aura/eredmeny'); }, rm ? 900 : 4000)); }
+      timers.push(setTimeout(() => q('#white').classList.add('on'), rm ? 300 : 2350)); timers.push(setTimeout(() => { FLOW.arrivedFromAnalysis = true; go('aura/eredmeny', true); }, rm ? 900 : 4000)); }
     const stopDust = dustLoop(root, q('#dust'), (rel) => { const f = rel(q('#stage').getBoundingClientRect()), a = Math.random() * Math.PI * 2, r = f.width * (.62 + Math.random() * .5), cls = scr.className, cols = ['255,214,130']; if (/p2|p3|hold|fin/.test(cls) && !GALLERY) cols.push('110,232,222'); if (/p3|hold|fin/.test(cls)) cols.push('208,172,255');
       return { k: 1, x: f.left + f.width / 2 + Math.cos(a) * r, y: f.top + f.height / 2 + Math.sin(a) * r, toward: [f.left + f.width / 2, f.top + f.height / 2], r: 1 + Math.random() * 1.8, dur: 3 + Math.random() * 3, life: 0, c: cols[Math.floor(Math.random() * cols.length)], ph: Math.random() * 7, sw: 0, f: 0, v: 0 }; }, { rate: 5, max: 40 });
     return () => { alive = false; timers.forEach(clearTimeout); stopDust(); };
@@ -248,7 +248,7 @@ function analysisScreen(ctx) {
 
 // ================= 5. SIKERTELEN PRÓBA – a tükör még hallgat =================
 function failScreen(ctx) {
-  const { t, esc, pet, go } = ctx, name = pet.name || t('au.start.noname'), ok = FLOW.fail || 'arc';
+  const { t, esc, pet, go, back } = ctx, name = pet.name || t('au.start.noname'), ok = FLOW.fail || 'arc';
   const html = `<div class="au au-fail"><canvas class="fx" id="dust"></canvas>${medal('back', esc(t('back')), ICON.back)}
   <div class="screen"><h1>${esc(t('au.fail.title'))}</h1><div class="sub">${esc(t('au.fail.sub'))}</div>
    <div class="pf"><div class="halo"></div><div class="wreath"><i class="wg"></i><i class="wv"></i></div><div class="ph"><img id="img" alt=""><div class="mist"></div><div class="q">✦</div></div><img src="${A('portrekeret.png')}" alt=""></div>
@@ -258,7 +258,7 @@ function failScreen(ctx) {
    <div class="acts"><button class="main" id="again">✦ ${esc(t('au.fail.again'))}</button><button class="sec" id="gal">${esc(t('au.start.gallery'))}</button></div></div></div>`;
   const mount = (root) => {
     const q = (s) => root.querySelector(s); if (FLOW.portrait) q('#img').src = FLOW.portrait;
-    q('#again').onclick = q('#back').onclick = () => go('aura/kamera');
+    q('#again').onclick = q('#back').onclick = () => back('aura/kamera');
     q('#gal').onclick = () => pickFile(async (f) => { FLOW.photo = await fileToData(f); FLOW.fromGallery = true; FLOW.dir = null; go('aura/igazitas'); });
     const stopDust = dustLoop(root, q('#dust'), (rel) => { const f = rel(q('.pf').getBoundingClientRect()), a = Math.random() * Math.PI * 2, r = f.width * (.5 + Math.random() * .2); return { k: 1, x: f.left + f.width / 2 + Math.cos(a) * r, y: f.top + f.height / 2 + Math.sin(a) * r, r: 1 + Math.random() * 1.4, v: 5 + Math.random() * 8, dur: 3.5 + Math.random() * 3, life: 0, c: Math.random() < .6 ? '255,214,130' : '208,172,255', ph: Math.random() * 7, sw: 3 + Math.random() * 6, f: .3 + Math.random() * .6 }; }, { rate: 1.8, max: 16 });
     return () => stopDust();

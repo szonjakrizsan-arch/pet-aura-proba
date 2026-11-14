@@ -1,13 +1,14 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.1';
-import { searchCities, norm } from './geo.js?v=0.6.1';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.1';
-import { analyze, chakraScores } from './analysis.js?v=0.6.1';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.1';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.1';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.1';
-import { auraScreen, FLOW } from './aura.js?v=0.6.1';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.2';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.2';
+import { analyze, chakraScores } from './analysis.js?v=0.6.2';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.2';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.2';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.2';
+import { auraScreen, FLOW } from './aura.js?v=0.6.2';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.2';
 const $ = (s) => document.querySelector(s);
-const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, cities: null, pk: '', pv: null, pet: { name: '', bday: '', btime: '', place: null, daily: true, ...JSON.parse(localStorage.getItem('pet') || '{}') } };
+const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
+Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
 const t = (k, v) => translate(S.dicts, S.lang, k, v);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -23,10 +24,18 @@ function chrome() {
   $('#nav').hidden = !TOP.includes(S.tab);
   $('#back').innerHTML = ICON.back; $('#back').setAttribute('aria-label', t('back'));
 }
+// A kezdőlap mancs-gombja a kiválasztott kedvenc portréját mutatja (ha van fotója), így mindig látszik, kié az élmény.
+function homePet() {
+  const r = document.querySelector('#s-home [data-go="pets"]'); if (!r) return; const p = S.pet;
+  let av = r.querySelector('.hpav'); const paw = r.querySelector('svg:not(.chev)');
+  if (p.photo) { if (!av) { av = document.createElement('span'); av.className = 'hpav'; r.prepend(av); } av.style.backgroundImage = `url(${p.photo})`; if (paw) paw.style.display = 'none'; }
+  else { if (av) av.remove(); if (paw) paw.style.display = ''; }
+  const label = p.id ? `${t('top.pets')}: ${p.name || t('au.start.noname')}` : t('top.pets'); r.setAttribute('aria-label', label); r.title = label;
+}
 // Vissza gomb: a főmenü termeiből mindig a kezdőlapra; az alterületekről az előző logikus szintre (szülő).
 const PARENT = { my: 'home', kb: 'home', styles: 'home', aura: 'home', cosmic: 'home', feng: 'home', pets: 'home', account: 'home' };
-const savePet = (o) => { S.pet = { ...S.pet, ...o }; localStorage.setItem('pet', JSON.stringify(S.pet)); };
-const auraCtx = () => ({ t, esc, pet: S.pet, go, lang: S.lang, savePet });
+const savePet = (o) => saveActive(o);
+const auraCtx = () => ({ t, esc, pet: S.pet, go, back: (r) => back(r), lang: S.lang, savePet });
 const soon = () => `<div class="soon"><div class="star">✦</div><h2>${esc(t('soon.title'))}</h2><p>${esc(t('soon.body'))}</p></div>`;
 const sub = (title, body, lead = '') => `<h1 class="t">${esc(title)}</h1>${lead ? `<p class="lead2">${esc(lead)}</p>` : ''}${body}`;
 function accountView() {
@@ -60,33 +69,26 @@ function profile() {
 }
 function kbCards(pf) {
   const row = (lab, i, key) => `<div class="kv big3"><span class="sg">${GLYPHS[i]}</span><div><small class="sub">${esc(t(lab))}</small><b>${esc(t('sign.' + i))}</b><p>${esc(t(key + i))}</p></div></div>`;
-  const sky = todaySky(new Date());
+  // A napi (és később heti) horoszkóp szünetel, amíg az ingyenes/fizetős rend el nem dől – a motor (dailyKeys) megmarad.
   return `<section class="glass fade"><h3>${esc(t('h.big3'))}</h3>${row('h.sun', pf.sun, 'sun.')}${row('h.moon', pf.moon, 'moon.')}
-   ${pf.asc !== null ? row('h.asc', pf.asc, 'asc.') : `<p class="sub">${esc(t('h.noAsc'))}</p>`}${pf.approx ? `<p class="note">${esc(t('h.approx'))}</p>` : ''}</section>` +
-  (S.pet.daily ? `<section class="glass soft fade"><h3>${esc(t('h.daily'))}</h3><p>${dailyKeys(pf.sun, sky).map((k) => esc(t(k))).join(' ')}</p></section>` : '');
-}
-function kbForm(p) {
-  return `<details class="more" ${p.btime || p.place ? 'open' : ''}><summary>${esc(t('h.more'))}</summary>
-   <label for="pt">${esc(t('h.time'))}</label><input id="pt" type="time" value="${esc(p.btime)}">
-   <label for="pp">${esc(t('h.place'))}</label>${p.place ? `<div class="chip">📍 ${esc(p.place.n)}, ${esc(p.place.cc)} <button id="pclear" aria-label="${esc(t('h.clear'))}">✕</button></div>`
-     : `<input id="pp" type="text" placeholder="${esc(t('h.placeph'))}" autocomplete="off"><div id="pr"></div>`}
-   <p class="note">${esc(t('h.attr'))}</p></details>
-   <label class="chk"><input id="dly" type="checkbox" ${p.daily ? 'checked' : ''}> ${esc(t('h.dailyOn'))}</label>`;
+   ${pf.asc !== null ? row('h.asc', pf.asc, 'asc.') : `<p class="sub">${esc(t('h.noAsc'))}</p>`}${pf.approx ? `<p class="note">${esc(t('h.approx'))}</p>` : ''}</section>`;
 }
 function cosmicView() {
   const now = new Date(), p = S.pet, m = moonPhase(now), b = p.bday ? new Date(p.bday + 'T12:00:00') : null, ok = b && !isNaN(b), kb = KB_READY.includes(S.lang);
   const pf = kb && ok ? profile() : null;
   const z = ok ? (pf ? { glyph: GLYPHS[pf.sun], idx: pf.sun, element: ['fire', 'earth', 'air', 'water'][pf.sun % 4] } : zodiac(b.getMonth() + 1, b.getDate())) : null, key = now.toISOString().slice(0, 10);
   const hue = z ? luckyHue(key, z.glyph) : 260, vals = z ? Array.from({ length: 8 }, (_, i) => 35 + (hash(key + z.glyph + i) % 55)) : [];
-  const spBtn = (k) => `<button class="sp${p.species === k ? ' on' : ''}" data-sp="${k}" type="button">${esc(t(k === 'cat' ? 'au.al.cat' : 'au.al.dog'))}</button>`;
-  const form = `<section class="glass"><label for="pn">${esc(t('cos.name'))}</label><input id="pn" type="text" value="${esc(p.name)}">
-   <label>${esc(t('cos.species'))}</label><div class="sprow">${spBtn('dog')}${spBtn('cat')}</div>
-   <label for="pb">${esc(t('cos.bday'))}</label><input id="pb" type="date" value="${esc(p.bday)}">${kb ? kbForm(p) : ''}</section>`;
+  // Az adatok a Kedvenceim adatlapon vannak; itt csak a kiválasztott kedvenc látszik, váltás és szerkesztés gombbal.
+  const pv = p.id ? `<span class="cpav${p.photo ? '' : ' none'}"${p.photo ? ` style="background-image:url(${p.photo})"` : ''}>${p.photo ? '' : ICON.paw}</span>` : '';
+  const meta = [p.bday && ok ? fmtDate(S.lang, b) : '', placeLabel(S.lang, p.place)].filter(Boolean).join(' · ');
+  const form = p.id ? `<section class="glass cpet">${pv}<div><b>${esc(p.name || t('au.start.noname'))}</b>${meta ? `<small class="sub">${esc(meta)}</small>` : ''}
+   <div class="cbtns"><button class="cbtn" data-go="pets/${p.id}">${esc(t('pets.edit'))}</button>${PETS.list.length > 1 ? `<button class="cbtn" data-go="pets">${esc(t('pets.change'))}</button>` : ''}</div></div></section>`
+    : `<section class="glass cpet"><div><p>${esc(t('pets.empty'))}</p><div class="cbtns"><button class="cbtn" data-go="pets/uj">${esc(t('pets.add'))}</button></div></div></section>`;
   const scene = `<section class="glass scene slot fade" data-slot="cosmic">${z ? `<span class="sign">${z.glyph}</span>` : dogArt().replace('class="art"', 'class="art" style="width:60px;position:absolute;left:16px;top:14px;color:#ffffff55"')}${moonSvg(m.frac)}<h2>${esc(p.name || t(kb ? 'h.title' : 'cos.title'))}</h2><span class="sub">${esc(fmtDate(S.lang, now))} ${MOON_GLYPHS[m.idx]}</span></section>`;
-  if (!z) return scene + `<p class="lead">${esc(t('cos.need'))}</p>` + form + note();
-  return scene + (pf ? kbCards(pf) : '') + `<section class="glass soft"><div class="kv">${elementArt(z.element)}<p>${esc(t('el.' + z.element))}</p></div></section>
+  if (!z) return scene + form + (p.id ? `<p class="lead">${esc(t('cos.need'))}</p>` : '') + note();
+  return scene + form + (pf ? kbCards(pf) : '') + `<section class="glass soft"><div class="kv">${elementArt(z.element)}<p>${esc(t('el.' + z.element))}</p></div></section>
   <section class="glass"><h3>${esc(t('cos.energy'))}</h3>${curve(vals, hue)}</section>
-  <section class="glass"><div class="kv"><span class="lucky" style="background:hsl(${hue} 80% 65%);color:hsl(${hue} 80% 65% / .6)"></span><div><b>${esc(t('cos.lucky'))}</b></div></div></section>` + form + note();
+  <section class="glass"><div class="kv"><span class="lucky" style="background:hsl(${hue} 80% 65%);color:hsl(${hue} 80% 65% / .6)"></span><div><b>${esc(t('cos.lucky'))}</b></div></div></section>` + note();
 }
 function fengView() {
   const sc = S.scan, hn = sc?.obs.bgHue, pal = PAL[hn];
@@ -102,20 +104,35 @@ function render() {
   if (S.stopAura) { S.stopAura(); S.stopAura = null; $('#s-aura').innerHTML = ''; }
   if (aura) { const scr = auraScreen(S.sub, auraCtx()); if (!scr) return; $('#s-aura').innerHTML = scr.html; S.stopAura = scr.mount($('#s-aura')); return; }
   $('#s-sub').classList.toggle('nonav', !TOP.includes(S.tab));
+  if (!(S.tab === 'pets' && S.sub)) leaveForm();
+  // A kezdőlap animációi csak akkor futnak, amikor a kezdőlap látszik (különben a rejtett vásznak is terhelnék a telefont, és akadna a görgetés).
+  if (!home && S.stopHome) { S.stopHome(); S.stopHome = null; }
   if (home) {
-    if (!$('#s-home').childElementCount || $('#s-home').dataset.lang !== S.lang) { if (S.stopHome) S.stopHome(); $('#s-home').innerHTML = homeHtml(t, esc); $('#s-home').dataset.lang = S.lang; S.stopHome = startHome($('#s-home')); }
+    if (!$('#s-home').childElementCount || $('#s-home').dataset.lang !== S.lang) { if (S.stopHome) { S.stopHome(); S.stopHome = null; } $('#s-home').innerHTML = homeHtml(t, esc); $('#s-home').dataset.lang = S.lang; }
+    if (!S.stopHome) S.stopHome = startHome($('#s-home'));
+    homePet(); S.shown = 'home';
     return;
   }
-  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => legacy(cosmicView()), feng: () => legacy(fengView()), pets: () => legacy(cosmicView()), account: accountView, my: () => sub(t('nav.my'), soon()), kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
-  $('#view').innerHTML = (views[S.tab] || views.home)(); $('#s-sub').scrollTop = 0;
+  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => legacy(cosmicView()), feng: () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: accountView, my: () => sub(t('nav.my'), soon()), kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
+  const html = (views[S.tab] || views.home)(); if (html == null) { back('pets'); return; }
+  $('#view').innerHTML = html;
+  const route = curRoute(); if (S.shown !== route) { $('#s-sub').scrollTop = 0; S.shown = route; } // ugyanazon az oldalon (pl. faj választása) nem ugrik a tetejére
+  if (S.tab === 'pets') mountPets($('#view'), { t, esc, lang: S.lang, go, back, render }, S.sub);
   if (S.tab === 'regi-aura' && S.scan) drawAura($('#cv'), S.scan);
 }
+// Navigáció: saját útvonal-verem, hogy a vissza gomb (arany medál) és a telefon vissza gombja ugyanoda vigyen.
+const STACK = [];
 function go(route, replace = false) {
   const [tab, sub = ''] = route.split('/'); if (!route || (tab === S.tab && sub === S.sub)) return; S.tab = tab; S.sub = sub;
-  if (replace) history.replaceState(null, '', '#' + route); else location.hash = route;
+  if (replace) { history.replaceState(null, '', '#' + route); STACK[STACK.length - 1] = route; } else { history.pushState(null, '', '#' + route); STACK.push(route); }
   render();
 }
-addEventListener('hashchange', () => { const [tab, sub = ''] = (location.hash.slice(1) || 'home').split('/'); if (tab !== S.tab || sub !== S.sub) { S.tab = tab; S.sub = sub; render(); } });
+// Vissza egy logikai szülőre: ha az előző lépés éppen az, valódi „vissza” (a telefon gombjával egyezően); különben odaugrik.
+function back(target) { if (STACK.length > 1 && STACK[STACK.length - 2] === target) { history.back(); return; } go(target, true); }
+const curRoute = () => S.tab + (S.sub ? '/' + S.sub : '');
+addEventListener('popstate', () => { const r = location.hash.slice(1) || 'home', [tab, sub = ''] = r.split('/');
+  if (STACK.length > 1 && STACK[STACK.length - 2] === r) STACK.pop(); else STACK.push(r);
+  if (tab !== S.tab || sub !== S.sub) { S.tab = tab; S.sub = sub; render(); } });
 function drawAura(cv, sc, scanY = null) {
   const g = cv.getContext('2d'), W = cv.width; g.clearRect(0, 0, W, W);
   const r = Math.max(W / sc.img.width, W / sc.img.height), w = sc.img.width * r, h = sc.img.height * r;
@@ -142,29 +159,24 @@ async function scan(file) {
 }
 document.addEventListener('click', (e) => {
   const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
-  const sp = e.target.closest('[data-sp]'); if (sp) { savePet({ species: sp.dataset.sp }); render(); return; }
-  if (e.target.closest('#s-sub #back')) { go(PARENT[S.tab] || 'home'); return; }
+  if (e.target.closest('#s-sub #back')) { back(S.tab === 'pets' && S.sub ? 'pets' : PARENT[S.tab] || 'home'); return; }
   const tab = e.target.closest('[data-tab]'); if (tab && tab.dataset.tab) { go(tab.dataset.tab); }
   if (e.target.id === 'scan') $('#file').click();
-  const city = e.target.closest('[data-city]'); if (city) { const c = S.cities[+city.dataset.city]; S.pet = { ...S.pet, place: { n: c[0], cc: c[1], lat: c[2], lon: c[3] } }; localStorage.setItem('pet', JSON.stringify(S.pet)); render(); }
-  if (e.target.id === 'pclear') { S.pet = { ...S.pet, place: null }; localStorage.setItem('pet', JSON.stringify(S.pet)); render(); }
   if (e.target.id === 'goscan') go('regi-aura');
-});
-document.addEventListener('input', async (e) => {
-  if (e.target.id !== 'pp') return;
-  if (!S.cities) S.cities = (await (await fetch('data/cities.json?v=0.6.1')).json()).map((c) => [...c, norm(c[0])]);
-  const r = searchCities(S.cities, e.target.value), box = $('#pr'); if (!box) return;
-  box.innerHTML = e.target.value.trim().length < 2 ? '' : r.length ? r.map((c, i) => `<button class="city" data-city="${S.cities.indexOf(c)}">${esc(c[0])}, ${esc(c[1])}</button>`).join('') : `<p class="note">${esc(t('h.nocity'))}</p>`;
 });
 document.addEventListener('change', (e) => {
   if (e.target.id === 'lang') setLang(e.target.value);
   if (e.target.id === 'file' && e.target.files[0]) { scan(e.target.files[0]); e.target.value = ''; }
-  const id = e.target.id, sv = (o, re = true) => { S.pet = { ...S.pet, ...o }; localStorage.setItem('pet', JSON.stringify(S.pet)); if (re) render(); };
-  if (id === 'pn') sv({ name: e.target.value }, false);
-  if (id === 'pb') sv({ bday: e.target.value });
-  if (id === 'pt') sv({ btime: e.target.value });
-  if (id === 'dly') sv({ daily: e.target.checked });
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.go) go(e.target.dataset.go); });
-{ const [tab, sub = ''] = (location.hash.slice(1) || 'home').split('/'); S.tab = tab; S.sub = sub; } if (!location.hash) history.replaceState(null, '', '#home');
-setLang(detect(navigator.languages, localStorage.getItem('lang')));
+{ const [tab, sub = ''] = (location.hash.slice(1) || 'home').split('/'); S.tab = tab; S.sub = sub; } if (!location.hash) history.replaceState(null, '', '#home'); STACK.push(curRoute());
+// Indulás: a takarás csak akkor tűnik el, amikor a kezdőlap minden képe és a betűk betöltöttek – így nem rétegenként jelenik meg.
+const imgReady = (src) => new Promise((r) => { const i = new Image(); i.onload = i.onerror = r; i.src = src; });
+const boot = () => { const b = $('#boot'); if (!b || b.classList.contains('out')) return; b.classList.add('out'); setTimeout(() => b.remove(), 700); };
+setLang(detect(navigator.languages, localStorage.getItem('lang'))).then(() => {
+  const imgs = [...document.querySelectorAll('#s-home img, #s-aura img')].map((i) => i.src);
+  ['bg.jpg', 'frame2.png', 'scene_aura.jpg', 'scene_horo.jpg', 'scene_feng.jpg'].forEach((f) => imgs.push('assets/kezdolap/' + f));
+  imgs.push('assets/ui/hatter_aura.jpg', 'assets/ui/arany_medal.png');
+  Promise.all([...imgs.map(imgReady), document.fonts ? document.fonts.ready : null]).then(() => requestAnimationFrame(() => requestAnimationFrame(boot)));
+  setTimeout(boot, 5000);
+});

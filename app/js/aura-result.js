@@ -1,7 +1,7 @@
 // Eredményoldal: a jóváhagyott auraportré-oldal (design/aura_scanner/forras/template.html) az app keretében.
 // A rajzoló kód a sablonból változatlan. Az összetétel és az üzenet a 4. szakaszig mintaadat (a valódi elemzőmotor adja majd).
-import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.1';
-import { FLOW } from './aura.js?v=0.6.1';
+import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.2';
+import { FLOW } from './aura.js?v=0.6.2';
 const GOLD='<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#e9c46f"/><stop offset="1" stop-color="#b07f2c"/></linearGradient></defs>';
 const ICON={
  astro:`<svg viewBox="0 0 32 32">${GOLD}<path fill="url(#gg)" d="M19 5a11 11 0 1 0 8 18A9 9 0 1 1 19 5z"/><path fill="url(#gg)" d="M24 6l1.1 2.9L28 10l-2.9 1.1L24 14l-1.1-2.9L20 10l2.9-1.1z"/></svg>`,
@@ -13,14 +13,14 @@ const WU={E:'wood',SE:'wood',S:'fire',SW:'earth',NE:'earth',W:'metal',NW:'metal'
 const QCOL={wood:'#329B78',fire:'#C27A45',earth:'#65875C',metal:'#B8C3CC',water:'#468DAB'};
 export function sampleComposition(t){
  const dog=FLOW.species!=='cat',dir=FLOW.dir;
- const astro=dog?{lab:[t('el.fire'),t('el.earth'),t('el.air')].join(' · '),col:'#BF985D'}:{lab:t('el.water'),col:'#468DAB'};
+ const astro=dog?{lab:[t('au.el.fire'),t('au.el.earth'),t('au.el.air')].join(' · '),col:'#BF985D'}:{lab:t('au.el.water'),col:'#468DAB'};
  const etho={lab:t('au.etho.curious'),col:dog?'#6FA9C8':'#E8C66A'};
  if(dir){const w=WU[dir];return [['astro',astro.lab,astro.col,.30],['qi',t('au.dir.'+dir)+' · '+t('au.wu.'+w),QCOL[w],.30],['etho',etho.lab,etho.col,.40]]}
  return [['astro',astro.lab,astro.col,.4286],['etho',etho.lab,etho.col,.5714]];
 }
 export function resultScreen(ctx){
- const {t,esc,pet,go,lang}=ctx,name=pet.name||t('au.start.noname');
- const html=`<div class="au au-res"><div class="scrollarea" id="sa"><canvas id="bgcv"></canvas><canvas id="stars"></canvas>
+ const {t,esc,pet,go,back,lang}=ctx,name=pet.name||t('au.start.noname');
+ const html=`<div class="au au-res"><canvas id="stars"></canvas><div class="scrollarea" id="sa"><canvas id="bgcv"></canvas>
  <div class="wrap"><h1>${esc(t('au.res.title'))}</h1><div class="sub" id="sub">${esc(t('au.res.date',{date:new Intl.DateTimeFormat(lang,{dateStyle:'long'}).format(new Date())}))}</div>
   <canvas id="aura"></canvas><div class="name" id="nm">${esc(name)}</div>
   <div class="comp"><div class="ctitle"><span class="ln"></span><span class="st"></span>${esc(t('au.res.comp'))}<span class="st"></span><span class="ln r"></span></div>
@@ -104,7 +104,7 @@ export function resultScreen(ctx){
    band(bStart,Hi,yB,true,bF);
   }
   let bgT=0;const bgQ=()=>{clearTimeout(bgT);bgT=setTimeout(buildBg,60)};
-  BGIMG.onload=bgQ;
+  const bgLoaded=new Promise(r=>{BGIMG.onload=()=>{r();bgQ()};BGIMG.onerror=r});
   // minden méretváltozásra (első valódi méret, forgatás, ablakméret) újraépül minden réteg
   let rzT=0,lastW=0;const RO=new ResizeObserver(()=>{clearTimeout(rzT);rzT=setTimeout(()=>{const w=q('.wrap').getBoundingClientRect().width;
    if(w!==lastW){lastW=w;photo&&build();bandSetup();layoutCells()}bgQ()},50)});RO.observe(q('.wrap'));
@@ -317,16 +317,23 @@ export function resultScreen(ctx){
   q('#msg').textContent=t(L.length===3?'au.res.sample3':'au.res.sample2',{name});
   if(lang==='ja'){const m=q('#msg');m.style.fontStyle='normal';m.style.fontSize='14.5px';m.style.lineHeight='1.75';m.style.textAlign='left';q('.vet').style.fontStyle='normal'}
   bandSetup();layoutCells();
-  photo=new Image();photo.src=FLOW.portrait;photo.onload=build;
+  photo=new Image();const photoLoaded=new Promise(r=>{photo.onload=()=>{build();r()};photo.onerror=r});photo.src=FLOW.portrait;
   const onR=()=>{sizeStars();bgQ()};addEventListener('resize',onR);document.fonts&&document.fonts.ready.then(()=>{layoutCells();bgQ()});
   // csillagok külön hurokban (a frame() a sablonban a fő vászonra rajzol)
   (function sf(now){if(!alive)return;const tt=(now-t0)/1000;sx.clearRect(0,0,sc.width,sc.height);ST.forEach(s=>{sx.globalAlpha=.35+.35*Math.sin(tt*1.3+s.p);sx.fillStyle='#fff3d6';sx.beginPath();sx.arc(s.x*sc.width,s.y*sc.height,s.r*devicePixelRatio,0,7);sx.fill()});sx.globalAlpha=1;requestAnimationFrame(sf)})(t0);
   requestAnimationFrame(frame);
   // a fehér takarás: az oldal felépülése után egyszer halványul ki (az elemzés fehér átmenetének folytatása)
-  const veil=q('#veil0');const unveil=()=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>{veil.classList.add('out');setTimeout(()=>veil.remove(),2100)},250)));
-  if(FLOW.arrivedFromAnalysis){FLOW.arrivedFromAnalysis=false;(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(unveil,unveil);setTimeout(unveil,6000)}else veil.remove();
+  // Az eredmény a fehér takarás mögött TELJESEN elkészül (betűk, fotó, aura, sávok, festett háttér, néhány kirajzolt képkocka), és csak utána, egyszer bontakozik ki.
+  const veil=q('#veil0');let unveiled=false;
+  const frames=(n)=>new Promise(r=>{const f=()=>--n<=0?r():requestAnimationFrame(f);requestAnimationFrame(f)});
+  const unveil=()=>{if(unveiled||!alive)return;unveiled=true;veil.classList.add('out');setTimeout(()=>veil.remove(),2100)};
+  const prepared=Promise.all([document.fonts?document.fonts.ready:null,photoLoaded,bgLoaded]).then(async()=>{
+   if(!alive)return;layoutCells();bandSetup();if(!maskCanvas)build();bgKey='';buildBg();await frames(4)});
+  if(FLOW.arrivedFromAnalysis){FLOW.arrivedFromAnalysis=false;prepared.then(()=>setTimeout(unveil,150),unveil);setTimeout(unveil,8000)}
+  else{veil.style.transition='opacity .45s ease';prepared.then(unveil,unveil);setTimeout(unveil,4000)}
   // gombok: vissza · megosztás · mentés (a kész auraportré képe)
-  q('#bBack').onclick=()=>go('home');
+  // vissza a portrékészítéshez (fotózás)
+  q('#bBack').onclick=()=>back('aura/kamera');
   const shot=()=>new Promise(res=>{const cv=q('#aura'),o=document.createElement('canvas');o.width=cv.width;o.height=cv.height;const x=o.getContext('2d');x.fillStyle='#1a0f38';x.fillRect(0,0,o.width,o.height);x.drawImage(cv,0,0);o.toBlob(res,'image/png')});
   q('#bSave').onclick=async()=>{const b=await shot();if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`pet-aura-${name}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
   q('#bShare').onclick=async()=>{const b=await shot();if(!b)return;const f=new File([b],`pet-aura-${name}.png`,{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Pet Aura'})}catch(e){}}else q('#bSave').click()};

@@ -5,7 +5,7 @@ font-family:ui-rounded,"Nunito","Hiragino Maru Gothic ProN","Segoe UI",system-ui
 .legacy h2{margin:0 0 6px;font-size:1.25rem}
 .legacy h3{margin:0 0 10px;font-size:1.02rem;font-weight:700}
 .legacy input[type=text],.legacy input[type=date]{background:#ffffff14;color:var(--mist);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;width:100%}
-.legacy .glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:14px 0;backdrop-filter:blur(14px)}
+.legacy .glass{background:var(--glass);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:14px 0;background:#1f1238e6}
 .legacy .glass.soft{border-style:dashed}
 .legacy .lead{text-align:center;color:var(--dim);margin:6px 0}
 .legacy .slot{background:var(--img,none) center/cover}
@@ -28,7 +28,7 @@ font-family:ui-rounded,"Nunito","Hiragino Maru Gothic ProN","Segoe UI",system-ui
 .legacy .res canvas{width:100%;height:100%;display:block}
 .legacy .res .cap{position:absolute;left:0;right:0;bottom:0;padding:48px 18px 16px;background:linear-gradient(transparent,#100b24ee);display:flex;justify-content:space-between;align-items:end}
 .legacy .res .cap strong{font-size:1.5rem}
-.legacy .chip{background:#ffffff22;border:1px solid #ffffff44;border-radius:999px;padding:6px 14px;font-weight:700;backdrop-filter:blur(8px)}
+.legacy .chip{background:#ffffff22;border:1px solid #ffffff44;border-radius:999px;padding:6px 14px;font-weight:700}
 .legacy .orbs{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 6px;justify-items:center}
 .legacy .orb{position:relative;width:100%;max-width:78px;text-align:center;font-size:.72rem;color:var(--dim)}
 .legacy .orb svg{width:100%;display:block}
