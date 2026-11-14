@@ -28,7 +28,7 @@ export const fmtDate = (lang, d) => new Intl.DateTimeFormat(lang, { dateStyle: '
 // Only codes listed in SUPPORTED have a file (e.g. "pt" is just a lookup step, never fetched).
 export async function loadDicts(lang, fetchJson = (u) => fetch(u).then((r) => (r.ok ? r.json() : Promise.reject(new Error(u))))) {
   const known = SUPPORTED.map((s) => s.code), out = {};
-  for (const c of chain(lang).filter((c) => known.includes(c))) { try { out[c] = await fetchJson(`locales/${c}.json?v=0.6.5`); } catch { continue; }
-    if (KB_READY.includes(c)) { try { Object.assign(out[c], await fetchJson(`locales/kb.${c}.json?v=0.6.5`)); } catch { /* optional */ } } }
+  for (const c of chain(lang).filter((c) => known.includes(c))) { try { out[c] = await fetchJson(`locales/${c}.json?v=0.6.6`); } catch { continue; }
+    if (KB_READY.includes(c)) { try { Object.assign(out[c], await fetchJson(`locales/kb.${c}.json?v=0.6.6`)); } catch { /* optional */ } } }
   return out;
 }

@@ -1,12 +1,12 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.5';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.5';
-import { analyze, chakraScores } from './analysis.js?v=0.6.5';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.5';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.5';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.5';
-import { auraScreen, FLOW } from './aura.js?v=0.6.5';
-import { cosmicView as cosmicNew, mountCosmic } from './cosmic.js?v=0.6.5';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.5';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.6';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.6';
+import { analyze, chakraScores } from './analysis.js?v=0.6.6';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.6';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.6';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.6';
+import { auraScreen, FLOW } from './aura.js?v=0.6.6';
+import { cosmicView as cosmicNew, mountCosmic } from './cosmic.js?v=0.6.6';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.6';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -120,7 +120,7 @@ function render() {
   $('#view').innerHTML = html;
   const route = curRoute(); if (S.shown !== route) { $('#s-sub').scrollTop = 0; S.shown = route; } // ugyanazon az oldalon (pl. faj választása) nem ugrik a tetejére
   if (S.stopCosmic) { S.stopCosmic(); S.stopCosmic = null; }
-  if (S.tab === 'cosmic') S.stopCosmic = mountCosmic($('#view'), $('#s-sub'));
+  if (S.tab === 'cosmic') S.stopCosmic = mountCosmic($('#view'));
   if (S.tab === 'pets') mountPets($('#view'), { t, esc, lang: S.lang, go, back, render }, S.sub);
   if (S.tab === 'regi-aura' && S.scan) drawAura($('#cv'), S.scan);
 }

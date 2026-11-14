@@ -1,11 +1,11 @@
 // Kozmikus Mancs – új külső (3. szakasz). A számítás változatlan: horoscope.js (égi profil), cosmos.js (Hold, jegy, szerencseszín).
 // A díszítések saját rajzú, arany vonalas SVG-k (url(#au) = a közös arany színátmenet az index.html-ben).
-import { KB_READY, fmtDate } from './i18n.js?v=0.6.5';
-import { birthProfile } from './horoscope.js?v=0.6.5';
-import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.5';
-import { ICON } from './home.js?v=0.6.5';
-import { IC_SWAP } from './aura-deco.js?v=0.6.5';
-import { ZG, PG } from './zodiac-glyphs.js?v=0.6.5';
+import { KB_READY, fmtDate } from './i18n.js?v=0.6.6';
+import { birthProfile } from './horoscope.js?v=0.6.6';
+import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.6';
+import { ICON } from './home.js?v=0.6.6';
+import { IC_SWAP } from './aura-deco.js?v=0.6.6';
+import { ZG, PG } from './zodiac-glyphs.js?v=0.6.6';
 
 const ELEM = ['fire', 'earth', 'air', 'water'];
 const RULER = [4, 3, 2, 1, 0, 2, 3, 9, 5, 6, 7, 8]; // jegy → uralkodó bolygó (modern rend): Kos–Mars, Bika–Vénusz, …, Halak–Neptunusz
@@ -15,6 +15,8 @@ const G = 'fill="none" stroke="url(#au)" stroke-linecap="round" stroke-linejoin=
 const rnd = (seed) => { let s = hash(seed); return () => ((s = Math.imul(s ^ (s >>> 15), 2246822507) ^ Math.imul(s ^ (s >>> 13), 3266489909)) >>> 0) / 4294967296; };
 const star4 = (x, y, r) => `<path d="M${x} ${y - r}Q${x} ${y} ${x + r} ${y}Q${x} ${y} ${x} ${y + r}Q${x} ${y} ${x - r} ${y}Q${x} ${y} ${x} ${y - r}Z" fill="url(#au)"/>`;
 
+// --- apró arany mancsnyom (x,y középpont, méret, elforgatás) ---
+const paw = (x, y, s, rot, op = 1) => `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(1)}) scale(${s})" opacity="${op}"><ellipse cx="0" cy="2.2" rx="2.6" ry="2.1" fill="url(#au)"/><ellipse cx="-2.9" cy="-1.3" rx=".95" ry="1.25" fill="url(#au)"/><ellipse cx="-1" cy="-2.7" rx=".95" ry="1.3" fill="url(#au)"/><ellipse cx="1" cy="-2.7" rx=".95" ry="1.3" fill="url(#au)"/><ellipse cx="2.9" cy="-1.3" rx=".95" ry="1.25" fill="url(#au)"/></g>`;
 // --- állatövi érme ---
 const zodiacMedal = (i, glow = '') => `<span class="zm${glow ? ' ' + glow : ''}"><svg viewBox="-8 -8 116 116" aria-hidden="true"><path d="${ZG[i]}" fill="url(#au)"/></svg></span>`;
 
@@ -35,7 +37,9 @@ function astrolabe() {
   const C = 120; let ticks = '';
   for (let a = 0; a < 360; a += 5) { const L = a % 30 === 0 ? 9 : 4, r1 = 104, r2 = r1 - L, k = (a * Math.PI) / 180; ticks += `M${(C + r1 * Math.cos(k)).toFixed(1)} ${(C + r1 * Math.sin(k)).toFixed(1)}L${(C + r2 * Math.cos(k)).toFixed(1)} ${(C + r2 * Math.sin(k)).toFixed(1)}`; }
   const R = rnd('astro'); let stars = '';
-  for (let i = 0; i < 26; i++) { const k = R() * Math.PI * 2, r = 80 + R() * 34; stars += `<circle cx="${(C + r * Math.cos(k)).toFixed(1)}" cy="${(C + r * Math.sin(k)).toFixed(1)}" r="${(0.6 + R() * 1.1).toFixed(1)}" fill="#ffe9b0" opacity="${(0.35 + R() * 0.6).toFixed(2)}"/>`; }
+  for (let i = 0; i < 16; i++) { const k = R() * Math.PI * 2, r = 80 + R() * 34; stars += `<circle cx="${(C + r * Math.cos(k)).toFixed(1)}" cy="${(C + r * Math.sin(k)).toFixed(1)}" r="${(0.6 + R() * 1.1).toFixed(1)}" fill="#ffe9b0" opacity="${(0.35 + R() * 0.6).toFixed(2)}"/>`; }
+  // mancsnyom-ösvények a gyűrűn: négy irányban, hogy a lassú forgás közben mindkét szárnyon mindig látsszon egy
+  let trails = ''; for (const base of [0, 90, 180, 270]) for (let j = 0; j < 4; j++) { const a = base - 15 + j * 10, k = (a * Math.PI) / 180, r = 95 + (j % 2 ? 2.2 : -2.2); trails += paw(C + r * Math.cos(k), C + r * Math.sin(k), 1.05, a + 180, 0.55 + j * 0.15); }
   const cons = (pts) => `<path d="${pts.map((p, i) => (i ? 'L' : 'M') + p.join(' ')).join('')}" ${G} stroke-width=".7" opacity=".55"/>${pts.map((p) => `<circle cx="${p[0]}" cy="${p[1]}" r="1.5" fill="#fff1c2"/>`).join('')}`;
   // Csak a két oldalsó ív látszik (szárnyak): vízszintes és függőleges lágy maszk – a cím és a névtábla előtt nem fut át.
   return `<svg class="kastro" viewBox="0 0 240 240" aria-hidden="true"><defs>
@@ -45,7 +49,7 @@ function astrolabe() {
    <g mask="url(#kmh)"><g mask="url(#kmv)"><g class="rot">
    <circle cx="${C}" cy="${C}" r="114" ${G} stroke-width=".8" opacity=".6"/><circle cx="${C}" cy="${C}" r="104" ${G} stroke-width="1" opacity=".75"/><circle cx="${C}" cy="${C}" r="86" ${G} stroke-width=".6" stroke-dasharray="1 4" opacity=".6"/>
    <path d="${ticks}" ${G} stroke-width=".9" opacity=".7"/>${stars}
-   ${cons([[30, 92], [22, 110], [34, 128], [26, 146]])}${cons([[212, 88], [220, 104], [208, 120], [218, 140], [206, 152]])}
+   ${trails}
    ${star4(C, 8, 4)}${star4(C, 232, 4)}${star4(8, C, 4)}${star4(232, C, 4)}</g></g></g></svg>`;
 }
 
@@ -63,6 +67,12 @@ const divider = () => `<svg class="kdiv" viewBox="0 0 260 18" preserveAspectRati
  <path d="M100 9c4-6 10-6 12 0-2 4-6 4-7 1M160 9c-4-6-10-6-12 0 2 4 6 4 7 1" stroke="#b07a26" stroke-width="1.2" fill="none" stroke-linecap="round"/>
  <path d="M130 1.5 133 9 130 16.5 127 9Z" fill="#c08a32"/><path d="M122.5 9 130 6.5 137.5 9 130 11.5Z" fill="#d9a64a"/><circle cx="118" cy="9" r="1.4" fill="#b07a26"/><circle cx="142" cy="9" r="1.4" fill="#b07a26"/></svg>`;
 
+// --- füstüveg-panelek arany díszvonala (középen vastagodó, végein elhalványuló, indás – mint a pergamen elválasztója) ---
+const orn = (pos) => `<svg class="korn ${pos}" viewBox="0 0 280 20" aria-hidden="true"><defs><linearGradient id="kog" x1="0" x2="1"><stop offset="0" stop-color="#f6d27a" stop-opacity="0"/><stop offset=".5" stop-color="#ffe7a6"/><stop offset="1" stop-color="#f6d27a" stop-opacity="0"/></linearGradient></defs>
+ <path d="M6 10Q70 9.4 140 8.4Q210 9.4 274 10Q210 10.6 140 11.6Q70 10.6 6 10Z" fill="url(#kog)"/>
+ <path d="M112 10c4-6 10-6 12 0-2 4-6 4-7 1M168 10c-4-6-10-6-12 0 2 4 6 4 7 1" stroke="url(#au)" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+ <path d="M140 2 143.4 10 140 18 136.6 10Z" fill="url(#au)"/><circle cx="129" cy="10" r="1.5" fill="#f6d27a"/><circle cx="151" cy="10" r="1.5" fill="#f6d27a"/></svg>`;
+
 // --- születési csillag (üres állapot) ---
 const birthStar = () => `<svg class="kbirth" viewBox="0 0 120 120" aria-hidden="true">
  <defs><radialGradient id="kbg"><stop offset="0" stop-color="#fff6d8" stop-opacity=".95"/><stop offset=".35" stop-color="#ffd98a" stop-opacity=".45"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient></defs>
@@ -78,6 +88,7 @@ function elemArt(el, cls) {
   if (el === 'water') art = `<path d="M50 14c11 15 17 24 17 33a17 17 0 0 1-34 0c0-9 6-18 17-33Z" ${G} stroke-width="2.6"/><path d="M42 50a8 8 0 0 0 8 8" ${G} stroke-width="1.8"/><path d="M16 72c6-5 11-5 17 0s11 5 17 0 11-5 17 0 11 5 17 0M22 82c5-4 9-4 14 0s9 4 14 0 9-4 14 0 9 4 14 0" ${G} stroke-width="1.6"/>`;
   if (el === 'air') art = `<path d="M14 38h40a10 10 0 1 0-10-10" ${G} stroke-width="2.6"/><path d="M14 52h56a11 11 0 1 1-11 11" ${G} stroke-width="2.6"/><path d="M20 66h22a7 7 0 1 1-7 7" ${G} stroke-width="1.8"/><path d="M70 24c4 0 8 3 8 8" ${G} stroke-width="1.4" opacity=".7"/>`;
   const R = rnd('el' + el); let dots = ''; for (let i = 0; i < 10; i++) { const k = R() * Math.PI * 2; dots += `<circle cx="${(50 + 46 * Math.cos(k)).toFixed(1)}" cy="${(50 + 46 * Math.sin(k)).toFixed(1)}" r="1.1" fill="#ffe9b0"/>`; }
+  if (cls === 'kbgm') return `<svg class="${cls}" viewBox="0 0 100 100" aria-hidden="true">${art}</svg>`; // háttérben csak maga a motívum, halványan
   return `<svg class="${cls}" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" ${G} stroke-width="1.2" opacity=".55"/>${dots}${art}</svg>`;
 }
 
@@ -99,20 +110,8 @@ function energy(vals, t, esc) {
    <div class="kdp">${dp}</div></div><p class="kpk">✦ ${esc(t('cos.peak'))}: ${esc(t('cos.dp.' + part))}</p>`;
 }
 
-// --- szerencsekő: csiszolt drágakő a napi szín árnyalatában ---
-function gem(h) {
-  const c = (l, s = 80) => `hsl(${h} ${s}% ${l}%)`;
-  const P = { tl: [24, 24], tr: [76, 24], r: [94, 44], b: [50, 94], l: [6, 44], t1: [36, 24], t2: [64, 24], m1: [30, 44], m2: [70, 44], m0: [50, 44] };
-  const poly = (ks, fill, op = 1) => `<polygon points="${ks.map((k) => P[k].join(',')).join(' ')}" fill="${fill}" opacity="${op}"/>`;
-  return `<svg class="kgem" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="kgh"><stop offset="0" stop-color="${c(70, 95)}" stop-opacity=".9"/><stop offset=".45" stop-color="${c(55, 90)}" stop-opacity=".35"/><stop offset="1" stop-color="${c(50)}" stop-opacity="0"/></radialGradient></defs>
-   <circle cx="50" cy="54" r="48" fill="url(#kgh)"/>
-   ${poly(['tl', 't1', 'm1', 'l'], c(62))}${poly(['t1', 't2', 'm2', 'm1'], c(74, 85))}${poly(['t2', 'tr', 'r', 'm2'], c(50))}
-   ${poly(['l', 'm1', 'b'], c(36))}${poly(['m1', 'm0', 'b'], c(56))}${poly(['m0', 'm2', 'b'], c(44))}${poly(['m2', 'r', 'b'], c(26))}
-   ${poly(['t1', 't2', 'm0'], '#ffffff', 0.28)}<polygon points="38,27 54,27 44,40 34,40" fill="#fff" opacity=".45"/><polygon points="34,50 46,50 48,72" fill="#fff" opacity=".18"/>
-   <polygon points="${['tl', 'tr', 'r', 'b', 'l'].map((k) => P[k].join(',')).join(' ')}" fill="none" stroke="url(#au)" stroke-width="2.2" stroke-linejoin="round"/>
-   <path d="M${P.l}L${P.r}M${P.t1}L${P.m1}L${P.b}L${P.m2}L${P.t2}M${P.m0}L${P.b}" fill="none" stroke="url(#au)" stroke-width=".9" opacity=".8"/>
-   <g class="kspark">${star4(78, 20, 7)}</g></svg>`;
-}
+// --- szerencsekő: valódi fénytöréssel renderelt, áttetsző csiszolt kő (design/kozmikus_mancs/forras/gem_render.py), a napi szín szerint ---
+const gem = (hn) => `<img class="kgem" src="assets/kozmikus/ko_${hn}.png" alt="">`;
 
 let cache = { k: '', v: null };
 const profile = (p) => { const k = [p.bday, p.btime, p.place && p.place.lat + ',' + p.place.lon].join('|'); if (cache.k !== k) { try { cache = { k, v: birthProfile(p) }; } catch { cache = { k, v: null }; } } return cache.v; };
@@ -126,7 +125,7 @@ export function cosmicView({ t, esc, lang, pet: p, multi }) {
   const head = `<h1 class="t">${esc(t('nav.cosmic'))}</h1>
   <div class="ktop">${astrolabe()}
    ${el ? side('kl', sideElem(el), t('cos.elem', { el: t('au.el.' + el) })) : ''}
-   <div class="kpet"><div class="kph${p.photo ? '' : ' none'}"${p.photo ? ` style="background-image:url(${p.photo})"` : ''}>${p.photo ? '' : ICON.paw}</div><img src="assets/aura/portrekeret.png" alt="">${sun !== null ? `<span class="ksign">${zodiacMedal(sun)}</span>` : ''}</div>
+   <div class="kpet"><div class="kwr"><i></i><i></i><i></i></div><div class="kph${p.photo ? '' : ' none'}"${p.photo ? ` style="background-image:url(${p.photo})"` : ''}>${p.photo ? '' : ICON.paw}</div><img src="assets/aura/portrekeret.png" alt="">${sun !== null ? `<span class="ksign">${zodiacMedal(sun)}</span>` : ''}</div>
    ${pl !== null ? side('kr', sidePlanet(pl), t('cos.ruler', { p: t('pl.' + pl) })) : ''}</div>
   ${p.id ? `<a class="kname" data-go="pets" role="button" tabindex="0" aria-label="${esc(t('pets.change'))}"><span>${esc(name)}</span>${multi ? IC_SWAP : ''}</a>` : ''}
   <div class="ksky">${moonDisc(m.frac)}<span>${esc(fmtDate(lang, now))}<br><i>${esc(t('moonph.' + m.idx))}</i></span></div>`;
@@ -146,20 +145,20 @@ export function cosmicView({ t, esc, lang, pet: p, multi }) {
   // Az elem-szöveg „Föld energia: …” alakú: a kettőspont előtti rész a cím, így nem ismétlődik.
   const et = t('el.' + el), cut = et.search(/[:：]/), eh = cut > 0 ? et.slice(0, cut) : t('au.el.' + el), eb = cut > 0 ? et.slice(cut + 1).trim() : et;
   return head + perg(big) + `
-  <div class="panel kel">${elemArt(el, 'kbgm')}<span class="kico">${elemArt(el, 'kicon')}</span><div><h3>${esc(eh)}</h3><p>${esc(eb)}</p></div></div>
-  <div class="panel ken"><h3>${esc(t('cos.energy'))}</h3>${energy(vals, t, esc)}</div>
-  <div class="panel kluck">${gem(hue)}<div><h3>${esc(t('cos.lucky'))}</h3><b class="kcol">${esc(t('hue.' + hn))}</b><p>${esc(t('luck.' + hn))}</p></div></div>`;
+  <div class="kglass kel">${orn('t')}${elemArt(el, 'kbgm')}<span class="kico">${elemArt(el, 'kicon')}</span><div><h3>${esc(eh)}</h3><p>${esc(eb)}</p></div>${orn('b')}</div>
+  <div class="kglass ken">${orn('t')}<h3>${esc(t('cos.energy'))}</h3>${energy(vals, t, esc)}${orn('b')}</div>
+  <div class="kglass kluck">${orn('t')}<span class="kgemw" style="--gm:hsl(${{ red: 2, yellow: 45, green: 135, blue: 220, purple: 285 }[hn]} 90% 60% / .7)"><span class="kmist"></span>${gem(hn)}<i class="ks s1"></i><i class="ks s2"></i><i class="ks s3"></i></span><div><h3>${esc(t('cos.lucky'))}</h3><b class="kcol">${esc(t('hue.' + hn))}</b><p>${esc(t('luck.' + hn))}</p></div>${orn('b')}</div>`;
 }
 
 // Mozgás: az asztrolábium görgetésre lassan fordul; a fénygömb végighalad az égi pályán (csökkentett mozgásnál áll).
-export function mountCosmic(root, scroller) {
-  const rot = root.querySelector('.kastro .rot'), onScroll = () => { if (rot) rot.style.transform = `rotate(${(scroller.scrollTop * 0.06).toFixed(2)}deg)`; };
-  scroller.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+// Mozgás: az asztrolábium CSS-ből, önállóan és nagyon lassan forog (a görgetéstől független).
+// A fénygömb csak balról jobbra halad (az idő múlását követve); a végén elhalványul, és elölről indul.
+export function mountCosmic(root) {
   const path = root.querySelector('#kpath'), orb = root.querySelector('#korbit'), svg = path && path.ownerSVGElement;
   let raf = 0; const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (path && orb) {
-    const L = path.getTotalLength(), t0 = performance.now(), place = (f) => { const pt = path.getPointAtLength(f * L), vb = svg.viewBox.baseVal; orb.style.left = (pt.x / vb.width * 100) + '%'; orb.style.top = (pt.y / vb.height * 100) + '%'; };
-    if (still) place(0.5); else { const step = (now) => { const f = ((now - t0) / 14000) % 1; place((1 - Math.cos(f * 2 * Math.PI)) / 2); raf = requestAnimationFrame(step); }; raf = requestAnimationFrame(step); }
+    const L = path.getTotalLength(), t0 = performance.now(), vb = svg.viewBox.baseVal, place = (f) => { const pt = path.getPointAtLength(f * L); orb.style.left = (pt.x / vb.width * 100) + '%'; orb.style.top = (pt.y / vb.height * 100) + '%'; };
+    if (still) place(0.5); else { const step = (now) => { const f = ((now - t0) / 12000) % 1; place(f); orb.style.opacity = Math.min(1, f * 10, (1 - f) * 10).toFixed(2); raf = requestAnimationFrame(step); }; raf = requestAnimationFrame(step); }
   }
-  return () => { scroller.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
+  return () => cancelAnimationFrame(raf);
 }
