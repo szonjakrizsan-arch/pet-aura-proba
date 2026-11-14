@@ -74,3 +74,6 @@ font-family:ui-rounded,"Nunito","Hiragino Maru Gothic ProN","Segoe UI",system-ui
 .legacy .chk input{width:20px;height:20px;accent-color:var(--mint)}
 .legacy .city{display:block;width:100%;text-align:left;background:#ffffff0f;color:var(--mist);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:6px;font:inherit;cursor:pointer}
 .legacy input[type=time]{background:#ffffff14;color:var(--mist);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;width:100%}
+.legacy .sprow{display:flex;gap:8px;margin:4px 0 10px}
+.legacy .sprow .sp{flex:1;font:inherit;padding:10px;border-radius:14px;border:1px solid var(--line);background:#ffffff14;color:var(--mist);cursor:pointer}
+.legacy .sprow .sp.on{background:var(--mint);color:#102;border-color:var(--mint);font-weight:700}

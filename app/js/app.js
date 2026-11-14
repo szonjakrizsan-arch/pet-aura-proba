@@ -1,12 +1,13 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.0';
-import { searchCities, norm } from './geo.js?v=0.6.0';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.0';
-import { analyze, chakraScores } from './analysis.js?v=0.6.0';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.0';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.0';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.0';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.1';
+import { searchCities, norm } from './geo.js?v=0.6.1';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.1';
+import { analyze, chakraScores } from './analysis.js?v=0.6.1';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.1';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.1';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.1';
+import { auraScreen, FLOW } from './aura.js?v=0.6.1';
 const $ = (s) => document.querySelector(s);
-const S = { lang: 'en', dicts: {}, tab: 'home', scan: null, stopHome: null, busy: false, cities: null, pk: '', pv: null, pet: { name: '', bday: '', btime: '', place: null, daily: true, ...JSON.parse(localStorage.getItem('pet') || '{}') } };
+const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, cities: null, pk: '', pv: null, pet: { name: '', bday: '', btime: '', place: null, daily: true, ...JSON.parse(localStorage.getItem('pet') || '{}') } };
 const t = (k, v) => translate(S.dicts, S.lang, k, v);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -24,6 +25,8 @@ function chrome() {
 }
 // Vissza gomb: a főmenü termeiből mindig a kezdőlapra; az alterületekről az előző logikus szintre (szülő).
 const PARENT = { my: 'home', kb: 'home', styles: 'home', aura: 'home', cosmic: 'home', feng: 'home', pets: 'home', account: 'home' };
+const savePet = (o) => { S.pet = { ...S.pet, ...o }; localStorage.setItem('pet', JSON.stringify(S.pet)); };
+const auraCtx = () => ({ t, esc, pet: S.pet, go, lang: S.lang, savePet });
 const soon = () => `<div class="soon"><div class="star">✦</div><h2>${esc(t('soon.title'))}</h2><p>${esc(t('soon.body'))}</p></div>`;
 const sub = (title, body, lead = '') => `<h1 class="t">${esc(title)}</h1>${lead ? `<p class="lead2">${esc(lead)}</p>` : ''}${body}`;
 function accountView() {
@@ -75,7 +78,9 @@ function cosmicView() {
   const pf = kb && ok ? profile() : null;
   const z = ok ? (pf ? { glyph: GLYPHS[pf.sun], idx: pf.sun, element: ['fire', 'earth', 'air', 'water'][pf.sun % 4] } : zodiac(b.getMonth() + 1, b.getDate())) : null, key = now.toISOString().slice(0, 10);
   const hue = z ? luckyHue(key, z.glyph) : 260, vals = z ? Array.from({ length: 8 }, (_, i) => 35 + (hash(key + z.glyph + i) % 55)) : [];
+  const spBtn = (k) => `<button class="sp${p.species === k ? ' on' : ''}" data-sp="${k}" type="button">${esc(t(k === 'cat' ? 'au.al.cat' : 'au.al.dog'))}</button>`;
   const form = `<section class="glass"><label for="pn">${esc(t('cos.name'))}</label><input id="pn" type="text" value="${esc(p.name)}">
+   <label>${esc(t('cos.species'))}</label><div class="sprow">${spBtn('dog')}${spBtn('cat')}</div>
    <label for="pb">${esc(t('cos.bday'))}</label><input id="pb" type="date" value="${esc(p.bday)}">${kb ? kbForm(p) : ''}</section>`;
   const scene = `<section class="glass scene slot fade" data-slot="cosmic">${z ? `<span class="sign">${z.glyph}</span>` : dogArt().replace('class="art"', 'class="art" style="width:60px;position:absolute;left:16px;top:14px;color:#ffffff55"')}${moonSvg(m.frac)}<h2>${esc(p.name || t(kb ? 'h.title' : 'cos.title'))}</h2><span class="sub">${esc(fmtDate(S.lang, now))} ${MOON_GLYPHS[m.idx]}</span></section>`;
   if (!z) return scene + `<p class="lead">${esc(t('cos.need'))}</p>` + form + note();
@@ -92,23 +97,25 @@ function fengView() {
 }
 function render() {
   chrome();
-  const home = S.tab === 'home';
-  $('#s-home').classList.toggle('on', home); $('#s-sub').classList.toggle('on', !home);
+  const home = S.tab === 'home', aura = S.tab === 'aura';
+  $('#s-home').classList.toggle('on', home); $('#s-sub').classList.toggle('on', !home && !aura); $('#s-aura').classList.toggle('on', aura);
+  if (S.stopAura) { S.stopAura(); S.stopAura = null; $('#s-aura').innerHTML = ''; }
+  if (aura) { const scr = auraScreen(S.sub, auraCtx()); if (!scr) return; $('#s-aura').innerHTML = scr.html; S.stopAura = scr.mount($('#s-aura')); return; }
   $('#s-sub').classList.toggle('nonav', !TOP.includes(S.tab));
   if (home) {
     if (!$('#s-home').childElementCount || $('#s-home').dataset.lang !== S.lang) { if (S.stopHome) S.stopHome(); $('#s-home').innerHTML = homeHtml(t, esc); $('#s-home').dataset.lang = S.lang; S.stopHome = startHome($('#s-home')); }
     return;
   }
-  const views = { aura: () => legacy(auraView()), cosmic: () => legacy(cosmicView()), feng: () => legacy(fengView()), pets: () => legacy(cosmicView()), account: accountView, my: () => sub(t('nav.my'), soon()), kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
+  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => legacy(cosmicView()), feng: () => legacy(fengView()), pets: () => legacy(cosmicView()), account: accountView, my: () => sub(t('nav.my'), soon()), kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
   $('#view').innerHTML = (views[S.tab] || views.home)(); $('#s-sub').scrollTop = 0;
-  if (S.tab === 'aura' && S.scan) drawAura($('#cv'), S.scan);
+  if (S.tab === 'regi-aura' && S.scan) drawAura($('#cv'), S.scan);
 }
 function go(route, replace = false) {
-  if (!route || route === S.tab) return; S.tab = route;
+  const [tab, sub = ''] = route.split('/'); if (!route || (tab === S.tab && sub === S.sub)) return; S.tab = tab; S.sub = sub;
   if (replace) history.replaceState(null, '', '#' + route); else location.hash = route;
   render();
 }
-addEventListener('hashchange', () => { const r = location.hash.slice(1) || 'home'; if (r !== S.tab) { S.tab = r; render(); } });
+addEventListener('hashchange', () => { const [tab, sub = ''] = (location.hash.slice(1) || 'home').split('/'); if (tab !== S.tab || sub !== S.sub) { S.tab = tab; S.sub = sub; render(); } });
 function drawAura(cv, sc, scanY = null) {
   const g = cv.getContext('2d'), W = cv.width; g.clearRect(0, 0, W, W);
   const r = Math.max(W / sc.img.width, W / sc.img.height), w = sc.img.width * r, h = sc.img.height * r;
@@ -135,16 +142,17 @@ async function scan(file) {
 }
 document.addEventListener('click', (e) => {
   const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
-  if (e.target.closest('#back')) { go(PARENT[S.tab] || 'home'); return; }
+  const sp = e.target.closest('[data-sp]'); if (sp) { savePet({ species: sp.dataset.sp }); render(); return; }
+  if (e.target.closest('#s-sub #back')) { go(PARENT[S.tab] || 'home'); return; }
   const tab = e.target.closest('[data-tab]'); if (tab && tab.dataset.tab) { go(tab.dataset.tab); }
   if (e.target.id === 'scan') $('#file').click();
   const city = e.target.closest('[data-city]'); if (city) { const c = S.cities[+city.dataset.city]; S.pet = { ...S.pet, place: { n: c[0], cc: c[1], lat: c[2], lon: c[3] } }; localStorage.setItem('pet', JSON.stringify(S.pet)); render(); }
   if (e.target.id === 'pclear') { S.pet = { ...S.pet, place: null }; localStorage.setItem('pet', JSON.stringify(S.pet)); render(); }
-  if (e.target.id === 'goscan') go('aura');
+  if (e.target.id === 'goscan') go('regi-aura');
 });
 document.addEventListener('input', async (e) => {
   if (e.target.id !== 'pp') return;
-  if (!S.cities) S.cities = (await (await fetch('data/cities.json?v=0.6.0')).json()).map((c) => [...c, norm(c[0])]);
+  if (!S.cities) S.cities = (await (await fetch('data/cities.json?v=0.6.1')).json()).map((c) => [...c, norm(c[0])]);
   const r = searchCities(S.cities, e.target.value), box = $('#pr'); if (!box) return;
   box.innerHTML = e.target.value.trim().length < 2 ? '' : r.length ? r.map((c, i) => `<button class="city" data-city="${S.cities.indexOf(c)}">${esc(c[0])}, ${esc(c[1])}</button>`).join('') : `<p class="note">${esc(t('h.nocity'))}</p>`;
 });
@@ -158,5 +166,5 @@ document.addEventListener('change', (e) => {
   if (id === 'dly') sv({ daily: e.target.checked });
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.go) go(e.target.dataset.go); });
-S.tab = location.hash.slice(1) || 'home'; if (!location.hash) history.replaceState(null, '', '#home');
+{ const [tab, sub = ''] = (location.hash.slice(1) || 'home').split('/'); S.tab = tab; S.sub = sub; } if (!location.hash) history.replaceState(null, '', '#home');
 setLang(detect(navigator.languages, localStorage.getItem('lang')));
