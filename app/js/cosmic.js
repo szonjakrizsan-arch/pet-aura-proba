@@ -1,11 +1,11 @@
 // Kozmikus Mancs – új külső (3. szakasz). A számítás változatlan: horoscope.js (égi profil), cosmos.js (Hold, jegy, szerencseszín).
 // A díszítések saját rajzú, arany vonalas SVG-k (url(#au) = a közös arany színátmenet az index.html-ben).
-import { fmtDate } from './i18n.js?v=0.6.8';
-import { birthProfile } from './horoscope.js?v=0.6.8';
-import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.8';
-import { ICON } from './home.js?v=0.6.8';
-import { IC_SWAP } from './aura-deco.js?v=0.6.8';
-import { ZG, PG } from './zodiac-glyphs.js?v=0.6.8';
+import { fmtDate } from './i18n.js?v=0.6.9';
+import { birthProfile } from './horoscope.js?v=0.6.9';
+import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.9';
+import { ICON } from './home.js?v=0.6.9';
+import { IC_SWAP } from './aura-deco.js?v=0.6.9';
+import { ZG, PG } from './zodiac-glyphs.js?v=0.6.9';
 
 const ELEM = ['fire', 'earth', 'air', 'water'];
 const RULER = [4, 3, 2, 1, 0, 2, 3, 9, 5, 6, 7, 8]; // jegy → uralkodó bolygó (modern rend): Kos–Mars, Bika–Vénusz, …, Halak–Neptunusz
@@ -168,7 +168,7 @@ export function cosmicView({ t, esc, lang, pet: p, multi }) {
 // --- szövegtár betöltése (nyelvenként, azonosítónként egy kis JSON; egyszer töltjük le, utána a memóriából) ---
 const LIB = new Map();
 export function libText(lang, id) {
-  const k = lang + '/' + id; if (!LIB.has(k)) LIB.set(k, fetch(`data/horoscope/${lang}/${id}.json?v=0.6.8`).then((r) => (r.ok ? r.json() : null)).catch(() => null));
+  const k = lang + '/' + id; if (!LIB.has(k)) LIB.set(k, fetch(`data/horoscope/${lang}/${id}.json?v=0.6.9`).then((r) => (r.ok ? r.json() : null)).catch(() => null));
   return LIB.get(k);
 }
 // Teljes szöveg az olvasóban (útvonal: #cosmic/<azonosító>), a pergamenen.
@@ -180,14 +180,28 @@ export function readerView({ t, esc, id }) {
     : q[0] === 'planet_sign' ? [t('pl.' + PIX[q[1]]), t('zs.' + q[2]), spn(q[3])]
     : q[0] === 'planet_house' ? [t('pl.' + PIX[q[1]]), t('cos.house', { n: ROM[+q[2]] || q[2] }), spn(q[3])]
     : [t({ sun_sign: 'cos.k.sun', moon_sign: 'cos.k.moon', asc_sign: 'cos.k.asc' }[q[0]] || 'nav.cosmic'), t('zs.' + q[1]), spn(q[2])];
-  return `<h1 class="t">${esc(t('nav.cosmic'))}</h1><p class="kctx">${esc(ctx.filter(Boolean).join(' · '))}</p><div class="kreader"><div class="kscroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt=""><div class="p-in" id="kread"><i class="kload">${esc(t('cos.loading'))}</i></div></div></div>
-   <div class="kbtn"><button class="pbtn" data-go="cosmic">${esc(t('cos.back'))}</button></div>`;
+  // központi égi szimbólum a pergamen felső peremén: ugyanaz az érme, mint a listában
+  const ASYM = { conjunction: '☌', sextile: '⚹', square: '□', trigon: '△', opposition: '☍' };
+  const sym = q[0] === 'aspect' ? `<span class="zm pm asym">${ASYM[q[1]] || '✦'}</span>`
+    : q[0].startsWith('planet') ? `<span class="zm pm"><svg viewBox="-14 -14 128 128" aria-hidden="true"><path d="${PG[PIX[q[1]]]}" fill="url(#au)"/></svg></span>`
+    : zodiacMedal(+q[1], { sun_sign: 'g-sun', moon_sign: 'g-moon', asc_sign: 'g-asc' }[q[0]] || 'g-sun');
+  // a lap alja: halványan derengő kristályok és a lassan forgó asztrológiai kör (a portré körüli díszítés teljes köre, maszk nélkül)
+  const dial = astrolabe().replace(' mask="url(#kmh)"', '').replace(' mask="url(#kmv)"', '').replace('class="kastro"', 'class="kdial"');
+  return `<h1 class="t">${esc(t('nav.cosmic'))}</h1><p class="kctx">${esc(ctx.filter(Boolean).join(' · '))}</p><div class="kreader"><div class="kscroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt=""><span class="krsym">${sym}</span><div class="p-in" id="kread"><i class="kload">${esc(t('cos.loading'))}</i></div></div></div>
+   <div class="krfoot">${dial}<img class="kcry l" src="assets/kezdolap/crystals.webp" alt=""><img class="kcry r" src="assets/kezdolap/crystals.webp" alt="">
+    <button class="krbtn" data-go="cosmic"><span>${esc(t('cos.back'))}</span></button></div>`;
 }
 export function mountReader(root, lang, id, esc) {
   libText(lang, id).then((d) => {
     const box = root.querySelector('#kread'); if (!box || !d) return;
-    let n = d.n; if (n.length && n[0][0] === 'h' && n[0][1] === d.title) n = n.slice(1); // a cím ne ismétlődjön
-    box.innerHTML = `<h2 class="krt">${esc(d.title)}</h2>${divider()}` + n.map(([k, x]) => (k === 'h' ? `<h3 class="krh">${esc(x)}</h3>` : k === 'q' ? `<blockquote class="krq">${esc(x)}</blockquote>` : `<p class="krp">${esc(x)}</p>`)).join('')
+    let n = d.n; while (n.length && n[0][1].trim() === d.title.trim()) n = n.slice(1); // a cím ne ismétlődjön
+    const dropAt = n.findIndex((x) => x[0] === 'p' && x[1].length > 80); // az iniciálé az első valódi bekezdésre kerül
+    // 1–2 pihentető díszvonal a hosszú szövegben: a harmadoló pontokhoz legközelebbi címsor (vagy bekezdés) elé
+    const marks = new Set(), pick = (f) => { const target = Math.round(n.length * f); let best = -1;
+      for (let i = 2; i < n.length - 1; i++) if (n[i][0] !== 'q' && (best < 0 || (n[i][0] === 'h') > (n[best][0] === 'h') || ((n[i][0] === 'h') === (n[best][0] === 'h') && Math.abs(i - target) < Math.abs(best - target)))) best = i;
+      if (best > 0) marks.add(best); };
+    if (n.length >= 6) pick(1 / 2); if (n.length >= 14) { marks.clear(); pick(1 / 3); const a = [...marks][0]; pick(2 / 3); if ([...marks].length < 2 || [...marks][1] - a < 3) { marks.clear(); pick(1 / 2); } }
+    box.innerHTML = `<h2 class="krt">${esc(d.title)}</h2>${divider()}` + n.map(([k, x], i) => (marks.has(i) ? divider() : '') + (k === 'h' ? `<h3 class="krh">${esc(x)}</h3>` : k === 'q' ? `<blockquote class="krq">${esc(x)}</blockquote>` : `<p class="krp${i === dropAt ? ' kdrop' : ''}">${esc(x)}</p>`)).join('')
       + (d.sig ? `${divider()}<p class="krs">${esc(d.sig)}</p>` : '');
   });
 }
