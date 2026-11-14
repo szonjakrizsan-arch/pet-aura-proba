@@ -1,7 +1,7 @@
 // Birth profile + today's sky from Celestine (positions); texts come from the knowledge base (locales/kb.*.json).
-import { calculateChart } from './vendor/celestine.js?v=0.6.2';
-import tzlookup from './vendor/tzlookup.js?v=0.6.2';
-import { tzOffsetHours } from './geo.js?v=0.6.2';
+import { calculateChart } from './vendor/celestine.js?v=0.6.3';
+import tzlookup from './vendor/tzlookup.js?v=0.6.3';
+import { tzOffsetHours } from './geo.js?v=0.6.3';
 const OPT = { includeAsteroids: false, includeChiron: false, includeLilith: false, includeNodes: false, includeLots: false, aspectTypes: 'major' };
 const body = (c, n) => c.planets.find((p) => p.name === n);
 // pet: { bday:'YYYY-MM-DD', btime:'HH:MM'|'', place:{lat,lon}|null }

@@ -1,11 +1,11 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.2';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.2';
-import { analyze, chakraScores } from './analysis.js?v=0.6.2';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.2';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.2';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.2';
-import { auraScreen, FLOW } from './aura.js?v=0.6.2';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.2';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.3';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.3';
+import { analyze, chakraScores } from './analysis.js?v=0.6.3';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.3';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.3';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.3';
+import { auraScreen, FLOW } from './aura.js?v=0.6.3';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.3';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -127,6 +127,12 @@ function go(route, replace = false) {
   if (replace) { history.replaceState(null, '', '#' + route); STACK[STACK.length - 1] = route; } else { history.pushState(null, '', '#' + route); STACK.push(route); }
   render();
 }
+// Kedvenceim: oda tér vissza, ahonnan jött (pl. az aura-indító névcsere-gombjáról vagy a Kozmikus Mancsból); az adatlapról a listára.
+function petsBack() {
+  if (S.tab !== 'pets') return PARENT[S.tab] || 'home';
+  if (S.sub) return 'pets';
+  const prev = STACK[STACK.length - 2]; return prev && !prev.startsWith('pets') ? prev : 'home';
+}
 // Vissza egy logikai szülőre: ha az előző lépés éppen az, valódi „vissza” (a telefon gombjával egyezően); különben odaugrik.
 function back(target) { if (STACK.length > 1 && STACK[STACK.length - 2] === target) { history.back(); return; } go(target, true); }
 const curRoute = () => S.tab + (S.sub ? '/' + S.sub : '');
@@ -159,7 +165,7 @@ async function scan(file) {
 }
 document.addEventListener('click', (e) => {
   const g = e.target.closest('[data-go]'); if (g) { go(g.dataset.go); return; }
-  if (e.target.closest('#s-sub #back')) { back(S.tab === 'pets' && S.sub ? 'pets' : PARENT[S.tab] || 'home'); return; }
+  if (e.target.closest('#s-sub #back')) { back(petsBack()); return; }
   const tab = e.target.closest('[data-tab]'); if (tab && tab.dataset.tab) { go(tab.dataset.tab); }
   if (e.target.id === 'scan') $('#file').click();
   if (e.target.id === 'goscan') go('regi-aura');
