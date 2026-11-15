@@ -1,11 +1,11 @@
 // Kozmikus Mancs – új külső (3. szakasz). A számítás változatlan: horoscope.js (égi profil), cosmos.js (Hold, jegy, szerencseszín).
 // A díszítések saját rajzú, arany vonalas SVG-k (url(#au) = a közös arany színátmenet az index.html-ben).
-import { fmtDate } from './i18n.js?v=0.6.9';
-import { birthProfile } from './horoscope.js?v=0.6.9';
-import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.9';
-import { ICON } from './home.js?v=0.6.9';
-import { IC_SWAP } from './aura-deco.js?v=0.6.9';
-import { ZG, PG } from './zodiac-glyphs.js?v=0.6.9';
+import { fmtDate } from './i18n.js?v=0.6.10';
+import { birthProfile } from './horoscope.js?v=0.6.10';
+import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.10';
+import { ICON } from './home.js?v=0.6.10';
+import { IC_SWAP } from './aura-deco.js?v=0.6.10';
+import { ZG, PG } from './zodiac-glyphs.js?v=0.6.10';
 
 const ELEM = ['fire', 'earth', 'air', 'water'];
 const RULER = [4, 3, 2, 1, 0, 2, 3, 9, 5, 6, 7, 8]; // jegy → uralkodó bolygó (modern rend): Kos–Mars, Bika–Vénusz, …, Halak–Neptunusz
@@ -168,7 +168,7 @@ export function cosmicView({ t, esc, lang, pet: p, multi }) {
 // --- szövegtár betöltése (nyelvenként, azonosítónként egy kis JSON; egyszer töltjük le, utána a memóriából) ---
 const LIB = new Map();
 export function libText(lang, id) {
-  const k = lang + '/' + id; if (!LIB.has(k)) LIB.set(k, fetch(`data/horoscope/${lang}/${id}.json?v=0.6.9`).then((r) => (r.ok ? r.json() : null)).catch(() => null));
+  const k = lang + '/' + id; if (!LIB.has(k)) LIB.set(k, fetch(`data/horoscope/${lang}/${id}.json?v=0.6.10`).then((r) => (r.ok ? r.json() : null)).catch(() => null));
   return LIB.get(k);
 }
 // Teljes szöveg az olvasóban (útvonal: #cosmic/<azonosító>), a pergamenen.
@@ -191,6 +191,15 @@ export function readerView({ t, esc, id }) {
    <div class="krfoot">${dial}<img class="kcry l" src="assets/kezdolap/crystals.webp" alt=""><img class="kcry r" src="assets/kezdolap/crystals.webp" alt="">
     <button class="krbtn" data-go="cosmic"><span>${esc(t('cos.back'))}</span></button></div>`;
 }
+// Japánul nincs iniciálé (a japán tördelés nem ismeri, és egy kana egyedül furcsán hatna): helyette egy kis, cinóbervörös pecsét
+// (落款-szerű) nyitja a szöveget, benne a jegy / bolygó / fényszög jelével.
+function sealFor(id) {
+  const q = id.split('.'), PIX = { sun: 0, moon: 1, mercury: 2, venus: 3, mars: 4, jupiter: 5, saturn: 6, uranus: 7, neptune: 8, pluto: 9 };
+  const ASYM = { conjunction: '☌', sextile: '⚹', square: '□', trigon: '△', opposition: '☍' };
+  const inner = q[0] === 'aspect' ? `<span class="ksealt">${ASYM[q[1]] || '✦'}</span>`
+    : `<svg viewBox="-10 -10 120 120" aria-hidden="true"><path d="${q[0].startsWith('planet') ? PG[PIX[q[1]]] : ZG[+q[1]]}" fill="#b3341f"/></svg>`;
+  return `<span class="kseal" aria-hidden="true">${inner}</span>`;
+}
 export function mountReader(root, lang, id, esc) {
   libText(lang, id).then((d) => {
     const box = root.querySelector('#kread'); if (!box || !d) return;
@@ -201,7 +210,7 @@ export function mountReader(root, lang, id, esc) {
       for (let i = 2; i < n.length - 1; i++) if (n[i][0] !== 'q' && (best < 0 || (n[i][0] === 'h') > (n[best][0] === 'h') || ((n[i][0] === 'h') === (n[best][0] === 'h') && Math.abs(i - target) < Math.abs(best - target)))) best = i;
       if (best > 0) marks.add(best); };
     if (n.length >= 6) pick(1 / 2); if (n.length >= 14) { marks.clear(); pick(1 / 3); const a = [...marks][0]; pick(2 / 3); if ([...marks].length < 2 || [...marks][1] - a < 3) { marks.clear(); pick(1 / 2); } }
-    box.innerHTML = `<h2 class="krt">${esc(d.title)}</h2>${divider()}` + n.map(([k, x], i) => (marks.has(i) ? divider() : '') + (k === 'h' ? `<h3 class="krh">${esc(x)}</h3>` : k === 'q' ? `<blockquote class="krq">${esc(x)}</blockquote>` : `<p class="krp${i === dropAt ? ' kdrop' : ''}">${esc(x)}</p>`)).join('')
+    box.innerHTML = `<h2 class="krt">${esc(d.title)}</h2>${divider()}` + n.map(([k, x], i) => (marks.has(i) ? divider() : '') + (k === 'h' ? `<h3 class="krh">${esc(x)}</h3>` : k === 'q' ? `<blockquote class="krq">${esc(x)}</blockquote>` : (i === dropAt && lang === 'ja' ? `<p class="krp">${sealFor(id)}${esc(x)}</p>` : `<p class="krp${i === dropAt ? ' kdrop' : ''}">${esc(x)}</p>`))).join('')
       + (d.sig ? `${divider()}<p class="krs">${esc(d.sig)}</p>` : '');
   });
 }
