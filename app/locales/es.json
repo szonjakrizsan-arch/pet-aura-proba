@@ -252,5 +252,7 @@
 "asp.square": "Cuadratura",
 "asp.trigon": "Trígono",
 "asp.opposition": "Oposición",
-"cos.back": "Volver al horóscopo"
+"cos.back": "Volver al horóscopo",
+"fs.show": "Mostrar la lectura",
+"fs.zoneNote": "Tú indicaste, de forma aproximada, la zona del lugar de descanso. La lectura presenta el significado tradicional de esa zona; no es el resultado de una revisión de tu vivienda."
 }

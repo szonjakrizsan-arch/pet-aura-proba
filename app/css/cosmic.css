@@ -182,3 +182,21 @@
 #s-sub .kseal{float:left;width:52px;height:52px;margin:6px 12px 2px 0;display:grid;place-items:center;border:2.5px solid #b3341f;border-radius:6px;box-shadow:inset 0 0 0 2.5px #f6ead0,inset 0 0 0 3.6px #b3341fcc;background:#f8e9cf;transform:rotate(-3deg);opacity:.92}
 #s-sub .kseal svg{width:74%;height:74%}
 #s-sub .ksealt{font-size:30px;color:#b3341f;line-height:1;font-family:'Noto Sans Symbols','Segoe UI Symbol',sans-serif}
+/* ---- Mancs Feng Shui (tartalom bekötve; a végleges külső később) ---- */
+#s-sub .fsgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 10px}
+#s-sub .fsz{font:inherit;font-size:15px;line-height:1.15;min-height:48px;padding:6px 4px;border-radius:12px;border:1.3px solid #b07a2699;background:#fff6dc;color:#5b3510;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#s-sub .fsz.mid{border-style:dashed}
+#s-sub .fsz.on{background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c);color:#2a1236;font-weight:700;border-color:#8a5a16;box-shadow:0 0 10px #e8a54a88}
+#s-sub .fsun{display:flex;justify-content:center}
+#s-sub .fsun .fsz{min-width:50%}
+#s-sub .fsq{padding:10px 0;border-top:1px solid #b07a2633}
+#s-sub .fsq:first-child{border-top:0;padding-top:0}
+#s-sub .fsq p{margin:0 0 8px;font-size:16px;line-height:1.35}
+#s-sub .fsch{display:flex;gap:6px}
+#s-sub .fsc{flex:1;font:inherit;font-size:15px;min-height:40px;border-radius:999px;border:1.3px solid #b07a2699;background:#fff6dc;color:#5b3510;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#s-sub .fsc.on{background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c);color:#2a1236;font-weight:700;border-color:#8a5a16}
+#s-sub .fsgo{margin:6px 0 24px}
+#s-sub .fsnote{margin:8px 4px 4px;background:#1f1040cc;color:#efe3c6;border-color:#e8b95a88}
+#s-sub .fspart{margin-top:14px}
+#s-sub .fsdraft{margin-top:26px}
+#s-sub .fsfoot{height:auto;-webkit-mask:none;mask:none;padding-bottom:30px}

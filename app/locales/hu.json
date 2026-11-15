@@ -252,5 +252,7 @@
 "asp.square": "Kvadrát",
 "asp.trigon": "Trigon",
 "asp.opposition": "Oppozíció",
-"cos.back": "Vissza a horoszkóphoz"
+"cos.back": "Vissza a horoszkóphoz",
+"fs.show": "Mutasd az olvasást",
+"fs.zoneNote": "A pihenőhely zónáját te adtad meg, hozzávetőlegesen. Az olvasás ennek a zónának a hagyományos jelentését mutatja be, nem a lakásod vizsgálatának eredménye."
 }

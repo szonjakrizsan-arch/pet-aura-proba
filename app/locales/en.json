@@ -252,5 +252,7 @@
 "asp.square": "Square",
 "asp.trigon": "Trine",
 "asp.opposition": "Opposition",
-"cos.back": "Back to the horoscope"
+"cos.back": "Back to the horoscope",
+"fs.show": "Show the reading",
+"fs.zoneNote": "You chose the resting place’s zone yourself, as an approximation. The reading presents the traditional meaning of this zone; it is not the result of an inspection of your home."
 }

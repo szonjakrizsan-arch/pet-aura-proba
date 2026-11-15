@@ -252,5 +252,7 @@
 "asp.square": "Quadrat",
 "asp.trigon": "Trigon",
 "asp.opposition": "Opposition",
-"cos.back": "Zurück zum Horoskop"
+"cos.back": "Zurück zum Horoskop",
+"fs.show": "Deutung anzeigen",
+"fs.zoneNote": "Die Zone des Ruheplatzes hast du selbst angegeben, als ungefähre Angabe. Die Deutung stellt die traditionelle Bedeutung dieser Zone vor; sie ist nicht das Ergebnis einer Untersuchung deines Zuhauses."
 }
