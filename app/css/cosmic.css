@@ -278,3 +278,13 @@
 #s-sub .fsnote .korn{width:70%}
 #s-sub .fsnote .korn.t{top:-4px}#s-sub .fsnote .korn.b{bottom:-6px}
 #s-sub .fsem{width:78px;height:78px}
+
+/* élő luopan iránytű */
+#s-sub .fscomp{flex-wrap:wrap;justify-content:center;position:relative}
+#s-sub .fsdial{position:relative;flex:none;width:min(62cqw,240px);height:auto;aspect-ratio:1;margin:8px auto 2px;filter:drop-shadow(0 6px 12px #0008)}
+#s-sub .fsplate{position:absolute;inset:0;width:100%;height:100%;transform:rotate(180deg);transition:none}
+#s-sub .fsneedle{position:absolute;left:50%;top:50%;height:86%;width:auto;transform-origin:50% 48.8%;translate:-50% -48.8%}
+#s-sub .fslub{position:absolute;left:50%;top:-9px;z-index:2;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:13px solid #f6d27a;translate:-50% 0;filter:drop-shadow(0 0 4px #ffd98a) drop-shadow(0 2px 2px #0008)}
+#s-sub .fsci{flex:1 1 100%;text-align:center;order:3}
+#s-sub .fscb{justify-content:center}
+#s-sub .fsinfo{position:absolute;right:6px;top:6px}
