@@ -288,3 +288,5 @@
 #s-sub .fsci{flex:1 1 100%;text-align:center;order:3}
 #s-sub .fscb{justify-content:center}
 #s-sub .fsinfo{position:absolute;right:6px;top:6px}
+#s-sub .fscomp .fsinfo{width:84px;height:84px;right:-8px;top:-10px;margin:0;filter:drop-shadow(0 4px 6px #0007)}
+#s-sub .fscomp .fsinfo img{width:100%;height:100%;object-fit:contain}

@@ -40,7 +40,7 @@ function baguaBg() {
 }
 
 const DATA = new Map();
-export const fsData = (lang) => { if (!DATA.has(lang)) DATA.set(lang, fetch(`data/fengshui/${lang}.json?v=0.6.17`).then((r) => (r.ok ? r.json() : null)).catch(() => null)); return DATA.get(lang); };
+export const fsData = (lang) => { if (!DATA.has(lang)) DATA.set(lang, fetch(`data/fengshui/${lang}.json?v=0.6.18`).then((r) => (r.ok ? r.json() : null)).catch(() => null)); return DATA.get(lang); };
 
 // a gazdi válaszai kedvencenként, külön tárolva (a kedvenc adatlapjához nem nyúlunk)
 const key = (pid) => 'fs.' + (pid || 'x');
