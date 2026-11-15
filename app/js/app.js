@@ -1,13 +1,13 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.12';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.12';
-import { analyze, chakraScores } from './analysis.js?v=0.6.12';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.12';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.12';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.12';
-import { auraScreen, FLOW } from './aura.js?v=0.6.12';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.12';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.12';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.12';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.13';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.13';
+import { analyze, chakraScores } from './analysis.js?v=0.6.13';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.13';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.13';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.13';
+import { auraScreen, FLOW } from './aura.js?v=0.6.13';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.13';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.13';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.13';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)

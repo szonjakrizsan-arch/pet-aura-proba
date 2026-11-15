@@ -224,3 +224,5 @@
 .fssteps b{display:block;font-size:16.5px;line-height:1.2;color:#5b3510}
 .fssteps p{margin:2px 0 0;font-size:15.5px;line-height:1.35}
 .fsmcard .knote{margin-top:10px;padding:8px 10px;border-radius:12px;border:1px solid #c9953f99;background:#c9953f1c;font-size:15px;line-height:1.35}
+.fsmcard .fstip{margin:10px 2px 0;font-size:15px;line-height:1.35;font-style:italic;color:#6e4518;text-align:center}
+.fssteps li{padding:9px 0}

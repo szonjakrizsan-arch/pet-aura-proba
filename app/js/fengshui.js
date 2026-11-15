@@ -11,7 +11,7 @@ const FORMS = [['q1', 'pihenohely', ['yes']], ['q2', 'fekete_teknos', ['yes', 'n
 const QS = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'];
 
 const DATA = new Map();
-export const fsData = (lang) => { if (!DATA.has(lang)) DATA.set(lang, fetch(`data/fengshui/${lang}.json?v=0.6.12`).then((r) => (r.ok ? r.json() : null)).catch(() => null)); return DATA.get(lang); };
+export const fsData = (lang) => { if (!DATA.has(lang)) DATA.set(lang, fetch(`data/fengshui/${lang}.json?v=0.6.13`).then((r) => (r.ok ? r.json() : null)).catch(() => null)); return DATA.get(lang); };
 
 // a gazdi válaszai kedvencenként, külön tárolva (a kedvenc adatlapjához nem nyúlunk)
 const key = (pid) => 'fs.' + (pid || 'x');
@@ -51,7 +51,7 @@ export function mountFeng(root, { t, esc, lang, pet, go, savePet, render }) {
     // ---- kérdések ----
     const zbtn = (z) => `<button class="fsz${ans.zone === z ? ' on' : ''}${z === 'center' ? ' mid' : ''}" data-z="${z}" aria-pressed="${ans.zone === z}">${esc(cap(ui(d, 'zone.' + z)))}</button>`;
     const chips = (q) => ['yes', 'no', 'unknown'].map((v) => `<button class="fsc${ans.a[q] === v ? ' on' : ''}" data-q="${q}" data-v="${v}" aria-pressed="${ans.a[q] === v}">${esc(cap(ui(d, 'answer.' + v)))}</button>`).join('');
-    box.innerHTML = perg(`<h2>${esc(ui(d, 'zone.question'))}</h2>${compassHtml(t, esc, ui(d, 'zone.north').charAt(0).toUpperCase())}<div class="fsgrid">${ZONES.map(zbtn).join('')}</div>
+    box.innerHTML = perg(`<h2>${esc(t('fs.zoneQ'))}</h2>${compassHtml(t, esc, ui(d, 'zone.north').charAt(0).toUpperCase())}<div class="fsgrid">${ZONES.map(zbtn).join('')}</div>
       <div class="fsun">${zbtn('unknown')}</div>`) +
       perg(`${QS.map((q) => `<div class="fsq"><p>${esc(ui(d, 'form.' + q))}</p><div class="fsch">${chips(q)}</div></div>`).join('')}`) +
       `<div class="kbtn fsgo"><button class="btn-gold" id="fsread">${esc(t('fs.show'))}</button></div>`;
@@ -89,9 +89,9 @@ function compassHtml(t, esc, nl) {
    <button class="zm fsinfo" id="fsinfo" type="button" aria-label="${esc(t('fs.h.title'))}">${I_MEDAL}</button></div>`;
 }
 function helpHtml(t, esc) {
-  const steps = [1, 2, 3, 4, 5].map((i) => `<li><span class="fsn">${i}</span><div><b>${esc(t('fs.h.' + i + 't'))}</b><p>${esc(t('fs.h.' + i))}</p></div></li>`).join('');
+  const steps = [1, 2, 3].map((i) => `<li><span class="fsn">${i}</span><div><b>${esc(t('fs.h.' + i + 't'))}</b><p>${esc(t('fs.h.' + i))}</p></div></li>`).join('');
   return `<div class="fsmodal" id="fsmodal" role="dialog" aria-modal="true" aria-labelledby="fsmt"><div class="fsmcard"><button class="fsx" id="fsclose" type="button" aria-label="${esc(t('fs.h.close'))}">✕</button>
-   <h2 id="fsmt">${esc(t('fs.h.title'))}</h2><ol class="fssteps">${steps}</ol><div class="knote"><b>${esc(t('fs.h.tipt'))}</b> ${esc(t('fs.h.tip'))}</div></div></div>`;
+   <h2 id="fsmt">${esc(t('fs.h.title'))}</h2><ol class="fssteps">${steps}</ol><p class="fstip">${esc(t('fs.h.tip'))}</p></div></div>`;
 }
 function mountCompass(box, { t, esc, zoneName, pickZone }) {
   const st = box.querySelector('#fsstate'), start = box.querySelector('#fsstart'), use = box.querySelector('#fsuse'), rose = box.querySelector('#fsrose'); if (!st) return;
