@@ -35,12 +35,12 @@ function baguaBg() {
   const C = 150, R1 = 128, R2 = 98, oct = (r) => Array.from({ length: 8 }, (_, i) => { const a = (i * 45 - 22.5) * Math.PI / 180; return `${(C + r * Math.cos(a)).toFixed(1)},${(C + r * Math.sin(a)).toFixed(1)}`; }).join(' ');
   const order = ['south', 'southwest', 'west', 'northwest', 'north', 'northeast', 'east', 'southeast']; // hagyományos körsorrend
   const tris = order.map((z, i) => `<g transform="rotate(${i * 45 - 90} ${C} ${C}) translate(${C + 113} ${C}) rotate(90)">${trigram(TRI[z], -14, -10, 28, 20, '#f6d27a')}</g>`).join('');
-  return `<svg class="fsbagua" viewBox="0 0 300 300" aria-hidden="true"><g class="rot"><polygon points="${oct(R1 + 16)}" fill="none" stroke="#f6d27a" stroke-width="1.2"/><polygon points="${oct(R2)}" fill="none" stroke="#f6d27a" stroke-width="1"/>
+  return `<svg class="fsbagua" viewBox="0 0 300 300" aria-hidden="true"><g class="rot"><polygon points="${oct(R1 + 16)}" fill="none" stroke="#f6d27a" stroke-width="2.4"/><polygon points="${oct(R1 + 10)}" fill="none" stroke="#f6d27a" stroke-width=".8"/><polygon points="${oct(R2)}" fill="none" stroke="#f6d27a" stroke-width="1.8"/>
    <circle cx="${C}" cy="${C}" r="70" fill="none" stroke="#f6d27a" stroke-width=".8" stroke-dasharray="1 5"/>${tris}${yinyang(C, C, 46, '#f6d27a', 'none', '#f6d27a')}</g></svg>`;
 }
 
 const DATA = new Map();
-export const fsData = (lang) => { if (!DATA.has(lang)) DATA.set(lang, fetch(`data/fengshui/${lang}.json?v=0.6.15`).then((r) => (r.ok ? r.json() : null)).catch(() => null)); return DATA.get(lang); };
+export const fsData = (lang) => { if (!DATA.has(lang)) DATA.set(lang, fetch(`data/fengshui/${lang}.json?v=0.6.16`).then((r) => (r.ok ? r.json() : null)).catch(() => null)); return DATA.get(lang); };
 
 // a gazdi válaszai kedvencenként, külön tárolva (a kedvenc adatlapjához nem nyúlunk)
 const key = (pid) => 'fs.' + (pid || 'x');
@@ -64,6 +64,8 @@ export function fengView({ t, esc, pet, sub }) {
 
 export function mountFeng(root, { t, esc, lang, pet, go, savePet, render }) {
   const box = root.querySelector('#fsroot'); if (!box) return;
+  // a háttér-Bagua a lap hátterébe kerül (a .bgsub mellé), így a pergamenek mellett és között, görgetéstől függetlenül látszik
+  const pane = root.closest('#s-sub'); if (pane && !pane.querySelector('#fsbg')) pane.querySelector('.bgsub').insertAdjacentHTML('afterend', `<div id="fsbg" class="fsbgw">${baguaBg()}</div>`);
   const sub = box.dataset.sub;
   fsData(lang).then((d) => {
     if (!d || !root.contains(box)) return;
@@ -78,12 +80,12 @@ export function mountFeng(root, { t, esc, lang, pet, go, savePet, render }) {
     const ans = loadAns(pet.id);
     if (sub === 'olvasas') return reading(box, d, ans, sp, { t, esc, pet, go, perg, lang });
     // ---- kérdések ----
-    const zbtn = (z) => `<button class="fsz${ans.zone === z ? ' on' : ''}${z === 'center' ? ' mid' : ''}${z === 'unknown' ? ' unk' : ''}" data-z="${z}" aria-pressed="${ans.zone === z}"${TRI[z] ? ` style="--wm:${triMark(z)}"` : z === 'center' ? ` style="--wm:${yyMark}"` : ''}><span>${esc(cap(ui(d, 'zone.' + z)))}</span></button>`;
+    const zbtn = (z) => `<button class="fsz${ans.zone === z ? ' on' : ''}${z === 'center' ? ' mid' : ''}${z === 'unknown' ? ' unk' : ''}" data-z="${z}" aria-pressed="${ans.zone === z}"${TRI[z] ? ` style="--wm:${triMark(z)}"` : z === 'center' ? ` style="--wm:${yyMark}"` : ''}><i class="fstri" aria-hidden="true">${TRI[z] ? `<svg viewBox="0 0 40 30">${trigram(TRI[z], 4, 3, 32, 24, 'url(#fsg)')}</svg>` : z === 'center' ? `<svg viewBox="0 0 40 40">${yinyang(20, 20, 15, 'url(#fsg)', 'none', '#e8b552')}</svg>` : ''}</i><span>${esc(cap(ui(d, 'zone.' + z)))}</span></button>`;
     const chips = (q) => ['yes', 'no', 'unknown'].map((v) => `<button class="fsc${ans.a[q] === v ? ' on' : ''}" data-q="${q}" data-v="${v}" aria-pressed="${ans.a[q] === v}">${esc(cap(ui(d, 'answer.' + v)))}</button>`).join('');
-    box.innerHTML = perg(`<h2>${esc(ui(d, 'zone.question'))}</h2>${compassHtml(t, esc, ui(d, 'zone.north').charAt(0).toUpperCase())}<div class="fsgrid">${ZONES.map(zbtn).join('')}</div>
+    box.innerHTML = perg(`<h2>${esc(ui(d, 'zone.question'))}</h2>${compassHtml(t, esc, ui(d, 'zone.north').charAt(0).toUpperCase())}<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="fsg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c8"/><stop offset=".45" stop-color="#e8b552"/><stop offset="1" stop-color="#8a5a16"/></linearGradient></defs></svg><div class="fsgrid">${ZONES.map(zbtn).join('')}</div>
       <div class="fsun">${zbtn('unknown')}</div>`) +
       perg(`${QS.map((q) => `<div class="fsq"><p>${esc(ui(d, 'form.' + q))}</p><div class="fsch">${chips(q)}</div></div>`).join('')}`) +
-      `<div class="kbtn fsgo"><button class="btn-gold" id="fsread">${esc(t('fs.show'))}</button></div>` + `<div class="fsbgw">${baguaBg()}</div>`;
+      `<div class="kbtn fsgo"><button class="btn-gold" id="fsread">${esc(t('fs.show'))}</button></div>`;
     box.querySelectorAll('[data-z]').forEach((b) => { b.onclick = () => { ans.zone = ans.zone === b.dataset.z ? '' : b.dataset.z; saveAns(pet.id, ans); box.querySelectorAll('[data-z]').forEach((x) => { const on = x.dataset.z === ans.zone; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); }); }; });
     box.querySelectorAll('[data-q]').forEach((b) => { b.onclick = () => { const q = b.dataset.q; ans.a[q] = ans.a[q] === b.dataset.v ? '' : b.dataset.v; saveAns(pet.id, ans);
       box.querySelectorAll(`[data-q="${q}"]`).forEach((x) => { const on = ans.a[q] === x.dataset.v; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); }); }; });
@@ -93,25 +95,27 @@ export function mountFeng(root, { t, esc, lang, pet, go, savePet, render }) {
   });
 }
 
+const ORN = (pos) => `<svg class="korn ${pos}" viewBox="0 0 280 20" aria-hidden="true"><path d="M6 10Q70 9.4 140 8.4Q210 9.4 274 10Q210 10.6 140 11.6Q70 10.6 6 10Z" fill="#f6d27a" opacity=".85"/><path d="M112 10c4-6 10-6 12 0-2 4-6 4-7 1M168 10c-4-6-10-6-12 0 2 4 6 4 7 1" stroke="url(#au)" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M140 2 143.4 10 140 18 136.6 10Z" fill="url(#au)"/></svg>`;
 const HANZI = { fa: '木', tuz: '火', fold: '土', fem: '金', viz: '水' };
 const ZFROM = Object.fromEntries(Object.entries(ZID).map(([k, v]) => [v, k]));
 const DIV = '<svg class="kdiv" viewBox="0 0 260 18" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M12 9H100M160 9H248" stroke="#b07a26" stroke-width="1.2" fill="none" opacity=".8"/><path d="M100 9c4-6 10-6 12 0-2 4-6 4-7 1M160 9c-4-6-10-6-12 0 2 4 6 4 7 1" stroke="#b07a26" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M130 1.5 133 9 130 16.5 127 9Z" fill="#c08a32"/><path d="M122.5 9 130 6.5 137.5 9 130 11.5Z" fill="#d9a64a"/><circle cx="118" cy="9" r="1.4" fill="#b07a26"/><circle cx="142" cy="9" r="1.4" fill="#b07a26"/></svg>';
 function reading(box, d, ans, sp, { t, esc, pet, go, perg, lang }) {
   const r = compose(ans, sp), name = pet.name;
   const back = `<div class="krfoot fsfoot">${baguaBg()}<img class="kcry l" src="assets/kezdolap/crystals.webp" alt=""><img class="kcry r" src="assets/kezdolap/crystals.webp" alt=""><button class="krbtn" data-go="feng"><span>${esc(ui(d, 'button.back_to_questions'))}</span></button></div>`;
-  const ORN = (pos) => `<svg class="korn ${pos}" viewBox="0 0 280 20" aria-hidden="true"><path d="M6 10Q70 9.4 140 8.4Q210 9.4 274 10Q210 10.6 140 11.6Q70 10.6 6 10Z" fill="#f6d27a" opacity=".85"/><path d="M112 10c4-6 10-6 12 0-2 4-6 4-7 1M168 10c-4-6-10-6-12 0 2 4 6 4 7 1" stroke="url(#au)" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M140 2 143.4 10 140 18 136.6 10Z" fill="url(#au)"/></svg>`;
   const draft = r.draft ? `<div class="kglass fsdraft">${ORN('t')}<h3>${esc(ui(d, 'label.env_draught'))}</h3><p>${esc(d.draft[sp])}</p>${ORN('b')}</div>` : '';
   if (!r.parts.length) { box.innerHTML = perg(`<p class="kc">${esc(d.empty)}</p>`) + draft + back; return; }
   // a név csak a rögzített címhelyen, és csak az első részben jelenik meg (6. pont)
   // érme a pergamen peremén: zóna → trigram, Közép → Luo Shu, elem → elemérme írásjellel, formaiskola → Yin-Yang
-  const medalFor = (id) => { const q = id.split('_'); if (q[0] === 'zona') return triCoin(ZFROM[q[1]]); if (q[0] === 'kozep') return luoCoin(); if (q[0] === 'elem') return elemCoin(q[1]); return yyCoin(); };
+  // minden érme fényszimulációval renderelt ékszer (design/feng_shui/forras/medal_render.py)
+  const img = (f) => `<span class="fsem"><img src="assets/fengshui/${f}.webp" alt=""></span>`;
+  const medalFor = (id) => { const q = id.split('_'); if (q[0] === 'zona') return img('ko_zona_' + ZFROM[q[1]]); if (q[0] === 'kozep') return img('ko_kozep'); if (q[0] === 'elem') return img('ko_elem_' + q[1]); return img('ko_forma_' + q.slice(1, -1).join('_')); };
   const el = (r.parts.find((x) => x.startsWith('elem_')) || '').split('_')[1];
   const block = (id, i) => { const x = d.texts[id]; const title = name && i === 0 ? x.titleName.replace('{NAME}', name) : x.title, n = x.p.length;
     // díszvonal a harmadánál és kétharmadánál (rövidebb szövegben csak középen)
     const marks = n >= 6 ? [Math.round(n / 3), Math.round((2 * n) / 3)] : n >= 4 ? [Math.round(n / 2)] : [];
     const first = (p) => (i !== 0 ? `<p class="krp">${esc(p)}</p>` : lang === 'ja' ? `<p class="krp"><span class="kseal fsseal" aria-hidden="true"><span class="ksealt">${el ? HANZI[el] : '☯'}</span></span>${esc(p)}</p>` : `<p class="krp kdrop">${esc(p)}</p>`);
     return perg(`<span class="krsym">${medalFor(id)}</span><h2 class="krt">${esc(title)}</h2>${DIV}${x.p.map((p, k) => (marks.includes(k) ? DIV : '') + (k === 0 ? first(p) : `<p class="krp">${esc(p)}</p>`)).join('')}`, 'fspart'); };
-  const note = r.zoned ? `<div class="knote fsnote">${esc(t('fs.zoneNote'))}</div>` : '';
+  const note = r.zoned ? `<div class="fsnote">${ORN('t')}<p>${esc(t('fs.zoneNote').replace(/^✦\s*/, ''))}</p>${ORN('b')}</div>` : '';
   box.innerHTML = note + r.parts.map(block).join('') + draft + back;
 }
 

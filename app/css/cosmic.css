@@ -225,8 +225,6 @@
 #s-sub .fsinfo{flex:none;width:64px;height:72px;padding:0;border:0;background:none;cursor:pointer;align-self:flex-start;margin-top:-4px;filter:drop-shadow(0 3px 4px #0006);transition:transform .15s}
 #s-sub .fsinfo:active{transform:scale(.93)}
 #s-sub .fsinfo img{width:100%;height:auto;display:block}
-#s-sub .fsbgw{position:sticky;bottom:0;height:0;overflow:visible;pointer-events:none;z-index:0}
-#s-sub .fsbgw .fsbagua{position:absolute;left:50%;bottom:-40px;transform:translateX(-50%)}
 #s-sub .km .kscroll{z-index:1}
 #s-sub .fsbagua{width:min(118cqw,560px);height:auto;opacity:.18;filter:drop-shadow(0 0 6px #ffcf7a)}
 #s-sub .fsbagua .rot{transform-origin:150px 150px;animation:krot 420s linear infinite}
@@ -255,3 +253,28 @@
 .fssteps b{display:block;font-size:16.5px;line-height:1.2;color:#5b3510}
 .fssteps p{margin:2px 0 0;font-size:15.5px;line-height:1.35}
 @media (prefers-reduced-motion:reduce){#s-sub .fsbagua .rot{animation:none}}
+
+/* ---- Feng Shui 2. kör: ékszer-gombok, erősebb Bagua, lebegő tájékoztató ---- */
+#s-sub .fsz{border-radius:14px;border:2px solid transparent;color:#4a2a0c;font-weight:600;
+ background:radial-gradient(120% 90% at 35% 20%,#fffaf0,#f6e4bb 55%,#e6c98c) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 30%,#8a5a16 55%,#f6d27a 80%,#b07a26) border-box;
+ box-shadow:0 3px 6px #5b351055,inset 0 2px 3px #fff,inset 0 -3px 6px #b07a2655}
+#s-sub .fsz::before{display:none}
+#s-sub .fstri{display:block;width:30px;height:22px;filter:drop-shadow(0 1px 0 #fff8) drop-shadow(0 -1px 0 #5b351066)}
+#s-sub .fstri:empty{display:none}
+#s-sub .fstri svg{width:100%;height:100%;display:block}
+#s-sub .fsz.mid .fstri{width:24px;height:24px}
+#s-sub .fsz.on{color:#fff3d6;background:radial-gradient(120% 100% at 35% 15%,#a77be0,#5a2a9a 50%,#2e1060) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 30%,#8a5a16 55%,#f6d27a 80%,#b07a26) border-box;
+ box-shadow:0 0 14px #b98cffaa,0 0 4px #ffd98a,inset 0 2px 6px #ffffff55,inset 0 -4px 8px #1a0636aa;text-shadow:0 1px 2px #0008}
+#s-sub .fsz.on .fstri{filter:drop-shadow(0 0 4px #ffd98a)}
+#s-sub .fsz.mid{border-radius:50%;box-shadow:0 3px 6px #5b351055,inset 0 2px 3px #fff,inset 0 -3px 6px #b07a2655,0 0 0 3px #fff6dc,0 0 0 5px #c9953f}
+#s-sub .fsz.mid.on{box-shadow:0 0 14px #b98cffaa,inset 0 2px 6px #ffffff55,inset 0 -4px 8px #1a0636aa,0 0 0 3px #fff6dc,0 0 0 5px #c9953f}
+#s-sub>.fsbgw{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+#s-sub .fsbgw .fsbagua{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%)}
+#s-sub .km .fsnote,#s-sub .km .kbtn,#s-sub .km .krfoot,#s-sub .km .kglass{position:relative;z-index:1}
+#s-sub .fsbagua{width:150cqw;max-width:none;opacity:.38;filter:drop-shadow(0 0 5px #ffcf7a99)}
+#s-sub .fsbagua .rot{animation-duration:600s}
+#s-sub .fsnote{position:relative;margin:6px 6px 0;padding:14px 12px 12px;text-align:center;background:radial-gradient(ellipse 70% 80% at 50% 50%,#2a1458b0,#2a145800 100%)}
+#s-sub .fsnote p{margin:0;font-size:15.5px;font-style:italic;line-height:1.4;color:#f3e6c8;text-shadow:0 1px 3px #000c}
+#s-sub .fsnote .korn{width:70%}
+#s-sub .fsnote .korn.t{top:-4px}#s-sub .fsnote .korn.b{bottom:-6px}
+#s-sub .fsem{width:78px;height:78px}

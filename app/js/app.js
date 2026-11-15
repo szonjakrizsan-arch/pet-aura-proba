@@ -1,13 +1,13 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.15';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.15';
-import { analyze, chakraScores } from './analysis.js?v=0.6.15';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.15';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.15';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.15';
-import { auraScreen, FLOW } from './aura.js?v=0.6.15';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.15';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.15';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.15';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.16';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.16';
+import { analyze, chakraScores } from './analysis.js?v=0.6.16';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.16';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.16';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.16';
+import { auraScreen, FLOW } from './aura.js?v=0.6.16';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.16';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.16';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.16';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -123,6 +123,7 @@ function render() {
   if (S.stopCosmic) { S.stopCosmic(); S.stopCosmic = null; }
   if (S.tab === 'cosmic' && S.sub) mountReader($('#view'), S.lang, S.sub, esc);
   else if (S.tab === 'cosmic') S.stopCosmic = mountCosmic($('#view'), S.lang, esc);
+  if (S.tab !== 'feng') document.getElementById('fsbg')?.remove();
   if (S.tab === 'feng') mountFeng($('#view'), { t, esc, lang: S.lang, pet: S.pet, go, savePet, render });
   if (S.tab === 'pets') mountPets($('#view'), { t, esc, lang: S.lang, go, back, render }, S.sub);
   if (S.tab === 'regi-aura' && S.scan) drawAura($('#cv'), S.scan);
