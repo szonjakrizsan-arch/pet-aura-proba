@@ -269,5 +269,14 @@
 "fs.h.3t": "Ustal kierunek",
 "fs.h.3": "Przytrzymaj telefon nieruchomo przez chwilę, a potem dotknij „Wybierz ten”!",
 "fs.h.tip": "✦ Wskazówka: Aby pomiar był dokładny, trzymaj telefon z dala od większych metalowych przedmiotów i urządzeń elektronicznych.",
-"fs.h.close": "Zamknij"
+"fs.h.close": "Zamknij",
+"acc.soon": "Logowanie i subskrypcja już wkrótce.",
+"acc.pets": "Pupile: {n}",
+"acc.data": "Twoje dane",
+"acc.local": "Dane i zdjęcia twoich pupili oraz twoje odpowiedzi są przechowywane tylko na tym telefonie. Pet Aura nigdzie ich nie wysyła.",
+"acc.wipe": "Usuń wszystkie dane z tego telefonu",
+"acc.wipeq": "Usunąć wszystkie dane Pet Aura z tego telefonu? Pupile, zdjęcia i odpowiedzi zostaną utracone. Tej operacji nie można cofnąć.",
+"acc.wipeyes": "Tak, usuń wszystko",
+"acc.about": "O aplikacji",
+"acc.sources": "Źródła danych:"
 }

@@ -290,3 +290,21 @@
 #s-sub .fsinfo{position:absolute;right:6px;top:6px}
 #s-sub .fscomp .fsinfo{width:84px;height:84px;right:-8px;top:-10px;margin:0;filter:drop-shadow(0 4px 6px #0007)}
 #s-sub .fscomp .fsinfo img{width:100%;height:100%;object-fit:contain}
+/* ---- Fiók ---- */
+#s-sub .accrest{display:flex;flex-direction:column;align-items:center;gap:8px;margin:4px 0 6px;text-align:center}
+#s-sub .accoin{width:72px;height:72px}
+#s-sub .accoin svg{width:58%;height:58%}
+#s-sub .accrest p{margin:0;font-size:15.5px;font-style:italic;color:#e9dcf6;text-shadow:0 1px 3px #000a}
+#s-sub .acg{margin-top:30px}
+#s-sub .aclangs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px}
+#s-sub .aclang{font:inherit;font-size:15.5px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid #c9953f;background:#2a1260cc;color:#f3d58a;cursor:pointer}
+#s-sub .aclang.on{color:#2a1236;font-weight:700;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c);border-color:#fff1c2;box-shadow:0 0 12px #ffb84a88}
+#s-sub .acrow{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:#efe3c6;font-size:16.5px;padding:6px 2px;cursor:pointer}
+#s-sub .acrow .karr{color:#f3cf7a}
+#s-sub .acg p{margin:0 0 6px}
+#s-sub .acwarn{color:#ffd2c9 !important}
+#s-sub .acsrc{font-size:13.5px !important;color:#bfaedb !important;line-height:1.5 !important}
+#s-sub .acg .plink{margin:8px auto 2px}
+#s-sub .acg .korn.b{display:none}
+#s-sub .acg:last-child .korn.b{display:block}
+#s-sub .acg{margin-top:22px}

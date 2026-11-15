@@ -269,5 +269,14 @@
 "fs.h.3t": "Richtung festhalten",
 "fs.h.3": "Halte einen Moment still und tippe dann auf „Diese wählen“!",
 "fs.h.tip": "✦ Tipp: Für eine genaue Messung halte das Handy von größeren Metallgegenständen und elektronischen Geräten fern.",
-"fs.h.close": "Schließen"
+"fs.h.close": "Schließen",
+"acc.soon": "Anmeldung und Abo folgen in Kürze.",
+"acc.pets": "Tiere: {n}",
+"acc.data": "Deine Daten",
+"acc.local": "Die Angaben und Fotos deiner Tiere und deine Antworten werden nur auf diesem Handy gespeichert. Pet Aura lädt sie nirgendwohin hoch.",
+"acc.wipe": "Alle Daten von diesem Handy löschen",
+"acc.wipeq": "Wirklich alle Pet-Aura-Daten von diesem Handy löschen? Tiere, Fotos und Antworten gehen verloren. Das lässt sich nicht rückgängig machen.",
+"acc.wipeyes": "Ja, alles löschen",
+"acc.about": "Über",
+"acc.sources": "Datenquellen:"
 }
