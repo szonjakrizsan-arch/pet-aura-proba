@@ -1,8 +1,8 @@
 // Aura Scanner képernyők: indító · fotózás · portré igazítása · elemzés · sikertelen próba · eredmény.
 // A jóváhagyott próbaoldalak (pet-aura-proba) logikája, az app keretébe illesztve. Minden felirat a szótárból (t) jön.
-import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.28';
-import { ICON } from './home.js?v=0.6.28';
-import { resultScreen, archiveScreen } from './aura-result.js?v=0.6.28';
+import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.29';
+import { ICON } from './home.js?v=0.6.29';
+import { resultScreen, archiveScreen } from './aura-result.js?v=0.6.29';
 
 const A = (f) => `assets/aura/${f}`;
 const RM = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -112,7 +112,7 @@ function cameraScreen(ctx) {
       const p = kind(x, y); if (p.k === 0) { p.r = 1 + Math.random() * .9; p.v = 12 + Math.random() * 18; p.star = Math.random() < .35; } return p; }, { rate: 4, max: 38 });
     // varázstükör-vignetta csillagpora a kamerakép peremén
     const vd = q('#vd'), vx = vd.getContext('2d'); let VP = [], alive = true;
-    const sizeV = () => { const r = q('#cam').getBoundingClientRect(); vd.width = r.width * devicePixelRatio; vd.height = r.height * devicePixelRatio; VP = []; for (let i = 0; i < 34; i++) { const e = Math.random() * 4 | 0, tt = Math.random(), m = Math.random() * .07; VP.push({ x: e === 0 ? m : e === 1 ? 1 - m : tt, y: e === 2 ? m : e === 3 ? 1 - m : tt, r: .5 + Math.random() * 1.1, ph: Math.random() * 7, s: .6 + Math.random() * 1.4, c: Math.random() < .6 ? '255,220,150' : '206,176,255' }); } };
+    const sizeV = () => { const r = q('#cam').getBoundingClientRect(); vd.width = r.width * devicePixelRatio; vd.height = r.height * devicePixelRatio; VP = []; for (let i = 0; i < 34; i++) { const e = Math.random() * 4 | 0, tt = Math.random(), m = Math.random() * .022; VP.push({ x: e === 0 ? m : e === 1 ? 1 - m : tt, y: e === 2 ? m : e === 3 ? 1 - m : tt, r: .5 + Math.random() * 1.1, ph: Math.random() * 7, s: .6 + Math.random() * 1.4, c: Math.random() < .6 ? '255,220,150' : '206,176,255' }); } };
     (function vig(now) { if (!alive) return; const d = devicePixelRatio; vx.clearRect(0, 0, vd.width, vd.height); if (!RM()) VP.forEach((p) => { const al = Math.max(0, Math.sin(now / 1000 * p.s + p.ph)) * .75, x = p.x * vd.width, y = p.y * vd.height, R = p.r * d * 3.2; const g = vx.createRadialGradient(x, y, 0, x, y, R); g.addColorStop(0, `rgba(255,250,230,${al})`); g.addColorStop(.3, `rgba(${p.c},${al * .6})`); g.addColorStop(1, `rgba(${p.c},0)`); vx.fillStyle = g; vx.beginPath(); vx.arc(x, y, R, 0, 7); vx.fill(); }); requestAnimationFrame(vig); })(performance.now());
     // kamera
     let stream = null; const say = (h) => { msg.innerHTML = '<div>' + h + '</div>'; msg.style.display = 'flex'; };

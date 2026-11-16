@@ -1,15 +1,15 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.28';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.28';
-import { analyze, chakraScores } from './analysis.js?v=0.6.28';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.28';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.28';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.28';
-import { auraScreen, FLOW } from './aura.js?v=0.6.28';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.28';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.28';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.28';
-import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.28';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.28';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.29';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.29';
+import { analyze, chakraScores } from './analysis.js?v=0.6.29';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.29';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.29';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.29';
+import { auraScreen, FLOW } from './aura.js?v=0.6.29';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.29';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.29';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.29';
+import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.29';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.29';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
