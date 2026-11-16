@@ -29,7 +29,7 @@ const coin = (inner) => `<span class="zm fsm"><svg viewBox="0 0 100 100" aria-hi
 const triCoin = (z) => coin(trigram(TRI[z], 26, 27, 48, 46, 'url(#au)'));
 const yyCoin = () => coin(yinyang(50, 50, 30, 'url(#au)', 'none', '#f6d27a'));
 const luoCoin = () => coin([0, 1, 2].map((r) => [0, 1, 2].map((c) => `<circle cx="${30 + c * 20}" cy="${30 + r * 20}" r="${r === 1 && c === 1 ? 8 : 4.5}" fill="url(#au)"/>`).join('')).join('') + '<rect x="21" y="21" width="58" height="58" rx="6" fill="none" stroke="#f6d27a" stroke-width="1.6" opacity=".6"/>');
-const elemCoin = (el) => `<span class="fsem"><img src="assets/fengshui/ko_elem_${el}.webp?v=0.6.24" alt=""></span>`;
+const elemCoin = (el) => `<span class="fsem"><img src="assets/fengshui/ko_elem_${el}.webp?v=0.6.25" alt=""></span>`;
 // a háttérben lassan forgó Bagua: nyolcszög, a nyolc trigram, középen Yin-Yang
 function baguaBg() {
   const C = 150, R1 = 128, R2 = 98, oct = (r) => Array.from({ length: 8 }, (_, i) => { const a = (i * 45 - 22.5) * Math.PI / 180; return `${(C + r * Math.cos(a)).toFixed(1)},${(C + r * Math.sin(a)).toFixed(1)}`; }).join(' ');
@@ -39,9 +39,9 @@ function baguaBg() {
    <circle cx="${C}" cy="${C}" r="70" fill="none" stroke="#f6d27a" stroke-width=".8" stroke-dasharray="1 5"/>${tris}${yinyang(C, C, 46, '#f6d27a', 'none', '#f6d27a')}</g></svg>`;
 }
 
-import { saveWithNotice, lastOf, sig } from './journal.js?v=0.6.24';
+import { saveWithNotice, lastOf, sig } from './journal.js?v=0.6.25';
 const DATA = new Map();
-export const fsData = (lang) => { if (!DATA.has(lang)) DATA.set(lang, fetch(`data/fengshui/${lang}.json?v=0.6.24`).then((r) => (r.ok ? r.json() : null)).catch(() => null)); return DATA.get(lang); };
+export const fsData = (lang) => { if (!DATA.has(lang)) DATA.set(lang, fetch(`data/fengshui/${lang}.json?v=0.6.25`).then((r) => (r.ok ? r.json() : null)).catch(() => null)); return DATA.get(lang); };
 
 // a gazdi válaszai kedvencenként, külön tárolva (a kedvenc adatlapjához nem nyúlunk)
 const key = (pid) => 'fs.' + (pid || 'x');
@@ -108,7 +108,7 @@ function reading(box, d, ans, sp, { t, esc, pet, go, perg, lang }) {
   // a név csak a rögzített címhelyen, és csak az első részben jelenik meg (6. pont)
   // érme a pergamen peremén: zóna → trigram, Közép → Luo Shu, elem → elemérme írásjellel, formaiskola → Yin-Yang
   // minden érme fényszimulációval renderelt ékszer (design/feng_shui/forras/medal_render.py)
-  const img = (f) => `<span class="fsem"><img src="assets/fengshui/${f}.webp?v=0.6.24" alt=""></span>`;
+  const img = (f) => `<span class="fsem"><img src="assets/fengshui/${f}.webp?v=0.6.25" alt=""></span>`;
   const medalFor = (id) => { const q = id.split('_'); if (q[0] === 'zona') return img('ko_zona_' + ZFROM[q[1]]); if (q[0] === 'kozep') return img('ko_kozep'); if (q[0] === 'elem') return img('ko_elem_' + q[1]); return img('ko_forma_' + q.slice(1, -1).join('_')); };
   const el = (r.parts.find((x) => x.startsWith('elem_')) || '').split('_')[1];
   const block = (id, i) => { const x = d.texts[id]; const title = name && i === 0 ? x.titleName.replace('{NAME}', name) : x.title, n = x.p.length;
@@ -133,9 +133,9 @@ function compassHtml(t, esc, nl) {
   // élő luopan: a számlap (Szonja képe, hagyományos Later Heaven elrendezés, Dél felül) úgy fordul, hogy a Kan (Észak) mindig a tű piros hegye alatt legyen;
   // a tű a valódi északra mutat; a fenti arany jelző mutatja, merre néz a telefon hátlapi kamerája
   return `<div class="fscomp">
-   <div class="fsdial" aria-hidden="true"><i class="fslub"></i><img class="fsplate" id="fsplate" src="assets/fengshui/szamlap.webp?v=0.6.24" alt=""><img class="fsneedle" id="fsneedle" src="assets/fengshui/tu.webp?v=0.6.24" alt=""></div>
+   <div class="fsdial" aria-hidden="true"><i class="fslub"></i><img class="fsplate" id="fsplate" src="assets/fengshui/szamlap.webp?v=0.6.25" alt=""><img class="fsneedle" id="fsneedle" src="assets/fengshui/tu.webp?v=0.6.25" alt=""></div>
    <div class="fsci"><b id="fsstate">${esc(t('fs.c.hint'))}</b><div class="fscb"><button class="fsbtn" id="fsstart" type="button">${esc(t('fs.c.start'))}</button><button class="fsbtn" id="fsuse" type="button" hidden></button></div></div>
-   <button class="fsinfo" id="fsinfo" type="button" aria-label="${esc(t('fs.h.title'))}"><img src="assets/fengshui/pecset_i.webp?v=0.6.24" alt=""></button></div>`;
+   <button class="fsinfo" id="fsinfo" type="button" aria-label="${esc(t('fs.h.title'))}"><img src="assets/fengshui/pecset_i.webp?v=0.6.25" alt=""></button></div>`;
 }
 function helpHtml(t, esc) {
   const steps = [1, 2, 3].map((i) => `<li><span class="fsn">${i}</span><div><b>${esc(t('fs.h.' + i + 't'))}</b><p>${esc(t('fs.h.' + i))}</p></div></li>`).join('');

@@ -1,7 +1,7 @@
 // Elemzéseim oldal (alcím: Pet Aura-napló): lista (#my) és egy elemzés visszanézése (#my/<id>).
 // Minden bejegyzésen: dátum, elemzéstípus, a kedvenc neve; az utolsó látogatás óta készültek „Új” jelzést kapnak.
-import { listEntries, getEntry, deleteEntry } from './journal.js?v=0.6.24';
-import { PETS } from './pets.js?v=0.6.24';
+import { listEntries, getEntry, deleteEntry } from './journal.js?v=0.6.25';
+import { PETS } from './pets.js?v=0.6.25';
 
 const SEEN = 'my.seen';
 const ORN = (pos) => `<svg class="korn ${pos}" viewBox="0 0 280 20" aria-hidden="true"><path d="M6 10Q70 9.4 140 8.4Q210 9.4 274 10Q210 10.6 140 11.6Q70 10.6 6 10Z" fill="#f6d27a" opacity=".85"/><path d="M112 10c4-6 10-6 12 0-2 4-6 4-7 1M168 10c-4-6-10-6-12 0 2 4 6 4 7 1" stroke="url(#au)" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M140 2 143.4 10 140 18 136.6 10Z" fill="url(#au)"/></svg>`;
@@ -29,7 +29,7 @@ export function mountMy(root, { t, esc, lang, go, back, render }) {
     if (!all.length) { box.innerHTML = `<section class="acard myempty"><h3>${esc(t('my.emptyt'))}</h3><p>${esc(t('my.empty'))}</p></section>`; return; }
     box.innerHTML = chips + shown.map((e) => `<a class="acard myrow${e.date > seenAt ? ' new' : ''}" data-go="my/${e.id}" role="button" tabindex="0">
       <span class="zm myico">${ICO[e.type] || ''}</span><span class="myl"><b>${esc(t('my.t.' + e.type))}</b><span class="mymeta">${esc(e.petName || '')} · ${esc(when(lang, e.date))}</span></span>
-      ${e.date > seenAt ? `<span class="mynew">${esc(t('my.new'))}</span>` : ''}<img class="acarrow" src="assets/fiok/nyil.webp?v=0.6.24" alt=""></a>`).join('');
+      ${e.date > seenAt ? `<span class="mynew">${esc(t('my.new'))}</span>` : ''}<img class="acarrow" src="assets/fiok/nyil.webp?v=0.6.25" alt=""></a>`).join('');
     box.querySelectorAll('[data-f]').forEach((b) => { b.onclick = () => { filter = b.dataset.f; render(); }; });
   });
   // a látogatás végén minden eddigi bejegyzés „látott” lesz
