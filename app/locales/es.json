@@ -289,14 +289,15 @@
 "my.t.aura": "Análisis de aura",
 "my.t.horo": "Horóscopo",
 "my.t.feng": "Lectura de Feng Shui",
-"my.emptyt": "Tu diario aún está vacío",
-"my.empty": "Aquí se irán guardando los análisis de tus mascotas – aura, horóscopo y lectura de Feng Shui, con la fecha – para que puedas volver a verlos cuando quieras.",
+"my.emptyt": "Aún no tienes análisis guardados",
+"my.empty": "Cuando hagas el análisis de aura, el horóscopo o la lectura de Feng Shui de tu mascota, los encontrarás aquí. Podrás volver a ellos cuando quieras y leer de nuevo los resultados anteriores.",
 "my.del": "Borrar análisis",
-"my.delq": "¿Borrar este análisis? El borrado es definitivo y no se podrá recuperar más adelante.",
+"my.delq": "¿Seguro que quieres borrar este análisis?",
 "my.delyes": "Sí, borrar",
 "my.sample": "Resultado de ejemplo: creado antes de activar el análisis definitivo.",
 "my.saved": "✦ Guardado en Mis análisis",
 "my.full": "No se pudo guardar el análisis porque el almacenamiento del teléfono está lleno. Borra algunos análisis antiguos e inténtalo de nuevo.",
 "my.fail": "No se pudo guardar el análisis. Inténtalo más tarde.",
-"my.gone": "Este análisis ya no existe."
+"my.gone": "Este análisis ya no existe.",
+"my.delsub": "Un análisis borrado no se puede recuperar."
 }

@@ -289,14 +289,15 @@
 "my.t.aura": "Aura analysis",
 "my.t.horo": "Horoscope",
 "my.t.feng": "Feng Shui reading",
-"my.emptyt": "Your journal is still empty",
-"my.empty": "Your pets’ analyses will be collected here – aura, horoscope and Feng Shui readings, with dates – so you can look back at them any time.",
+"my.emptyt": "No saved analyses yet",
+"my.empty": "Once you create your pet’s aura analysis, horoscope or Feng Shui reading, you’ll find them here. You can come back to them any time and read your earlier results again.",
 "my.del": "Delete analysis",
-"my.delq": "Delete this analysis? This is permanent and cannot be restored later.",
+"my.delq": "Are you sure you want to delete this analysis?",
 "my.delyes": "Yes, delete",
 "my.sample": "Sample result – created before the final analysis engine was switched on.",
 "my.saved": "✦ Saved to My analyses",
 "my.full": "The analysis could not be saved because your phone’s storage is full. Delete a few older analyses on the My analyses page and try again.",
 "my.fail": "The analysis could not be saved. Please try again later.",
-"my.gone": "This analysis can no longer be found."
+"my.gone": "This analysis can no longer be found.",
+"my.delsub": "A deleted analysis cannot be restored."
 }

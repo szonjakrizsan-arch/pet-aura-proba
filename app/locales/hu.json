@@ -289,14 +289,15 @@
 "my.t.aura": "Auraelemzés",
 "my.t.horo": "Horoszkóp",
 "my.t.feng": "Feng Shui olvasás",
-"my.emptyt": "Még üres a napló",
-"my.empty": "Itt gyűlnek majd a kedvenceid elemzései: az aura, a horoszkóp és a Feng Shui olvasás, dátummal, hogy bármikor visszanézhesd őket.",
+"my.emptyt": "Még nincs mentett elemzésed",
+"my.empty": "Amikor elkészíted kedvenced auraelemzését, horoszkópját vagy Feng Shui-olvasását, itt találod majd őket. Bármikor visszatérhetsz hozzájuk, és újra elolvashatod a korábbi eredményeket.",
 "my.del": "Elemzés törlése",
-"my.delq": "Biztosan törlöd ezt az elemzést? A törlés végleges, később nem lehet visszaállítani.",
+"my.delq": "Biztosan törlöd ezt az elemzést?",
 "my.delyes": "Igen, törlöm",
 "my.sample": "Mintaeredmény – a végleges elemzőmotor bekapcsolása előtt készült.",
 "my.saved": "✦ Elmentve az Elemzéseim közé",
 "my.full": "Az elemzést nem sikerült elmenteni, mert megtelt a telefon tárhelye. Törölj néhány régebbi elemzést az Elemzéseim oldalon, és próbáld újra.",
 "my.fail": "Az elemzést nem sikerült elmenteni. Próbáld újra később.",
-"my.gone": "Ez az elemzés már nem található."
+"my.gone": "Ez az elemzés már nem található.",
+"my.delsub": "A törölt elemzés nem állítható vissza."
 }

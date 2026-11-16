@@ -289,14 +289,15 @@
 "my.t.aura": "Análise de aura",
 "my.t.horo": "Horóscopo",
 "my.t.feng": "Leitura de Feng Shui",
-"my.emptyt": "Seu diário ainda está vazio",
-"my.empty": "Aqui ficarão as análises dos seus pets – aura, horóscopo e leitura de Feng Shui, com a data – para você revê-las quando quiser.",
+"my.emptyt": "Você ainda não tem análises salvas",
+"my.empty": "Quando você fizer a análise de aura, o horóscopo ou a leitura de Feng Shui do seu pet, eles ficarão guardados aqui. Você pode voltar a eles quando quiser e reler os resultados anteriores.",
 "my.del": "Excluir análise",
-"my.delq": "Excluir esta análise? A exclusão é definitiva e não poderá ser desfeita depois.",
+"my.delq": "Tem certeza de que deseja excluir esta análise?",
 "my.delyes": "Sim, excluir",
 "my.sample": "Resultado de exemplo – criado antes de a análise definitiva ser ativada.",
 "my.saved": "✦ Salvo em Minhas análises",
 "my.full": "Não foi possível salvar a análise porque o armazenamento do celular está cheio. Exclua algumas análises antigas e tente de novo.",
 "my.fail": "Não foi possível salvar a análise. Tente novamente mais tarde.",
-"my.gone": "Esta análise não foi encontrada."
+"my.gone": "Esta análise não foi encontrada.",
+"my.delsub": "Uma análise excluída não pode ser recuperada."
 }

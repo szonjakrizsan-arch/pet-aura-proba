@@ -1,15 +1,12 @@
 // Elemzéseim oldal (alcím: Pet Aura-napló): lista (#my) és egy elemzés visszanézése (#my/<id>).
 // Minden bejegyzésen: dátum, elemzéstípus, a kedvenc neve; az utolsó látogatás óta készültek „Új” jelzést kapnak.
-import { listEntries, getEntry, deleteEntry } from './journal.js?v=0.6.25';
-import { PETS } from './pets.js?v=0.6.25';
+import { listEntries, getEntry, deleteEntry } from './journal.js?v=0.6.26';
+import { PETS } from './pets.js?v=0.6.26';
+import { glass } from './account.js?v=0.6.26';
+import { astrolabe } from './astrolabe.js?v=0.6.26';
 
 const SEEN = 'my.seen';
-const ORN = (pos) => `<svg class="korn ${pos}" viewBox="0 0 280 20" aria-hidden="true"><path d="M6 10Q70 9.4 140 8.4Q210 9.4 274 10Q210 10.6 140 11.6Q70 10.6 6 10Z" fill="#f6d27a" opacity=".85"/><path d="M112 10c4-6 10-6 12 0-2 4-6 4-7 1M168 10c-4-6-10-6-12 0 2 4 6 4 7 1" stroke="url(#au)" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M140 2 143.4 10 140 18 136.6 10Z" fill="url(#au)"/></svg>`;
-const ICO = {
-  aura: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="url(#au)" stroke-width="1.6"/><circle cx="12" cy="12" r="5" fill="none" stroke="url(#au)" stroke-width="1.2" opacity=".7"/><g fill="url(#au)"><ellipse cx="12" cy="13.6" rx="2.4" ry="2"/><circle cx="9.3" cy="11" r=".95"/><circle cx="11" cy="9.6" r=".95"/><circle cx="13" cy="9.6" r=".95"/><circle cx="14.7" cy="11" r=".95"/></g></svg>',
-  horo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 4.2a8 8 0 1 0 4.3 12.2 6.4 6.4 0 1 1-4.3-12.2Z" fill="url(#au)"/><path d="M17 3l.7 1.8 1.8.7-1.8.7L17 8l-.7-1.8-1.8-.7 1.8-.7Z" fill="url(#au)"/></svg>',
-  feng: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 18.7 5.3 21.5 12 18.7 18.7 12 21.5 5.3 18.7 2.5 12 5.3 5.3Z" fill="none" stroke="url(#au)" stroke-width="1.4"/><path d="M12 7a5 5 0 0 1 0 10 2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 0 0-5Z" fill="url(#au)"/><circle cx="12" cy="7" r="5" fill="none" stroke="url(#au)" stroke-width="0" /><circle cx="12" cy="12" r="5" fill="none" stroke="url(#au)" stroke-width="1"/></svg>',
-};
+const JEL = (type, cls = 'myjel') => `<img class="${cls}" src="assets/elemzeseim/jel_${type}.webp?v=0.6.26" alt="">`;
 const when = (lang, ms) => new Intl.DateTimeFormat(lang, { dateStyle: 'long', timeStyle: 'short' }).format(new Date(ms));
 let filter = 'all', confirmDel = false;
 
@@ -26,11 +23,13 @@ export function mountMy(root, { t, esc, lang, go, back, render }) {
     const pets = PETS.list; if (filter !== 'all' && !pets.some((p) => p.id === filter)) filter = 'all';
     const shown = filter === 'all' ? all : all.filter((e) => e.petId === filter);
     const chips = pets.length > 1 ? `<div class="aclangs mychips">${[['all', t('my.all')], ...pets.map((p) => [p.id, p.name || t('au.start.noname')])].map(([id, n]) => `<button class="aclang${filter === id ? ' on' : ''}" data-f="${id}" aria-pressed="${filter === id}">${filter === id ? '<span class="acstar" aria-hidden="true">✦</span>' : ''}${esc(n)}</button>`).join('')}</div>` : '';
-    if (!all.length) { box.innerHTML = `<section class="acard myempty"><h3>${esc(t('my.emptyt'))}</h3><p>${esc(t('my.empty'))}</p></section>`; return; }
-    box.innerHTML = chips + shown.map((e) => `<a class="acard myrow${e.date > seenAt ? ' new' : ''}" data-go="my/${e.id}" role="button" tabindex="0">
-      <span class="zm myico">${ICO[e.type] || ''}</span><span class="myl"><b>${esc(t('my.t.' + e.type))}</b><span class="mymeta">${esc(e.petName || '')} · ${esc(when(lang, e.date))}</span></span>
-      ${e.date > seenAt ? `<span class="mynew">${esc(t('my.new'))}</span>` : ''}<img class="acarrow" src="assets/fiok/nyil.webp?v=0.6.25" alt=""></a>`).join('');
-    box.querySelectorAll('[data-f]').forEach((b) => { b.onclick = () => { filter = b.dataset.f; render(); }; });
+    if (!all.length) { box.innerHTML = glass(esc(t('my.emptyt')), `<p>${esc(t('my.empty'))}</p>`, 'myempty') + astrolabe(); return; }
+    box.innerHTML = chips + shown.map((e) => `<a class="pcard myrow${e.date > seenAt ? ' on new' : ''}" data-go="my/${e.id}" role="button" tabindex="0">
+      ${JEL(e.type)}<span class="pinfo"><b>${esc(t('my.t.' + e.type))}</b><small>${esc(e.petName || '')} · ${esc(when(lang, e.date))}</small>${e.date > seenAt ? `<span class="pon">✦ ${esc(t('my.new'))}</span>` : ''}</span>
+      <img class="acarrow" src="assets/fiok/nyil.webp?v=0.6.26" alt=""></a>`).join('') + astrolabe();
+    const shine = (el) => { el.classList.remove('shine'); void el.offsetWidth; el.classList.add('shine'); };
+    box.querySelectorAll('.aclang').forEach((b) => b.addEventListener('pointerdown', () => shine(b)));
+    box.querySelectorAll('[data-f]').forEach((b) => { b.onclick = () => { filter = b.dataset.f; setTimeout(render, 300); }; }); // előbb lefut a csillanás
   });
   // a látogatás végén minden eddigi bejegyzés „látott” lesz
   return () => { try { localStorage.setItem(SEEN, String(Date.now())); } catch { /* nincs tárhely */ } };
@@ -40,7 +39,7 @@ function detail(box, id, { t, esc, lang, back, render }) {
   getEntry(id).then((e) => {
     if (!document.body.contains(box)) return;
     if (!e) { box.innerHTML = `<section class="acard"><p>${esc(t('my.gone'))}</p></section>`; return; }
-    const head = `<div class="myhead"><span class="zm myico big">${ICO[e.type] || ''}</span><b>${esc(t('my.t.' + e.type))}</b><span>${esc(e.petName || '')} · ${esc(when(lang, e.date))}</span></div>`;
+    const head = `<div class="myhead">${JEL(e.type, 'myjel big')}<b>${esc(t('my.t.' + e.type))}</b><span>${esc(e.petName || '')} · ${esc(when(lang, e.date))}</span></div>`;
     const perg = (inner, cls = '') => `<div class="kscroll ${cls}"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt=""><div class="p-in">${inner}</div></div>`;
     const para = (arr) => arr.map(([k, x]) => (k === 'h' ? `<h3 class="krh">${esc(x)}</h3>` : k === 'q' ? `<blockquote class="krq">${esc(x)}</blockquote>` : `<p class="krp">${esc(x)}</p>`)).join('');
     let body = '';
@@ -59,11 +58,16 @@ function detail(box, id, { t, esc, lang, back, render }) {
         + (e.draft ? `<section class="acard"><h3>${esc(e.draft.title)}</h3><p>${esc(e.draft.p)}</p></section>` : '');
     }
     const del = confirmDel
-      ? `<div class="acwarnp" role="alert"><p class="acwq">${esc(t('my.delq'))}</p></div><div class="acbtns"><button class="acbtn danger" id="mydelyes" type="button">${esc(t('my.delyes'))}</button><button class="acbtn" id="mydelno" type="button">${esc(t('pets.cancel'))}</button></div>`
-      : `<button class="plink danger" id="mydel" type="button">${esc(t('my.del'))}</button>`;
-    box.innerHTML = head + body + `<section class="acard mydelc">${del}</section>`;
+      ? `<div class="mywin" role="alert">${['fb', 'fj', 'lb', 'lj'].map((c) => `<img class="mywc ${c}" src="assets/elemzeseim/ablak_sarok_${c}.webp?v=0.6.26" alt="">`).join('')}
+         <img class="mywsig" src="assets/elemzeseim/ablak_jel.webp?v=0.6.26" alt=""><p class="mywq">${esc(t('my.delq'))}</p><p class="mywr">${esc(t('my.delsub'))}</p>
+         <img class="mywdiv" src="assets/elemzeseim/ablak_valaszto.webp?v=0.6.26" alt="">
+         <div class="acbtns"><button class="acbtn danger" id="mydelyes" type="button">${esc(t('my.delyes'))}</button><button class="acbtn" id="mydelno" type="button">${esc(t('pets.cancel'))}</button></div></div>`
+      : `<button class="mydel" id="mydel" type="button"><img class="mydm" src="assets/elemzeseim/torles_kozep.webp?v=0.6.26" alt=""><img class="mydl" src="assets/elemzeseim/torles_bal.webp?v=0.6.26" alt=""><img class="mydr" src="assets/elemzeseim/torles_jobb.webp?v=0.6.26" alt=""><img class="mydt" src="assets/elemzeseim/torles_disz_fent.webp?v=0.6.26" alt=""><img class="mydb" src="assets/elemzeseim/torles_disz_lent.webp?v=0.6.26" alt=""><span>${esc(t('my.del'))}</span></button>`;
+    box.innerHTML = head + body + `<div class="mydelc">${del}</div>`;
     const q = (s) => box.querySelector(s);
-    if (q('#mydel')) q('#mydel').onclick = () => { confirmDel = true; render(); };
+    const shine = (el) => { el.classList.remove('shine'); void el.offsetWidth; el.classList.add('shine'); };
+    box.querySelectorAll('.mydel,.acbtn').forEach((b) => b.addEventListener('pointerdown', () => shine(b)));
+    if (q('#mydel')) q('#mydel').onclick = () => { confirmDel = true; setTimeout(() => { render(); setTimeout(() => document.querySelector('#mydelyes')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 60); }, 280); };
     if (q('#mydelno')) q('#mydelno').onclick = () => { confirmDel = false; render(); };
     if (q('#mydelyes')) q('#mydelyes').onclick = async () => { await deleteEntry(id); confirmDel = false; back('my'); };
   });

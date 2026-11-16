@@ -289,14 +289,15 @@
 "my.t.aura": "Analiza aury",
 "my.t.horo": "Horoskop",
 "my.t.feng": "Odczyt Feng Shui",
-"my.emptyt": "Dziennik jest jeszcze pusty",
-"my.empty": "Tutaj będą zbierane analizy twoich pupili – aura, horoskop i odczyt Feng Shui, z datą – aby można było do nich wrócić w każdej chwili.",
+"my.emptyt": "Nie masz jeszcze zapisanych analiz",
+"my.empty": "Gdy przygotujesz analizę aury, horoskop lub odczyt Feng Shui swojego pupila, znajdziesz je tutaj. Możesz do nich wrócić w każdej chwili i ponownie przeczytać wcześniejsze wyniki.",
 "my.del": "Usuń analizę",
-"my.delq": "Usunąć tę analizę? Usunięcie jest nieodwracalne i nie można jej później przywrócić.",
+"my.delq": "Czy na pewno chcesz usunąć tę analizę?",
 "my.delyes": "Tak, usuń",
 "my.sample": "Przykładowy wynik – utworzony przed włączeniem docelowej analizy.",
 "my.saved": "✦ Zapisano w Moich analizach",
 "my.full": "Nie udało się zapisać analizy, bo pamięć telefonu jest pełna. Usuń kilka starszych analiz i spróbuj ponownie.",
 "my.fail": "Nie udało się zapisać analizy. Spróbuj ponownie później.",
-"my.gone": "Ta analiza już nie istnieje."
+"my.gone": "Ta analiza już nie istnieje.",
+"my.delsub": "Usuniętej analizy nie można przywrócić."
 }
