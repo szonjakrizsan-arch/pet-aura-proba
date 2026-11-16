@@ -273,12 +273,14 @@
 "acc.data": "Twoje dane",
 "acc.local": "Dane i zdjęcia twoich pupili oraz twoje odpowiedzi są przechowywane tylko na tym telefonie. Pet Aura nigdzie ich nie wysyła.",
 "acc.wipe": "Usuń wszystkie dane z tego telefonu",
-"acc.wipeq": "Usunąć wszystkie dane Pet Aura z tego telefonu? Pupile, zdjęcia i odpowiedzi zostaną utracone. Tej operacji nie można cofnąć.",
+"acc.wipeq": "Czy na pewno chcesz usunąć wszystkie dane zapisane na tym telefonie?",
 "acc.wipeyes": "Tak, usuń wszystko",
 "acc.about": "O aplikacji",
 "acc.sources": "Źródła danych:",
 "acc.pets.one": "{n} profil",
 "acc.pets.few": "{n} profile",
 "acc.pets.many": "{n} profili",
-"acc.pets.other": "{n} profilu"
+"acc.pets.other": "{n} profilu",
+"acc.wipefinal": "Usunięcie jest nieodwracalne!",
+"acc.wiperest": "Wszyscy twoi pupile, zdjęcia, odpowiedzi i zapisane analizy zostaną utracone. Usuniętych danych nie będzie można później przywrócić."
 }

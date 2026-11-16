@@ -273,12 +273,14 @@
 "acc.data": "Tus datos",
 "acc.local": "Los datos y las fotos de tus mascotas y tus respuestas se guardan solo en este teléfono. Pet Aura no los sube a ningún sitio.",
 "acc.wipe": "Borrar todos los datos de este teléfono",
-"acc.wipeq": "¿Borrar todos los datos de Pet Aura de este teléfono? Se perderán las mascotas, las fotos y las respuestas. No se puede deshacer.",
+"acc.wipeq": "¿Seguro que quieres borrar todos los datos guardados en este teléfono?",
 "acc.wipeyes": "Sí, borrar todo",
 "acc.about": "Acerca de",
 "acc.sources": "Fuentes de datos:",
 "acc.pets.one": "{n} perfil",
 "acc.pets.few": "{n} perfiles",
 "acc.pets.many": "{n} perfiles",
-"acc.pets.other": "{n} perfiles"
+"acc.pets.other": "{n} perfiles",
+"acc.wipefinal": "¡El borrado es definitivo!",
+"acc.wiperest": "Se perderán todas tus mascotas, fotos, respuestas y análisis guardados. Los datos borrados no se podrán recuperar más adelante."
 }

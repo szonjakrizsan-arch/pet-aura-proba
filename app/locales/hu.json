@@ -273,12 +273,14 @@
 "acc.data": "Adataid",
 "acc.local": "A kedvenceid adatai, fotói és a válaszaid csak ezen a telefonon tárolódnak. A Pet Aura nem tölti fel őket sehová.",
 "acc.wipe": "Minden adat törlése erről a telefonról",
-"acc.wipeq": "Biztosan törölsz minden Pet Aura-adatot erről a telefonról? A kedvencek, a fotók és a válaszok is elvesznek. A törlés nem vonható vissza.",
+"acc.wipeq": "Biztosan törölni szeretnéd a telefonon tárolt összes adatodat?",
 "acc.wipeyes": "Igen, mindent törlök",
 "acc.about": "Névjegy",
 "acc.sources": "Adatforrások:",
 "acc.pets.one": "{n} profil",
 "acc.pets.few": "{n} profil",
 "acc.pets.many": "{n} profil",
-"acc.pets.other": "{n} profil"
+"acc.pets.other": "{n} profil",
+"acc.wipefinal": "A törlés végleges!",
+"acc.wiperest": "Minden kedvenced, fotód, válaszod és mentett elemzésed elvész. A törölt adatokat később nem lehet visszaállítani."
 }

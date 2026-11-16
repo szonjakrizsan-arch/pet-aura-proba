@@ -290,21 +290,50 @@
 #s-sub .fsinfo{position:absolute;right:6px;top:6px}
 #s-sub .fscomp .fsinfo{width:84px;height:84px;right:-8px;top:-10px;margin:0;filter:drop-shadow(0 4px 6px #0007)}
 #s-sub .fscomp .fsinfo img{width:100%;height:100%;object-fit:contain}
-/* ---- Fiók ---- */
-#s-sub .accrest{display:flex;flex-direction:column;align-items:center;gap:8px;margin:4px 0 6px;text-align:center}
-#s-sub .accoin{width:72px;height:72px}
-#s-sub .accoin svg{width:58%;height:58%}
-#s-sub .accrest p{margin:0;font-size:15.5px;font-style:italic;color:#e9dcf6;text-shadow:0 1px 3px #000a}
-#s-sub .acg{margin-top:30px}
-#s-sub .aclangs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px}
-#s-sub .aclang{font:inherit;font-size:15.5px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid #c9953f;background:#2a1260cc;color:#f3d58a;cursor:pointer}
-#s-sub .aclang.on{color:#2a1236;font-weight:700;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c);border-color:#fff1c2;box-shadow:0 0 12px #ffb84a88}
-#s-sub .acrow{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:#efe3c6;font-size:16.5px;padding:6px 2px;cursor:pointer}
-#s-sub .acrow .karr{color:#f3cf7a}
-#s-sub .acg p{margin:0 0 6px}
-#s-sub .acwarn{color:#ffd2c9 !important}
+/* ---- Fiók: ékszerkártyák (füstüveg, domború aranyszegély, sarokdíszek, lassú csillanás, lila fényudvar) ---- */
+#s-sub .accrest{display:flex;justify-content:center;margin:2px 0 4px}
+#s-sub .accoin{width:118px;height:auto;filter:drop-shadow(0 6px 12px #000a) drop-shadow(0 0 16px #c49aff66)}
+#s-sub .acard{position:relative;margin:20px 2px 0;padding:18px 18px 16px;border-radius:22px;border:2.4px solid transparent;overflow:hidden;
+ background:linear-gradient(180deg,#3a1d6ecc,#1d0d3ee0) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 22%,#8a5a16 45%,#f6d27a 62%,#b07a26 82%,#fff1c2) border-box;
+ box-shadow:0 0 22px #9b6cff40,0 10px 26px #0007,inset 0 1px 0 #ffffff22,inset 0 0 0 1px #2a1450,inset 0 0 0 2.5px #e8b55255}
+#s-sub .acard::after{content:'';position:absolute;inset:-2px;pointer-events:none;border-radius:inherit;background:linear-gradient(115deg,transparent 42%,#ffe7a633 50%,transparent 58%) no-repeat;background-size:280% 100%;background-position:130% 0;animation:acsheen 11s ease-in-out infinite}
+@keyframes acsheen{0%,62%{background-position:130% 0}100%{background-position:-30% 0}}
+#s-sub .acard h3{position:relative;margin:0 0 8px;font-family:'Cormorant Garamond',serif;font-size:21px;color:#f3d58a;text-shadow:0 0 8px #ffcf7a44}
+#s-sub .acard p{position:relative;margin:0 0 6px;font-size:16px;line-height:1.4;color:#efe3c6}
+#s-sub .accor{position:absolute;width:26px;height:26px;opacity:.9;pointer-events:none}
+#s-sub .accor svg{width:100%;height:100%;display:block}
+#s-sub .accor.tl{left:5px;top:5px}#s-sub .accor.tr{right:5px;top:5px;transform:scaleX(-1)}
+#s-sub .accor.bl{left:5px;bottom:5px;transform:scaleY(-1)}#s-sub .accor.br{right:5px;bottom:5px;transform:scale(-1,-1)}
 #s-sub .acsrc{font-size:13.5px !important;color:#bfaedb !important;line-height:1.5 !important}
-#s-sub .acg .plink{margin:8px auto 2px}
-#s-sub .acg .korn.b{display:none}
-#s-sub .acg:last-child .korn.b{display:block}
-#s-sub .acg{margin-top:22px}
+/* nyelvi gombok */
+#s-sub .aclangs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:4px}
+#s-sub .aclang{position:relative;overflow:hidden;font:inherit;font-size:16px;min-height:42px;padding:0 15px;border-radius:999px;cursor:pointer;color:#f6e7c1;border:1.6px solid transparent;-webkit-tap-highlight-color:transparent;
+ background:linear-gradient(180deg,#6a3fb0b3,#3c1d78cc 55%,#2a1260d9) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 35%,#8a5a16 60%,#f6d27a) border-box;box-shadow:inset 0 1px 0 #ffffff33,inset 0 -6px 10px #1a083680}
+#s-sub .aclang.on{color:#2a1236;font-weight:700;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 35%,#8a5a16 60%,#f6d27a) border-box;box-shadow:0 0 12px #ffb84a88,inset 0 1px 0 #fff}
+#s-sub .acstar{margin-right:6px;color:#7a3f0c}
+#s-sub .shine::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(110deg,transparent 35%,#fff3cfcc 50%,transparent 65%) no-repeat;background-size:250% 100%;animation:acshine .55s ease-out forwards;mix-blend-mode:screen}
+@keyframes acshine{from{background-position:130% 0}to{background-position:-30% 0}}
+/* Kedvenceim sor díszes nyíllal */
+#s-sub .acrow{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:10px;text-decoration:none;color:#efe3c6;font-size:17px;padding:4px 2px;border-radius:12px;cursor:pointer}
+#s-sub .acarrow{width:46px;height:auto;filter:drop-shadow(0 2px 4px #0008)}
+/* törlés: az ékszer-sáv (a középső rész nyúlik, a feliratot a program írja – minden nyelven) */
+#s-sub .acdel{--h:74px;position:relative;display:flex;align-items:center;justify-content:center;width:calc(100% + 24px);height:var(--h);margin:16px -12px 8px;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
+ border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.22) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
+#s-sub .acdel span{position:relative;z-index:1;padding:0 calc(var(--h) * .36) 0 calc(var(--h) * .84);font-size:14.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;color:#f6dca0;text-shadow:0 1px 2px #000c;text-align:center}
+#s-sub .acdt,#s-sub .acdb{position:absolute;left:calc(50% + var(--h) * .25);transform:translateX(-50%);height:calc(var(--h) * .19);width:auto;pointer-events:none}
+#s-sub .acdt{top:calc(var(--h) * .0)}#s-sub .acdb{bottom:calc(var(--h) * -.02)}
+#s-sub .acdel.shine::after{inset:12% 4% 12% 14%}
+/* figyelmeztetés */
+#s-sub .acwarnp{position:relative;margin:12px 0 12px;padding:14px 14px 12px 14px;border-radius:16px;text-align:center;background:linear-gradient(180deg,#4a1430cc,#2d0b26d9);border:1.6px solid transparent;
+ background-clip:padding-box;box-shadow:0 0 0 1.6px #c9953f,0 0 16px #ff7a9a33,inset 0 0 14px #0007}
+#s-sub .acwsig{display:block;width:30px;height:27px;margin:0 auto 6px;filter:drop-shadow(0 0 4px #f0c48a88)}
+#s-sub .acwarnp p{margin:0 0 6px !important;color:#f6ead6 !important}
+#s-sub .acwq{font-size:16.5px !important}
+#s-sub .acwarnp p.acwf{font-weight:700;font-size:18px !important;color:#ffb9a0 !important;letter-spacing:.01em;text-shadow:0 0 8px #ff9a8a55}
+#s-sub .acwr{font-size:15.5px !important}
+#s-sub .acbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#s-sub .acbtn{position:relative;overflow:hidden;font:inherit;font-size:16px;font-weight:700;height:52px;padding:0 10px;border-radius:999px;cursor:pointer;line-height:1.1;color:#f6e7c1;border:2px solid transparent;
+ background:linear-gradient(180deg,#4a2590,#2a1260) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 35%,#8a5a16 60%,#f6d27a) border-box;box-shadow:0 3px 8px #0008,inset 0 1px 0 #ffffff33}
+#s-sub .acbtn.danger{color:#ffe6df;background:linear-gradient(180deg,#9c2a3f,#5e1124) padding-box,linear-gradient(145deg,#ffd6c2,#e88a6a 35%,#7a2a16 60%,#f6b08a) border-box;box-shadow:0 0 12px #ff5a6a55,0 3px 8px #0008,inset 0 1px 0 #ffffff44}
+@media (prefers-reduced-motion:reduce){#s-sub .acard::after{animation:none;display:none}}
+#s-sub .acbtns{margin-bottom:14px}

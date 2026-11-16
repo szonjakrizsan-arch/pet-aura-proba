@@ -273,12 +273,14 @@
 "acc.data": "Your data",
 "acc.local": "Your pets’ details, photos, and your answers are stored only on this phone. Pet Aura does not upload them anywhere.",
 "acc.wipe": "Delete all data from this phone",
-"acc.wipeq": "Delete all Pet Aura data from this phone? Your pets, photos, and answers will be lost. This can’t be undone.",
+"acc.wipeq": "Are you sure you want to delete all the data stored on this phone?",
 "acc.wipeyes": "Yes, delete everything",
 "acc.about": "About",
 "acc.sources": "Data sources:",
 "acc.pets.one": "{n} profile",
 "acc.pets.few": "{n} profiles",
 "acc.pets.many": "{n} profiles",
-"acc.pets.other": "{n} profiles"
+"acc.pets.other": "{n} profiles",
+"acc.wipefinal": "This cannot be undone!",
+"acc.wiperest": "All your pets, photos, answers and saved analyses will be lost. Deleted data cannot be restored later."
 }

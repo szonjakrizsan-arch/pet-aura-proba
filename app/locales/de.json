@@ -273,12 +273,14 @@
 "acc.data": "Deine Daten",
 "acc.local": "Die Angaben und Fotos deiner Tiere und deine Antworten werden nur auf diesem Handy gespeichert. Pet Aura lädt sie nirgendwohin hoch.",
 "acc.wipe": "Alle Daten von diesem Handy löschen",
-"acc.wipeq": "Wirklich alle Pet-Aura-Daten von diesem Handy löschen? Tiere, Fotos und Antworten gehen verloren. Das lässt sich nicht rückgängig machen.",
+"acc.wipeq": "Möchtest du wirklich alle auf diesem Handy gespeicherten Daten löschen?",
 "acc.wipeyes": "Ja, alles löschen",
 "acc.about": "Über",
 "acc.sources": "Datenquellen:",
 "acc.pets.one": "{n} Profil",
 "acc.pets.few": "{n} Profile",
 "acc.pets.many": "{n} Profile",
-"acc.pets.other": "{n} Profile"
+"acc.pets.other": "{n} Profile",
+"acc.wipefinal": "Das Löschen ist endgültig!",
+"acc.wiperest": "Alle deine Tiere, Fotos, Antworten und gespeicherten Analysen gehen verloren. Gelöschte Daten lassen sich später nicht wiederherstellen."
 }

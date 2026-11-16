@@ -273,12 +273,14 @@
 "acc.data": "Seus dados",
 "acc.local": "Os dados e as fotos dos seus pets e as suas respostas ficam salvos apenas neste celular. O Pet Aura não os envia para lugar nenhum.",
 "acc.wipe": "Apagar todos os dados deste celular",
-"acc.wipeq": "Apagar todos os dados do Pet Aura deste celular? Os pets, as fotos e as respostas serão perdidos. Esta ação não pode ser desfeita.",
+"acc.wipeq": "Tem certeza de que deseja apagar todos os dados salvos neste celular?",
 "acc.wipeyes": "Sim, apagar tudo",
 "acc.about": "Sobre",
 "acc.sources": "Fontes de dados:",
 "acc.pets.one": "{n} perfil",
 "acc.pets.few": "{n} perfis",
 "acc.pets.many": "{n} perfis",
-"acc.pets.other": "{n} perfis"
+"acc.pets.other": "{n} perfis",
+"acc.wipefinal": "A exclusão é definitiva!",
+"acc.wiperest": "Todos os seus pets, fotos, respostas e análises salvas serão perdidos. Os dados apagados não poderão ser recuperados depois."
 }
