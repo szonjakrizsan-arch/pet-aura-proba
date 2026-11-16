@@ -318,7 +318,7 @@
 #s-sub .acarrow{width:46px;height:auto;filter:drop-shadow(0 2px 4px #0008)}
 /* törlés: az ékszer-sáv (a középső rész nyúlik, a feliratot a program írja – minden nyelven) */
 #s-sub .acdel{--h:74px;position:relative;display:flex;align-items:center;justify-content:center;width:calc(100% + 24px);height:var(--h);margin:16px -12px 8px;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
- border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.27) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
+ border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.28) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
 #s-sub .acdel span{position:relative;z-index:1;padding:0 calc(var(--h) * .36) 0 calc(var(--h) * .84);font-size:14.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;color:#f6dca0;text-shadow:0 1px 2px #000c;text-align:center}
 #s-sub .acdt,#s-sub .acdb{position:absolute;left:calc(50% + var(--h) * .25);transform:translateX(-50%);height:calc(var(--h) * .19);width:auto;pointer-events:none}
 #s-sub .acdt{top:calc(var(--h) * .0)}#s-sub .acdb{bottom:calc(var(--h) * -.02)}
@@ -331,12 +331,12 @@
 #s-sub .acwq{font-size:16.5px !important}
 #s-sub .acwarnp p.acwf{font-weight:700;font-size:18px !important;color:#ffb9a0 !important;letter-spacing:.01em;text-shadow:0 0 8px #ff9a8a55}
 #s-sub .acwr{font-size:15.5px !important}
-#s-sub .acbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-#s-sub .acbtn{position:relative;overflow:hidden;font:inherit;font-size:16px;font-weight:700;height:52px;padding:0 10px;border-radius:999px;cursor:pointer;line-height:1.1;color:#f6e7c1;border:2px solid transparent;
+:is(#s-sub,#s-aura) .acbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+:is(#s-sub,#s-aura) .acbtn{position:relative;overflow:hidden;font:inherit;font-size:16px;font-weight:700;height:52px;padding:0 10px;border-radius:999px;cursor:pointer;line-height:1.1;color:#f6e7c1;border:2px solid transparent;
  background:linear-gradient(180deg,#4a2590,#2a1260) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 35%,#8a5a16 60%,#f6d27a) border-box;box-shadow:0 3px 8px #0008,inset 0 1px 0 #ffffff33}
-#s-sub .acbtn.danger{color:#ffe6df;background:linear-gradient(180deg,#9c2a3f,#5e1124) padding-box,linear-gradient(145deg,#ffd6c2,#e88a6a 35%,#7a2a16 60%,#f6b08a) border-box;box-shadow:0 0 12px #ff5a6a55,0 3px 8px #0008,inset 0 1px 0 #ffffff44}
+:is(#s-sub,#s-aura) .acbtn.danger{color:#ffe6df;background:linear-gradient(180deg,#9c2a3f,#5e1124) padding-box,linear-gradient(145deg,#ffd6c2,#e88a6a 35%,#7a2a16 60%,#f6b08a) border-box;box-shadow:0 0 12px #ff5a6a55,0 3px 8px #0008,inset 0 1px 0 #ffffff44}
 @media (prefers-reduced-motion:reduce){#s-sub .acard::after{animation:none;display:none}}
-#s-sub .acbtns{margin-bottom:14px}
+:is(#s-sub,#s-aura) .acbtns{margin-bottom:14px}
 
 /* Fiók: élő háttér */
 #s-sub>#acbg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -346,66 +346,66 @@
 #s-sub .km .acard,#s-sub .km .accrest{position:relative;z-index:1}
 @media (prefers-reduced-motion:reduce){#acbg .acglow{animation:none}}
 /* ---- Elemzéseim ---- */
-#s-sub .mysub{margin:-6px 0 6px;text-align:center;font-style:italic;font-size:17px;color:#f3d58a;text-shadow:0 0 8px #ffcf7a55}
-#s-sub .mychips{margin:6px 0 4px}
-#s-sub .mynew{flex:none;font-size:13px;font-weight:700;color:#2a1236;padding:3px 9px;border-radius:999px;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c);box-shadow:0 0 10px #ffb84a99}
-#s-sub .myhead{display:flex;flex-direction:column;align-items:center;gap:4px;margin:4px 0 8px;text-align:center}
-#s-sub .myhead b{font-family:'Cormorant Garamond',serif;font-size:22px;color:#f3d58a}
-#s-sub .myhead span{font-size:15px;color:#e9dcf6}
-#s-sub .mysample{margin:4px 6px 8px;text-align:center;font-style:italic;font-size:14.5px;color:#ffd9b0}
-#s-sub .myaura{display:block;width:min(86%,340px);margin:6px auto;border-radius:50%;box-shadow:0 0 30px #b98cff66}
-#s-sub .mybar{margin:8px 0}
-#s-sub .mybar span{display:block;font-size:15px;color:#efe3c6;margin-bottom:4px}
-#s-sub .mybar i{display:block;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--c) var(--w),#ffffff18 var(--w))}
-#s-sub .mydet{border-top:1px solid #b07a2633;padding:8px 0}
-#s-sub .mydet:first-of-type{border-top:0}
-#s-sub .mydet summary{cursor:pointer;list-style:none;display:flex;flex-direction:column}
-#s-sub .mydet summary::-webkit-details-marker{display:none}
-#s-sub .mydet summary b{font-family:'Cormorant Garamond',serif;font-size:18px;color:#5b3510}
-#s-sub .mydet summary small{font-size:14px;color:#6e4518}
-#s-sub .mydet summary i{font-size:15px;color:#7a3f0c}
-#s-sub .mydet[open] summary i::after{content:' ▴'}#s-sub .mydet:not([open]) summary i::after{content:' ▾'}
+:is(#s-sub,#s-aura) .mysub{margin:-6px 0 6px;text-align:center;font-style:italic;font-size:17px;color:#f3d58a;text-shadow:0 0 8px #ffcf7a55}
+:is(#s-sub,#s-aura) .mychips{margin:6px 0 4px}
+:is(#s-sub,#s-aura) .mynew{flex:none;font-size:13px;font-weight:700;color:#2a1236;padding:3px 9px;border-radius:999px;background:linear-gradient(180deg,#ffe7a6,#f2c165 45%,#d99a3c);box-shadow:0 0 10px #ffb84a99}
+:is(#s-sub,#s-aura) .myhead{display:flex;flex-direction:column;align-items:center;gap:4px;margin:4px 0 8px;text-align:center}
+:is(#s-sub,#s-aura) .myhead b{font-family:'Cormorant Garamond',serif;font-size:22px;color:#f3d58a}
+:is(#s-sub,#s-aura) .myhead span{font-size:15px;color:#e9dcf6}
+:is(#s-sub,#s-aura) .mysample{margin:4px 6px 8px;text-align:center;font-style:italic;font-size:14.5px;color:#ffd9b0}
+:is(#s-sub,#s-aura) .myaura{display:block;width:min(86%,340px);margin:6px auto;border-radius:50%;box-shadow:0 0 30px #b98cff66}
+:is(#s-sub,#s-aura) .mybar{margin:8px 0}
+:is(#s-sub,#s-aura) .mybar span{display:block;font-size:15px;color:#efe3c6;margin-bottom:4px}
+:is(#s-sub,#s-aura) .mybar i{display:block;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--c) var(--w),#ffffff18 var(--w))}
+:is(#s-sub,#s-aura) .mydet{border-top:1px solid #b07a2633;padding:8px 0}
+:is(#s-sub,#s-aura) .mydet:first-of-type{border-top:0}
+:is(#s-sub,#s-aura) .mydet summary{cursor:pointer;list-style:none;display:flex;flex-direction:column}
+:is(#s-sub,#s-aura) .mydet summary::-webkit-details-marker{display:none}
+:is(#s-sub,#s-aura) .mydet summary b{font-family:'Cormorant Garamond',serif;font-size:18px;color:#5b3510}
+:is(#s-sub,#s-aura) .mydet summary small{font-size:14px;color:#6e4518}
+:is(#s-sub,#s-aura) .mydet summary i{font-size:15px;color:#7a3f0c}
+:is(#s-sub,#s-aura) .mydet[open] summary i::after{content:' ▴'}:is(#s-sub,#s-aura) .mydet:not([open]) summary i::after{content:' ▾'}
 .jtoast{position:absolute;left:50%;bottom:22px;z-index:80;transform:translateX(-50%);max-width:86%;padding:10px 16px;border-radius:14px;font-size:15px;line-height:1.35;text-align:center;color:#2a1236;background:linear-gradient(180deg,#ffe7a6,#f2c165);box-shadow:0 6px 20px #0009,0 0 14px #ffb84a88;animation:fsin .3s ease;transition:opacity .6s}
 .jtoast.bad{color:#ffe6df;background:linear-gradient(180deg,#9c2a3f,#5e1124);box-shadow:0 6px 20px #0009,0 0 0 1.5px #c9953f}
 .jtoast.out{opacity:0}
 
-/* Elemzéseim díszítés (v0.6.27): kártyák a Kedvenceim mintájára, jelvények, díszes törlés, mozgó csillagjel */
-#s-sub .myrow{display:flex;align-items:center;margin:14px 2px 0;text-decoration:none;color:inherit;text-align:left;padding:14px 12px 14px 14px;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
-#s-sub .myrow:active{transform:scale(.985)}
-#s-sub .myrow.new{box-shadow:0 0 26px #ffcf7a77,0 10px 26px #0007,inset 0 1px 0 #ffffff22,inset 0 0 0 1px #2a1450,inset 0 0 0 2.5px #f3cf7a88}
-#s-sub .myrow .pinfo{position:relative}#s-sub .myrow .myjel,#s-sub .myrow .acarrow{position:relative}
-#s-sub .myjel{flex:none;width:66px;height:auto;filter:drop-shadow(0 3px 6px #0009)}
-#s-sub .myjel.big{width:96px}
-#s-sub .myrow .pinfo b{font-size:21px;color:#f6e7c1}
-#s-sub .myrow .acarrow{width:40px}
-#s-sub .myrow.shine::after,#s-sub .mydel.shine::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(110deg,transparent 35%,#fff3cfcc 50%,transparent 65%) no-repeat;background-size:250% 100%;animation:acshine .55s ease-out forwards;mix-blend-mode:screen}
-#s-sub .myempty p{text-align:center}
+/* Elemzéseim díszítés (v0.6.28): kártyák a Kedvenceim mintájára, jelvények, díszes törlés, mozgó csillagjel */
+:is(#s-sub,#s-aura) .myrow{display:flex;align-items:center;margin:14px 2px 0;text-decoration:none;color:inherit;text-align:left;padding:14px 12px 14px 14px;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:is(#s-sub,#s-aura) .myrow:active{transform:scale(.985)}
+:is(#s-sub,#s-aura) .myrow.new{box-shadow:0 0 26px #ffcf7a77,0 10px 26px #0007,inset 0 1px 0 #ffffff22,inset 0 0 0 1px #2a1450,inset 0 0 0 2.5px #f3cf7a88}
+:is(#s-sub,#s-aura) .myrow .pinfo{position:relative}:is(#s-sub,#s-aura) .myrow .myjel,:is(#s-sub,#s-aura) .myrow .acarrow{position:relative}
+:is(#s-sub,#s-aura) .myjel{flex:none;width:66px;height:auto;filter:drop-shadow(0 3px 6px #0009)}
+:is(#s-sub,#s-aura) .myjel.big{width:96px}
+:is(#s-sub,#s-aura) .myrow .pinfo b{font-size:21px;color:#f6e7c1}
+:is(#s-sub,#s-aura) .myrow .acarrow{width:40px}
+:is(#s-sub,#s-aura) .myrow.shine::after,:is(#s-sub,#s-aura) .mydel.shine::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(110deg,transparent 35%,#fff3cfcc 50%,transparent 65%) no-repeat;background-size:250% 100%;animation:acshine .55s ease-out forwards;mix-blend-mode:screen}
+:is(#s-sub,#s-aura) .myempty p{text-align:center}
 /* törlés: ékszer-sáv kuka-éremmel (a középső rész nyúlik, a feliratot a program írja) */
-#s-sub .mydelc{margin:18px 0 8px}
-#s-sub .mydel{--h:62px;position:relative;display:flex;align-items:center;width:100%;height:var(--h);margin:0;padding:0 calc(var(--h) * .83) 0 calc(var(--h) * 1.66);border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;font:inherit}
-#s-sub .mydel>img{position:absolute;top:0;height:100%;pointer-events:none}
-#s-sub .mydel .mydm{left:calc(var(--h) * 1.62);width:calc(100% - var(--h) * 2.41)}
-#s-sub .mydel .mydl{left:0;width:calc(var(--h) * 1.663)}#s-sub .mydel .mydr{right:0;width:calc(var(--h) * .8315)}
-#s-sub .mydel span{position:relative;z-index:1;flex:1;min-width:0;padding:0 6px;font-size:17px;font-weight:600;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#f6dca0;text-shadow:0 1px 2px #000c,0 0 10px #ffcf7a44;text-align:center}
-#s-sub .mydel .mydt,#s-sub .mydel .mydb{left:50%;transform:translateX(-50%);height:calc(var(--h) * .3034);width:auto;z-index:1}
-#s-sub .mydel .mydt{top:0}#s-sub .mydel .mydb{top:auto;bottom:0}
-#s-sub .mydel.shine::after{inset:20% 2% 20% 4%;border-radius:12px}
-#s-sub .mydel:active{transform:scale(.985)}
+:is(#s-sub,#s-aura) .mydelc{margin:18px 0 8px}
+:is(#s-sub,#s-aura) .mydel{--h:62px;position:relative;display:flex;align-items:center;width:100%;height:var(--h);margin:0;padding:0 calc(var(--h) * .83) 0 calc(var(--h) * 1.66);border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;font:inherit}
+:is(#s-sub,#s-aura) .mydel>img{position:absolute;top:0;height:100%;pointer-events:none}
+:is(#s-sub,#s-aura) .mydel .mydm{left:calc(var(--h) * 1.62);width:calc(100% - var(--h) * 2.41)}
+:is(#s-sub,#s-aura) .mydel .mydl{left:0;width:calc(var(--h) * 1.663)}:is(#s-sub,#s-aura) .mydel .mydr{right:0;width:calc(var(--h) * .8315)}
+:is(#s-sub,#s-aura) .mydel span{position:relative;z-index:1;flex:1;min-width:0;padding:0 6px;font-size:17px;font-weight:600;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#f6dca0;text-shadow:0 1px 2px #000c,0 0 10px #ffcf7a44;text-align:center}
+:is(#s-sub,#s-aura) .mydel .mydt,:is(#s-sub,#s-aura) .mydel .mydb{left:50%;transform:translateX(-50%);height:calc(var(--h) * .3034);width:auto;z-index:1}
+:is(#s-sub,#s-aura) .mydel .mydt{top:0}:is(#s-sub,#s-aura) .mydel .mydb{top:auto;bottom:0}
+:is(#s-sub,#s-aura) .mydel.shine::after{inset:20% 2% 20% 4%;border-radius:12px}
+:is(#s-sub,#s-aura) .mydel:active{transform:scale(.985)}
 /* megerősítő ablak: lila, aranykeretes (nem olyan erős, mint a teljes törlésnél) */
-#s-sub .mywin{position:relative;padding:34px 22px 22px;text-align:center;border-style:solid;border-color:transparent;border-image:url(../assets/elemzeseim/ablak.webp?v=0.6.27) 20 fill / 13px stretch;filter:drop-shadow(0 8px 18px #0009)}
-#s-sub .mywc{position:absolute;pointer-events:none;width:auto}
-#s-sub .mywc.fb{left:11px;top:11px;height:40px}#s-sub .mywc.fj{right:11px;top:11px;height:40px}
-#s-sub .mywc.lb{left:11px;bottom:11px;height:50px}#s-sub .mywc.lj{right:11px;bottom:11px;height:50px}
-#s-sub .mywsig{display:block;width:124px;height:auto;margin:-14px auto 8px}
-#s-sub .mywin p{margin:0 0 4px !important;color:#f6ead6 !important}
-#s-sub .mywin p.mywq{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:21px !important;line-height:1.2;color:#f6dca0 !important;text-shadow:0 1px 2px #000a}
-#s-sub .mywin p.mywr{font-size:16px !important}
-#s-sub .mywdiv{display:block;width:72%;height:auto;margin:10px auto 14px}
-#s-sub .mywin .acbtns{position:relative;z-index:1;margin:0 26px 8px}
-#s-sub .mywin .acbtn.danger{background:linear-gradient(180deg,#a8323f,#6a1626) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 35%,#8a5a16 60%,#f6d27a) border-box;box-shadow:0 3px 8px #0008,inset 0 1px 0 #ffffff44}
+:is(#s-sub,#s-aura) .mywin{position:relative;padding:34px 22px 22px;text-align:center;border-style:solid;border-color:transparent;border-image:url(../assets/elemzeseim/ablak.webp?v=0.6.28) 20 fill / 13px stretch;filter:drop-shadow(0 8px 18px #0009)}
+:is(#s-sub,#s-aura) .mywc{position:absolute;pointer-events:none;width:auto}
+:is(#s-sub,#s-aura) .mywc.fb{left:11px;top:11px;height:40px}:is(#s-sub,#s-aura) .mywc.fj{right:11px;top:11px;height:40px}
+:is(#s-sub,#s-aura) .mywc.lb{left:11px;bottom:11px;height:50px}:is(#s-sub,#s-aura) .mywc.lj{right:11px;bottom:11px;height:50px}
+:is(#s-sub,#s-aura) .mywsig{display:block;width:124px;height:auto;margin:-14px auto 8px}
+:is(#s-sub,#s-aura) .mywin p{margin:0 0 4px !important;color:#f6ead6 !important}
+:is(#s-sub,#s-aura) .mywin p.mywq{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:21px !important;line-height:1.2;color:#f6dca0 !important;text-shadow:0 1px 2px #000a}
+:is(#s-sub,#s-aura) .mywin p.mywr{font-size:16px !important}
+:is(#s-sub,#s-aura) .mywdiv{display:block;width:72%;height:auto;margin:10px auto 14px}
+:is(#s-sub,#s-aura) .mywin .acbtns{position:relative;z-index:1;margin:0 26px 8px}
+:is(#s-sub,#s-aura) .mywin .acbtn.danger{background:linear-gradient(180deg,#a8323f,#6a1626) padding-box,linear-gradient(145deg,#fff1c2,#e8b552 35%,#8a5a16 60%,#f6d27a) border-box;box-shadow:0 3px 8px #0008,inset 0 1px 0 #ffffff44}
 /* lassan mozgó csillagjel */
-#s-sub .myastro{width:min(100%,380px);margin:14px auto 6px;pointer-events:none}
-#s-sub .myastro svg{display:block;width:100%;height:auto;overflow:visible}
+:is(#s-sub,#s-aura) .myastro{width:min(100%,380px);margin:14px auto 6px;pointer-events:none}
+:is(#s-sub,#s-aura) .myastro svg{display:block;width:100%;height:auto;overflow:visible}
 .myastro .alrot,.myastro .alorb,.myastro .alstar,.myastro .alhalo{transform-box:view-box;transform-origin:200px 150px}
 .myastro .r1{animation:alspin 140s linear infinite}
 .myastro .r2{animation:alspin 220s linear infinite reverse}

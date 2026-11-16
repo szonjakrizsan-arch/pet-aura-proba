@@ -1,8 +1,9 @@
 // Eredményoldal: a jóváhagyott auraportré-oldal (design/aura_scanner/forras/template.html) az app keretében.
 // A rajzoló kód a sablonból változatlan. Az összetétel és az üzenet a 4. szakaszig mintaadat (a valódi elemzőmotor adja majd).
-import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.27';
-import { FLOW } from './aura.js?v=0.6.27';
-import { saveWithNotice } from './journal.js?v=0.6.27';
+import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.28';
+import { FLOW } from './aura.js?v=0.6.28';
+import { saveWithNotice, getEntry } from './journal.js?v=0.6.28';
+import { mountDelete } from './myview.js?v=0.6.28';
 const GOLD='<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#e9c46f"/><stop offset="1" stop-color="#b07f2c"/></linearGradient></defs>';
 const ICON={
  astro:`<svg viewBox="0 0 32 32">${GOLD}<path fill="url(#gg)" d="M19 5a11 11 0 1 0 8 18A9 9 0 1 1 19 5z"/><path fill="url(#gg)" d="M24 6l1.1 2.9L28 10l-2.9 1.1L24 14l-1.1-2.9L20 10l2.9-1.1z"/></svg>`,
@@ -20,20 +21,21 @@ export function sampleComposition(t){
  return [['astro',astro.lab,astro.col,.4286],['etho',etho.lab,etho.col,.5714]];
 }
 export function resultScreen(ctx){
- const {t,esc,pet,go,back,lang}=ctx,name=pet.name||t('au.start.noname');
+ // ctx.archive: egy elmentett elemzés (Elemzéseim) – ugyanez a képernyő, a mentéskori fotóval, összetétellel, üzenettel és dátummal
+ const {t,esc,pet,go,back,lang}=ctx,A=ctx.archive||null,name=A?(A.petName||t('au.start.noname')):(pet.name||t('au.start.noname'));
  const html=`<div class="au au-res"><canvas id="stars"></canvas><div class="scrollarea" id="sa"><canvas id="bgcv"></canvas>
- <div class="wrap"><h1>${esc(t('au.res.title'))}</h1><div class="sub" id="sub">${esc(t('au.res.date',{date:new Intl.DateTimeFormat(lang,{dateStyle:'long'}).format(new Date())}))}</div>
+ <div class="wrap"><h1>${esc(t('au.res.title'))}</h1><div class="sub" id="sub">${esc(t('au.res.date',{date:new Intl.DateTimeFormat(lang,{dateStyle:'long'}).format(A?new Date(A.date):new Date())}))}</div>
   <canvas id="aura"></canvas><div class="name" id="nm">${esc(name)}</div>
   <div class="comp"><div class="ctitle"><span class="ln"></span><span class="st"></span>${esc(t('au.res.comp'))}<span class="st"></span><span class="ln r"></span></div>
    <div class="bands"><canvas id="bandcv"></canvas><svg id="bandfr"></svg><div class="brow" id="brow"></div></div></div>
   <div class="scroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt=""><div class="p-ti">${esc(t('au.res.msg'))}</div><div class="p-in" id="msg"></div></div>
   <div class="vet">${esc(t('au.res.vet'))}</div>
-  <nav class="acts"><a id="bBack" role="button" tabindex="0">${IC_RBACK}<span>${esc(t('back'))}</span></a><a id="bShare" role="button" tabindex="0">${IC_RSHARE}<span>${esc(t('au.res.share'))}</span></a><a id="bSave" role="button" tabindex="0">${IC_RSAVE}<span>${esc(t('au.res.save'))}</span></a></nav>
+  <nav class="acts"><a id="bBack" role="button" tabindex="0">${IC_RBACK}<span>${esc(t('back'))}</span></a><a id="bShare" role="button" tabindex="0">${IC_RSHARE}<span>${esc(t('au.res.share'))}</span></a><a id="bSave" role="button" tabindex="0">${IC_RSAVE}<span>${esc(t('au.res.save'))}</span></a></nav>${A?'<div class="mydelc" id="ardel"></div>':''}
  </div></div><div class="veil0" id="veil0"></div></div>`;
  const mount=(root)=>{
   const q=(s)=>root.querySelector(s),sa=q('#sa');let alive=true;
   const FRAMEIMG=new Image();FRAMEIMG.src='assets/aura/portrekeret.webp';
-  const L=sampleComposition(t),LNAME={astro:t('au.res.l.astro'),qi:t('au.res.l.qi'),etho:t('au.res.l.etho')};
+  const L=A?A.L:sampleComposition(t),LNAME={astro:t('au.res.l.astro'),qi:t('au.res.l.qi'),etho:t('au.res.l.etho')};
   // csillagok
   const sc=q('#stars'),sx=sc.getContext('2d');let ST=[];const sizeStars=()=>{sc.width=root.clientWidth*devicePixelRatio;sc.height=root.clientHeight*devicePixelRatio;ST=Array.from({length:40},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.3+.3,p:Math.random()*6}))};sizeStars();
   // --- színkeverés (lineáris RGB, mint az AURA_V1_DONTESEK 5. pontja) ---
@@ -315,10 +317,10 @@ export function resultScreen(ctx){
   const br=q('#brow');br.parentElement.className='bands n'+L.length;
   br.innerHTML=L.map(l=>`<div class="cell">${ICON[l[0]]}<b data-t="${LNAME[l[0]]}">${LNAME[l[0]]}</b><small>${l[1]}</small></div>`).join('');
   q('.ctitle').style.setProperty('--fc',rgbHex(lift(fin)));
-  q('#msg').textContent=t(L.length===3?'au.res.sample3':'au.res.sample2',{name});
+  q('#msg').textContent=A?A.msg:t(L.length===3?'au.res.sample3':'au.res.sample2',{name});
   if(lang==='ja'){const m=q('#msg');m.style.fontStyle='normal';m.style.fontSize='14.5px';m.style.lineHeight='1.75';m.style.textAlign='left';q('.vet').style.fontStyle='normal'}
   bandSetup();layoutCells();
-  photo=new Image();const photoLoaded=new Promise(r=>{photo.onload=()=>{build();r()};photo.onerror=r});photo.src=FLOW.portrait;
+  photo=new Image();const photoLoaded=new Promise(r=>{photo.onload=()=>{build();r()};photo.onerror=r});photo.src=A?A.portrait:FLOW.portrait;
   const onR=()=>{sizeStars();bgQ()};addEventListener('resize',onR);document.fonts&&document.fonts.ready.then(()=>{layoutCells();bgQ()});
   // csillagok külön hurokban (a frame() a sablonban a fő vászonra rajzol)
   (function sf(now){if(!alive)return;const tt=(now-t0)/1000;sx.clearRect(0,0,sc.width,sc.height);ST.forEach(s=>{sx.globalAlpha=.35+.35*Math.sin(tt*1.3+s.p);sx.fillStyle='#fff3d6';sx.beginPath();sx.arc(s.x*sc.width,s.y*sc.height,s.r*devicePixelRatio,0,7);sx.fill()});sx.globalAlpha=1;requestAnimationFrame(sf)})(t0);
@@ -331,17 +333,30 @@ export function resultScreen(ctx){
   const prepared=Promise.all([document.fonts?document.fonts.ready:null,photoLoaded,bgLoaded]).then(async()=>{
    if(!alive)return;layoutCells();bandSetup();if(!maskCanvas)build();bgKey='';buildBg();await frames(4)});
   if(FLOW.arrivedFromAnalysis){FLOW.arrivedFromAnalysis=false;prepared.then(()=>setTimeout(unveil,150),unveil);setTimeout(unveil,8000);
-   // új elemzés → pillanatkép az Elemzéseim közé: a kész auraportré képe, az összetétel és az üzenet, ahogy most látszik (a 4. szakaszig mintaeredmény)
-   prepared.then(()=>setTimeout(async()=>{if(!alive)return;const img=await new Promise(res=>{const cv=q('#aura'),o=document.createElement('canvas');o.width=cv.width;o.height=cv.height;const x=o.getContext('2d');x.fillStyle='#1a0f38';x.fillRect(0,0,o.width,o.height);x.drawImage(cv,0,0);o.toBlob(res,'image/webp',.88)});if(!img||!alive)return;
-    saveWithNotice({type:'aura',petId:pet.id||'',petName:name,sample:true,img,comp:L.map(l=>({k:l[0],name:LNAME[l[0]],lab:l[1],col:l[2],w:l[3]})),msg:q('#msg').textContent,lang},t)},2600))}
+   // új elemzés → az Elemzéseim közé kerül mindaz, amiből ez a képernyő később pontosan ugyanígy újraépül:
+   // a kivágott portré, a faj, az égtáj, az összetétel, az üzenet és a dátum (a 4. szakaszig mintaeredmény)
+   const snap={type:'aura',petId:pet.id||'',petName:name,sample:true,portrait:FLOW.portrait,species:FLOW.species||'dog',dir:FLOW.dir||null,L:L.map(l=>[...l]),
+    comp:L.map(l=>({k:l[0],name:LNAME[l[0]],lab:l[1],col:l[2],w:l[3]})),msg:q('#msg').textContent,lang,date:Date.now()};
+   prepared.then(()=>setTimeout(()=>{if(alive)saveWithNotice(snap,t)},1200))}
   else{veil.style.transition='opacity .45s ease';prepared.then(unveil,unveil);setTimeout(unveil,4000)}
   // gombok: vissza · megosztás · mentés (a kész auraportré képe)
   // vissza a portrékészítéshez (fotózás)
-  q('#bBack').onclick=()=>back('aura/kamera');
+  q('#bBack').onclick=()=>A?back('my'):back('aura/kamera');
+  if(A)mountDelete(q('#ardel'),A.id,{t,esc,done:()=>back('my')});
   const shot=()=>new Promise(res=>{const cv=q('#aura'),o=document.createElement('canvas');o.width=cv.width;o.height=cv.height;const x=o.getContext('2d');x.fillStyle='#1a0f38';x.fillRect(0,0,o.width,o.height);x.drawImage(cv,0,0);o.toBlob(res,'image/png')});
   q('#bSave').onclick=async()=>{const b=await shot();if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`pet-aura-${name}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
   q('#bShare').onclick=async()=>{const b=await shot();if(!b)return;const f=new File([b],`pet-aura-${name}.png`,{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Pet Aura'})}catch(e){}}else q('#bSave').click()};
   return ()=>{alive=false;removeEventListener('resize',onR);RO.disconnect()};
  };
  return {html,mount,back:'home'};
+}
+
+// Elemzéseim → egy elmentett auraelemzés teljes eredményképernyője (#aura/naplo-<azonosító>)
+export function archiveScreen(ctx,id){
+ const html='<div class="au au-res"><div class="veil0"></div></div>';
+ const mount=(root)=>{let stop=null,alive=true;
+  getEntry(id).then((e)=>{if(!alive)return;if(!e||!e.portrait){ctx.go('my/'+id,true);return}
+   const scr=resultScreen({...ctx,archive:e});root.innerHTML=scr.html;stop=scr.mount(root)});
+  return ()=>{alive=false;if(stop)stop()}};
+ return {html,mount,back:'my'};
 }

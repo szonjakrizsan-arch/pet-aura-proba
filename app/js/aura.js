@@ -1,8 +1,8 @@
 // Aura Scanner képernyők: indító · fotózás · portré igazítása · elemzés · sikertelen próba · eredmény.
 // A jóváhagyott próbaoldalak (pet-aura-proba) logikája, az app keretébe illesztve. Minden felirat a szótárból (t) jön.
-import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.27';
-import { ICON } from './home.js?v=0.6.27';
-import { resultScreen } from './aura-result.js?v=0.6.27';
+import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.28';
+import { ICON } from './home.js?v=0.6.28';
+import { resultScreen, archiveScreen } from './aura-result.js?v=0.6.28';
 
 const A = (f) => `assets/aura/${f}`;
 const RM = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -269,6 +269,7 @@ function failScreen(ctx) {
 // ---------- útvonalak ----------
 const SCREENS = { '': startScreen, kamera: cameraScreen, igazitas: alignScreen, elemzes: analysisScreen, csend: failScreen, eredmeny: resultScreen };
 export function auraScreen(sub, ctx) {
+  if (sub.startsWith('naplo-')) return archiveScreen(ctx, sub.slice(6)); // Elemzéseim: egy elmentett eredmény
   // fotó nélkül az igazítás/elemzés/eredmény nem értelmes → vissza az indítóhoz
   if ((sub === 'igazitas' && !FLOW.photo) || ((sub === 'elemzes' || sub === 'eredmeny') && !FLOW.portrait)) { ctx.go('aura', true); return null; }
   return (SCREENS[sub] || startScreen)(ctx);
