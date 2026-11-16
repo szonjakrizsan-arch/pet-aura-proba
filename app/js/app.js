@@ -1,14 +1,15 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.23';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.23';
-import { analyze, chakraScores } from './analysis.js?v=0.6.23';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.23';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.23';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.23';
-import { auraScreen, FLOW } from './aura.js?v=0.6.23';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.23';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.23';
-import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.23';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.23';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.24';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.24';
+import { analyze, chakraScores } from './analysis.js?v=0.6.24';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.24';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.24';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.24';
+import { auraScreen, FLOW } from './aura.js?v=0.6.24';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.24';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.24';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.24';
+import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.24';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.24';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -109,7 +110,8 @@ function render() {
   if (aura) { const scr = auraScreen(S.sub, auraCtx()); if (!scr) return; $('#s-aura').innerHTML = scr.html; S.stopAura = scr.mount($('#s-aura')); return; }
   $('#s-sub').classList.toggle('nonav', !TOP.includes(S.tab));
   if (!(S.tab === 'pets' && S.sub)) leaveForm();
-  if (S.tab !== 'account' && S.stopAccBg) { S.stopAccBg(); S.stopAccBg = null; }
+  if (S.tab !== 'account' && S.tab !== 'my' && S.stopAccBg) { S.stopAccBg(); S.stopAccBg = null; }
+  if (S.stopMy && !(S.tab === 'my' && !S.sub)) { S.stopMy(); S.stopMy = null; } if (S.tab !== 'my') leaveMy();
   // A kezdőlap animációi csak akkor futnak, amikor a kezdőlap látszik (különben a rejtett vásznak is terhelnék a telefont, és akadna a görgetés).
   if (!home && S.stopHome) { S.stopHome(); S.stopHome = null; }
   if (home) {
@@ -118,16 +120,17 @@ function render() {
     homePet(); S.shown = 'home';
     return;
   }
-  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => `<div class="km" data-more="${esc(t('cos.read'))}">${S.sub ? readerView({ t, esc, id: S.sub }) : cosmicNew({ t, esc, lang: S.lang, pet: S.pet, multi: PETS.list.length > 1 })}</div>`, 'regi-kozmikus': () => legacy(cosmicView()), feng: () => `<div class="km">${fengNew({ t, esc, pet: S.pet, sub: S.sub })}</div>`, 'regi-feng': () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: () => `<div class="km">${accountNew({ t, esc, lang: S.lang })}</div>`, 'regi-fiok': accountView, my: () => sub(t('nav.my'), soon()), kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
+  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => `<div class="km" data-more="${esc(t('cos.read'))}">${S.sub ? readerView({ t, esc, id: S.sub }) : cosmicNew({ t, esc, lang: S.lang, pet: S.pet, multi: PETS.list.length > 1 })}</div>`, 'regi-kozmikus': () => legacy(cosmicView()), feng: () => `<div class="km">${fengNew({ t, esc, pet: S.pet, sub: S.sub })}</div>`, 'regi-feng': () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: () => `<div class="km">${accountNew({ t, esc, lang: S.lang })}</div>`, 'regi-fiok': accountView, my: () => `<div class="km">${myView({ t, esc, sub: S.sub })}</div>`, kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
   const html = (views[S.tab] || views.home)(); if (html == null) { back('pets'); return; }
   $('#view').innerHTML = html;
   const route = curRoute(); if (S.shown !== route) { const sc = $('#s-sub'); SCROLL[S.shown] = sc.scrollTop; const y = SCROLL[route] || 0; sc.scrollTop = y; if (y) setTimeout(() => { if (curRoute() === route) sc.scrollTop = y; }, 250); S.shown = route; } // ugyanazon az oldalon (pl. faj választása) nem ugrik a tetejére
   if (S.stopCosmic) { S.stopCosmic(); S.stopCosmic = null; }
   if (S.tab === 'cosmic' && S.sub) mountReader($('#view'), S.lang, S.sub, esc);
-  else if (S.tab === 'cosmic') S.stopCosmic = mountCosmic($('#view'), S.lang, esc);
+  else if (S.tab === 'cosmic') S.stopCosmic = mountCosmic($('#view'), S.lang, esc, { pet: S.pet, t });
   if (S.tab !== 'feng') document.getElementById('fsbg')?.remove();
   if (S.tab === 'account') { mountAccount($('#view'), { setLang, render }); if (!S.stopAccBg) S.stopAccBg = startAccountBg($('#s-sub')); }
-  else { leaveAccount(); if (S.stopAccBg) { S.stopAccBg(); S.stopAccBg = null; } }
+  else leaveAccount();
+  if (S.tab === 'my') { if (S.stopMy) S.stopMy(); S.stopMy = mountMy($('#view'), { t, esc, lang: S.lang, go, back, render }); if (!S.stopAccBg) S.stopAccBg = startAccountBg($('#s-sub')); }
   if (S.tab === 'feng') mountFeng($('#view'), { t, esc, lang: S.lang, pet: S.pet, go, savePet, render });
   if (S.tab === 'pets') mountPets($('#view'), { t, esc, lang: S.lang, go, back, render }, S.sub);
   if (S.tab === 'regi-aura' && S.scan) drawAura($('#cv'), S.scan);
@@ -141,7 +144,7 @@ function go(route, replace = false) {
 }
 // Kedvenceim: oda tér vissza, ahonnan jött (pl. az aura-indító névcsere-gombjáról vagy a Kozmikus Mancsból); az adatlapról a listára.
 function petsBack() {
-  if ((S.tab === 'cosmic' || S.tab === 'feng') && S.sub) return S.tab;
+  if ((S.tab === 'cosmic' || S.tab === 'feng' || S.tab === 'my') && S.sub) return S.tab;
   if (S.tab !== 'pets') return PARENT[S.tab] || 'home';
   if (S.sub) return S.tab;
   const prev = STACK[STACK.length - 2]; return prev && !prev.startsWith('pets') ? prev : 'home';

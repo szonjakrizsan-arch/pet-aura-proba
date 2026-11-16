@@ -1,7 +1,8 @@
 // Kedvencek: több kedvenc tárolása (localStorage 'pets' + 'activePet'), a Kedvenceim lista és az adatlap-űrlap.
-import { searchCities, norm } from './geo.js?v=0.6.23';
-import { fmtDate } from './i18n.js?v=0.6.23';
-import { ICON } from './home.js?v=0.6.23';
+import { searchCities, norm } from './geo.js?v=0.6.24';
+import { fmtDate } from './i18n.js?v=0.6.24';
+import { deleteByPet } from './journal.js?v=0.6.24';
+import { ICON } from './home.js?v=0.6.24';
 
 const KEY = 'pets', AKEY = 'activePet';
 const BLANK = { id: '', name: '', species: '', bday: '', btime: '', place: null, photo: '' };
@@ -34,7 +35,7 @@ function upsert(d) {
   if (i < 0) PETS.list.push(rec); else PETS.list[i] = rec;
   PETS.active = rec.id; return persist();
 }
-function remove(id) { PETS.list = PETS.list.filter((p) => p.id !== id); if (PETS.active === id) PETS.active = PETS.list[0]?.id || ''; persist(); }
+function remove(id) { deleteByPet(id); PETS.list = PETS.list.filter((p) => p.id !== id); if (PETS.active === id) PETS.active = PETS.list[0]?.id || ''; persist(); }
 
 const regionName = (lang, cc) => { try { return new Intl.DisplayNames([lang], { type: 'region' }).of(cc) || cc; } catch { return cc; } };
 export const placeLabel = (lang, pl) => pl ? `${pl.n}, ${regionName(lang, pl.cc)}` : '';
@@ -97,7 +98,7 @@ export function mountPets(root, ctx, sub) {
   const clr = q('#pclr'); if (clr) clr.onclick = () => { keep(); draft.place = null; render(); setTimeout(() => q('#pp2')?.focus(), 0); };
   const pp = q('#pp2');
   if (pp) pp.oninput = async () => {
-    if (!cities) cities = (await (await fetch('data/cities.json?v=0.6.23')).json()).map((c) => [...c, norm(c[0])]);
+    if (!cities) cities = (await (await fetch('data/cities.json?v=0.6.24')).json()).map((c) => [...c, norm(c[0])]);
     const box = q('#pr2'); if (!box) return; const v = pp.value;
     const r = v.trim().length < 2 ? [] : searchCities(cities, v);
     box.innerHTML = v.trim().length < 2 ? '' : r.length ? r.map((c) => `<button class="pcity" type="button" data-ci="${cities.indexOf(c)}">${esc(c[0])}<small>${esc(regionName(lang, c[1]))}</small></button>`).join('') : `<p class="pnote">${esc(t('pets.nocity'))}</p>`;

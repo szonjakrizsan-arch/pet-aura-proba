@@ -1,7 +1,8 @@
 // Eredményoldal: a jóváhagyott auraportré-oldal (design/aura_scanner/forras/template.html) az app keretében.
 // A rajzoló kód a sablonból változatlan. Az összetétel és az üzenet a 4. szakaszig mintaadat (a valódi elemzőmotor adja majd).
-import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.23';
-import { FLOW } from './aura.js?v=0.6.23';
+import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.24';
+import { FLOW } from './aura.js?v=0.6.24';
+import { saveWithNotice } from './journal.js?v=0.6.24';
 const GOLD='<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#e9c46f"/><stop offset="1" stop-color="#b07f2c"/></linearGradient></defs>';
 const ICON={
  astro:`<svg viewBox="0 0 32 32">${GOLD}<path fill="url(#gg)" d="M19 5a11 11 0 1 0 8 18A9 9 0 1 1 19 5z"/><path fill="url(#gg)" d="M24 6l1.1 2.9L28 10l-2.9 1.1L24 14l-1.1-2.9L20 10l2.9-1.1z"/></svg>`,
@@ -329,7 +330,10 @@ export function resultScreen(ctx){
   const unveil=()=>{if(unveiled||!alive)return;unveiled=true;veil.classList.add('out');setTimeout(()=>veil.remove(),2100)};
   const prepared=Promise.all([document.fonts?document.fonts.ready:null,photoLoaded,bgLoaded]).then(async()=>{
    if(!alive)return;layoutCells();bandSetup();if(!maskCanvas)build();bgKey='';buildBg();await frames(4)});
-  if(FLOW.arrivedFromAnalysis){FLOW.arrivedFromAnalysis=false;prepared.then(()=>setTimeout(unveil,150),unveil);setTimeout(unveil,8000)}
+  if(FLOW.arrivedFromAnalysis){FLOW.arrivedFromAnalysis=false;prepared.then(()=>setTimeout(unveil,150),unveil);setTimeout(unveil,8000);
+   // új elemzés → pillanatkép az Elemzéseim közé: a kész auraportré képe, az összetétel és az üzenet, ahogy most látszik (a 4. szakaszig mintaeredmény)
+   prepared.then(()=>setTimeout(async()=>{if(!alive)return;const img=await new Promise(res=>{const cv=q('#aura'),o=document.createElement('canvas');o.width=cv.width;o.height=cv.height;const x=o.getContext('2d');x.fillStyle='#1a0f38';x.fillRect(0,0,o.width,o.height);x.drawImage(cv,0,0);o.toBlob(res,'image/webp',.88)});if(!img||!alive)return;
+    saveWithNotice({type:'aura',petId:pet.id||'',petName:name,sample:true,img,comp:L.map(l=>({k:l[0],name:LNAME[l[0]],lab:l[1],col:l[2],w:l[3]})),msg:q('#msg').textContent,lang},t)},2600))}
   else{veil.style.transition='opacity .45s ease';prepared.then(unveil,unveil);setTimeout(unveil,4000)}
   // gombok: vissza · megosztás · mentés (a kész auraportré képe)
   // vissza a portrékészítéshez (fotózás)

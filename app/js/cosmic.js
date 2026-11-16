@@ -1,11 +1,12 @@
 // Kozmikus Mancs – új külső (3. szakasz). A számítás változatlan: horoscope.js (égi profil), cosmos.js (Hold, jegy, szerencseszín).
 // A díszítések saját rajzú, arany vonalas SVG-k (url(#au) = a közös arany színátmenet az index.html-ben).
-import { fmtDate } from './i18n.js?v=0.6.23';
-import { birthProfile } from './horoscope.js?v=0.6.23';
-import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.23';
-import { ICON } from './home.js?v=0.6.23';
-import { IC_SWAP } from './aura-deco.js?v=0.6.23';
-import { ZG, PG } from './zodiac-glyphs.js?v=0.6.23';
+import { fmtDate } from './i18n.js?v=0.6.24';
+import { birthProfile } from './horoscope.js?v=0.6.24';
+import { moonPhase, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.24';
+import { ICON } from './home.js?v=0.6.24';
+import { IC_SWAP } from './aura-deco.js?v=0.6.24';
+import { saveWithNotice, lastOf, sig } from './journal.js?v=0.6.24';
+import { ZG, PG } from './zodiac-glyphs.js?v=0.6.24';
 
 const ELEM = ['fire', 'earth', 'air', 'water'];
 const RULER = [4, 3, 2, 1, 0, 2, 3, 9, 5, 6, 7, 8]; // jegy → uralkodó bolygó (modern rend): Kos–Mars, Bika–Vénusz, …, Halak–Neptunusz
@@ -168,7 +169,7 @@ export function cosmicView({ t, esc, lang, pet: p, multi }) {
 // --- szövegtár betöltése (nyelvenként, azonosítónként egy kis JSON; egyszer töltjük le, utána a memóriából) ---
 const LIB = new Map();
 export function libText(lang, id) {
-  const k = lang + '/' + id; if (!LIB.has(k)) LIB.set(k, fetch(`data/horoscope/${lang}/${id}.json?v=0.6.23`).then((r) => (r.ok ? r.json() : null)).catch(() => null));
+  const k = lang + '/' + id; if (!LIB.has(k)) LIB.set(k, fetch(`data/horoscope/${lang}/${id}.json?v=0.6.24`).then((r) => (r.ok ? r.json() : null)).catch(() => null));
   return LIB.get(k);
 }
 // Teljes szöveg az olvasóban (útvonal: #cosmic/<azonosító>), a pergamenen.
@@ -218,7 +219,30 @@ export function mountReader(root, lang, id, esc) {
 // Mozgás: az asztrolábium görgetésre lassan fordul; a fénygömb végighalad az égi pályán (csökkentett mozgásnál áll).
 // Mozgás: az asztrolábium CSS-ből, önállóan és nagyon lassan forog (a görgetéstől független).
 // A fénygömb csak balról jobbra halad (az idő múlását követve); a végén elhalványul, és elölről indul.
-export function mountCosmic(root, lang, esc) {
+// Elemzéseim: a horoszkóp pillanatképe (a látott fejezetek, címkék és a TELJES szövegek, ahogy most szólnak).
+// Csak akkor készül új bejegyzés, ha a tartalom változott (más születési adat vagy módosult szövegtár).
+async function snapshotHoroscope(root, lang, pet, t) {
+  if (!pet || !pet.id || !root.querySelector('.krow')) return;
+  const sections = [...root.querySelectorAll('.kscroll')].map((sc) => {
+    const title = sc.querySelector('h2')?.textContent || '';
+    const items = [...sc.querySelectorAll('.krow, .kline')].map((el) => {
+      if (el.classList.contains('krow')) { const tx = el.querySelector('[data-tx]'); return tx ? { id: tx.dataset.tx, label: [el.querySelector('small')?.textContent, el.querySelector('b')?.textContent].filter(Boolean).join(' · ') } : null; }
+      const id = (el.dataset.go || '').replace(/^cosmic\//, ''); const b = el.querySelector('b')?.textContent || ''; const pairs = el.querySelector('.kpairs')?.textContent || '';
+      return id ? { id, label: b, pairs } : null;
+    }).filter(Boolean);
+    return { title, items };
+  }).filter((x) => x.items.length);
+  const ids = [...new Set(sections.flatMap((x) => x.items.map((i) => i.id)))];
+  const texts = {}; for (const id of ids) { const d = await libText(lang, id); if (!d) return; texts[id] = d; }
+  if (!document.body.contains(root)) return;
+  const birth = { bday: pet.bday, btime: pet.btime, place: pet.place, species: pet.species };
+  const sg = sig(JSON.stringify([lang, birth, sections, texts]));
+  const last = await lastOf(pet.id, 'horo'); if (last && last.sig === sg) return;
+  saveWithNotice({ type: 'horo', petId: pet.id, petName: pet.name || t('au.start.noname'), lang, birth, sections, texts, sig: sg }, t);
+}
+
+export function mountCosmic(root, lang, esc, extra = {}) {
+  if (extra.pet) setTimeout(() => snapshotHoroscope(root, lang, extra.pet, extra.t), 1200);
   root.querySelectorAll('[data-tx]').forEach((el) => libText(lang, el.dataset.tx).then((d) => { if (!d) { el.innerHTML = ''; return; }
     const first = d.n.find((x) => x[0] === 'p');
     el.innerHTML = `<i class="ktt">${esc(d.title)}</i>${first ? `<p>${esc(first[1])}</p>` : ''}<a class="kmore" data-go="cosmic/${el.dataset.tx}" role="button" tabindex="0">${esc(el.closest('.km').dataset.more)} ›</a>`; }));
