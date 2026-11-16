@@ -270,13 +270,15 @@
 "fs.h.3": "Quédate quieto un momento y toca «Usar esta».",
 "fs.h.tip": "✦ Consejo: Para una medición precisa, mantén el teléfono lejos de objetos metálicos grandes y de aparatos electrónicos.",
 "fs.h.close": "Cerrar",
-"acc.soon": "El inicio de sesión y la suscripción llegarán pronto.",
-"acc.pets": "Mascotas: {n}",
 "acc.data": "Tus datos",
 "acc.local": "Los datos y las fotos de tus mascotas y tus respuestas se guardan solo en este teléfono. Pet Aura no los sube a ningún sitio.",
 "acc.wipe": "Borrar todos los datos de este teléfono",
 "acc.wipeq": "¿Borrar todos los datos de Pet Aura de este teléfono? Se perderán las mascotas, las fotos y las respuestas. No se puede deshacer.",
 "acc.wipeyes": "Sí, borrar todo",
 "acc.about": "Acerca de",
-"acc.sources": "Fuentes de datos:"
+"acc.sources": "Fuentes de datos:",
+"acc.pets.one": "{n} perfil",
+"acc.pets.few": "{n} perfiles",
+"acc.pets.many": "{n} perfiles",
+"acc.pets.other": "{n} perfiles"
 }

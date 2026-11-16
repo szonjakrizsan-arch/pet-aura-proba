@@ -270,13 +270,15 @@
 "fs.h.3": "Tartsd mozdulatlanul egy pillanatig, majd koppints az »Ezt választom« gombra!",
 "fs.h.tip": "✦ Tipp: A pontos méréshez tartsd távol a telefont nagyobb fémtárgyaktól és elektronikus eszközöktől.",
 "fs.h.close": "Bezárás",
-"acc.soon": "A bejelentkezés és az előfizetés hamarosan érkezik.",
-"acc.pets": "Kedvencek: {n}",
 "acc.data": "Adataid",
 "acc.local": "A kedvenceid adatai, fotói és a válaszaid csak ezen a telefonon tárolódnak. A Pet Aura nem tölti fel őket sehová.",
 "acc.wipe": "Minden adat törlése erről a telefonról",
 "acc.wipeq": "Biztosan törölsz minden Pet Aura-adatot erről a telefonról? A kedvencek, a fotók és a válaszok is elvesznek. A törlés nem vonható vissza.",
 "acc.wipeyes": "Igen, mindent törlök",
 "acc.about": "Névjegy",
-"acc.sources": "Adatforrások:"
+"acc.sources": "Adatforrások:",
+"acc.pets.one": "{n} profil",
+"acc.pets.few": "{n} profil",
+"acc.pets.many": "{n} profil",
+"acc.pets.other": "{n} profil"
 }
