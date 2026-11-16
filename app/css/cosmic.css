@@ -318,7 +318,7 @@
 #s-sub .acarrow{width:46px;height:auto;filter:drop-shadow(0 2px 4px #0008)}
 /* törlés: az ékszer-sáv (a középső rész nyúlik, a feliratot a program írja – minden nyelven) */
 #s-sub .acdel{--h:74px;position:relative;display:flex;align-items:center;justify-content:center;width:calc(100% + 24px);height:var(--h);margin:16px -12px 8px;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
- border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.22) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
+ border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.23) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
 #s-sub .acdel span{position:relative;z-index:1;padding:0 calc(var(--h) * .36) 0 calc(var(--h) * .84);font-size:14.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;color:#f6dca0;text-shadow:0 1px 2px #000c;text-align:center}
 #s-sub .acdt,#s-sub .acdb{position:absolute;left:calc(50% + var(--h) * .25);transform:translateX(-50%);height:calc(var(--h) * .19);width:auto;pointer-events:none}
 #s-sub .acdt{top:calc(var(--h) * .0)}#s-sub .acdb{bottom:calc(var(--h) * -.02)}
@@ -337,3 +337,11 @@
 #s-sub .acbtn.danger{color:#ffe6df;background:linear-gradient(180deg,#9c2a3f,#5e1124) padding-box,linear-gradient(145deg,#ffd6c2,#e88a6a 35%,#7a2a16 60%,#f6b08a) border-box;box-shadow:0 0 12px #ff5a6a55,0 3px 8px #0008,inset 0 1px 0 #ffffff44}
 @media (prefers-reduced-motion:reduce){#s-sub .acard::after{animation:none;display:none}}
 #s-sub .acbtns{margin-bottom:14px}
+
+/* Fiók: élő háttér */
+#s-sub>#acbg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#acbg canvas{position:absolute;inset:0;width:100%;height:100%}
+#acbg .acglow{position:absolute;left:50%;top:45%;width:140%;height:90%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,#9b6cff40,#6b3aa622 50%,transparent 75%);animation:acglow 14s ease-in-out infinite;filter:blur(10px)}
+@keyframes acglow{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)}50%{opacity:1;transform:translate(-48%,-52%) scale(1.06)}}
+#s-sub .km .acard,#s-sub .km .accrest{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){#acbg .acglow{animation:none}}
