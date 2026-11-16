@@ -1,5 +1,5 @@
 // Measured values come from real pixels; chakra scores are a playful, deterministic interpretation.
-import { hash } from './cosmos.js?v=0.6.26';
+import { hash } from './cosmos.js?v=0.6.27';
 function rgb2hsl(r, g, b) {
   r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, l = (mx + mn) / 2;
   let h = 0; if (d) { h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h = (h * 60 + 360) % 360; }

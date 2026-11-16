@@ -318,7 +318,7 @@
 #s-sub .acarrow{width:46px;height:auto;filter:drop-shadow(0 2px 4px #0008)}
 /* törlés: az ékszer-sáv (a középső rész nyúlik, a feliratot a program írja – minden nyelven) */
 #s-sub .acdel{--h:74px;position:relative;display:flex;align-items:center;justify-content:center;width:calc(100% + 24px);height:var(--h);margin:16px -12px 8px;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
- border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.26) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
+ border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.27) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
 #s-sub .acdel span{position:relative;z-index:1;padding:0 calc(var(--h) * .36) 0 calc(var(--h) * .84);font-size:14.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;color:#f6dca0;text-shadow:0 1px 2px #000c;text-align:center}
 #s-sub .acdt,#s-sub .acdb{position:absolute;left:calc(50% + var(--h) * .25);transform:translateX(-50%);height:calc(var(--h) * .19);width:auto;pointer-events:none}
 #s-sub .acdt{top:calc(var(--h) * .0)}#s-sub .acdb{bottom:calc(var(--h) * -.02)}
@@ -369,8 +369,11 @@
 .jtoast.bad{color:#ffe6df;background:linear-gradient(180deg,#9c2a3f,#5e1124);box-shadow:0 6px 20px #0009,0 0 0 1.5px #c9953f}
 .jtoast.out{opacity:0}
 
-/* Elemzéseim díszítés (v0.6.26): kártyák a Kedvenceim mintájára, jelvények, díszes törlés, mozgó csillagjel */
-#s-sub .myrow{position:relative;overflow:hidden;text-decoration:none;color:inherit;text-align:left;padding:10px 8px 10px 10px;gap:10px}
+/* Elemzéseim díszítés (v0.6.27): kártyák a Kedvenceim mintájára, jelvények, díszes törlés, mozgó csillagjel */
+#s-sub .myrow{display:flex;align-items:center;margin:14px 2px 0;text-decoration:none;color:inherit;text-align:left;padding:14px 12px 14px 14px;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#s-sub .myrow:active{transform:scale(.985)}
+#s-sub .myrow.new{box-shadow:0 0 26px #ffcf7a77,0 10px 26px #0007,inset 0 1px 0 #ffffff22,inset 0 0 0 1px #2a1450,inset 0 0 0 2.5px #f3cf7a88}
+#s-sub .myrow .pinfo{position:relative}#s-sub .myrow .myjel,#s-sub .myrow .acarrow{position:relative}
 #s-sub .myjel{flex:none;width:66px;height:auto;filter:drop-shadow(0 3px 6px #0009)}
 #s-sub .myjel.big{width:96px}
 #s-sub .myrow .pinfo b{font-size:21px;color:#f6e7c1}
@@ -389,7 +392,7 @@
 #s-sub .mydel.shine::after{inset:20% 2% 20% 4%;border-radius:12px}
 #s-sub .mydel:active{transform:scale(.985)}
 /* megerősítő ablak: lila, aranykeretes (nem olyan erős, mint a teljes törlésnél) */
-#s-sub .mywin{position:relative;padding:34px 22px 22px;text-align:center;border-style:solid;border-color:transparent;border-image:url(../assets/elemzeseim/ablak.webp?v=0.6.26) 20 fill / 13px stretch;filter:drop-shadow(0 8px 18px #0009)}
+#s-sub .mywin{position:relative;padding:34px 22px 22px;text-align:center;border-style:solid;border-color:transparent;border-image:url(../assets/elemzeseim/ablak.webp?v=0.6.27) 20 fill / 13px stretch;filter:drop-shadow(0 8px 18px #0009)}
 #s-sub .mywc{position:absolute;pointer-events:none;width:auto}
 #s-sub .mywc.fb{left:11px;top:11px;height:40px}#s-sub .mywc.fj{right:11px;top:11px;height:40px}
 #s-sub .mywc.lb{left:11px;bottom:11px;height:50px}#s-sub .mywc.lj{right:11px;bottom:11px;height:50px}
