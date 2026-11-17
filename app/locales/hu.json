@@ -299,5 +299,7 @@
 "my.full": "Az elemzést nem sikerült elmenteni, mert megtelt a telefon tárhelye. Törölj néhány régebbi elemzést az Elemzéseim oldalon, és próbáld újra.",
 "my.fail": "Az elemzést nem sikerült elmenteni. Próbáld újra később.",
 "my.gone": "Ez az elemzés már nem található.",
-"my.delsub": "A törölt elemzés nem állítható vissza."
+"my.delsub": "A törölt elemzés nem állítható vissza.",
+"au.card.sample": "A csendes kíváncsiság aurája",
+"au.card.tag": "Fedezd fel kedvenced auráját"
 }

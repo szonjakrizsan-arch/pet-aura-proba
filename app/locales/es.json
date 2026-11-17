@@ -299,5 +299,7 @@
 "my.full": "No se pudo guardar el análisis porque el almacenamiento del teléfono está lleno. Borra algunos análisis antiguos e inténtalo de nuevo.",
 "my.fail": "No se pudo guardar el análisis. Inténtalo más tarde.",
 "my.gone": "Este análisis ya no existe.",
-"my.delsub": "Un análisis borrado no se puede recuperar."
+"my.delsub": "Un análisis borrado no se puede recuperar.",
+"au.card.sample": "El aura de la curiosidad silenciosa",
+"au.card.tag": "Descubre el aura de tu mascota"
 }

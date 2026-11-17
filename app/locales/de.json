@@ -299,5 +299,7 @@
 "my.full": "Die Analyse konnte nicht gespeichert werden, weil der Speicher deines Handys voll ist. Lösche einige ältere Analysen und versuche es erneut.",
 "my.fail": "Die Analyse konnte nicht gespeichert werden. Bitte versuche es später erneut.",
 "my.gone": "Diese Analyse ist nicht mehr vorhanden.",
-"my.delsub": "Eine gelöschte Analyse kann nicht wiederhergestellt werden."
+"my.delsub": "Eine gelöschte Analyse kann nicht wiederhergestellt werden.",
+"au.card.sample": "Die Aura der stillen Neugier",
+"au.card.tag": "Entdecke die Aura deines Lieblings"
 }

@@ -1,9 +1,11 @@
 // Eredményoldal: a jóváhagyott auraportré-oldal (design/aura_scanner/forras/template.html) az app keretében.
 // A rajzoló kód a sablonból változatlan. Az összetétel és az üzenet a 4. szakaszig mintaadat (a valódi elemzőmotor adja majd).
-import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.29';
-import { FLOW } from './aura.js?v=0.6.29';
-import { saveWithNotice, getEntry } from './journal.js?v=0.6.29';
-import { mountDelete } from './myview.js?v=0.6.29';
+import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.30';
+import { FLOW } from './aura.js?v=0.6.30';
+import { saveWithNotice, getEntry } from './journal.js?v=0.6.30';
+import { mountDelete } from './myview.js?v=0.6.30';
+import { makeShareCard } from './sharecard.js?v=0.6.30';
+import { PETS } from './pets.js?v=0.6.30';
 const GOLD='<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#e9c46f"/><stop offset="1" stop-color="#b07f2c"/></linearGradient></defs>';
 const ICON={
  astro:`<svg viewBox="0 0 32 32">${GOLD}<path fill="url(#gg)" d="M19 5a11 11 0 1 0 8 18A9 9 0 1 1 19 5z"/><path fill="url(#gg)" d="M24 6l1.1 2.9L28 10l-2.9 1.1L24 14l-1.1-2.9L20 10l2.9-1.1z"/></svg>`,
@@ -114,7 +116,7 @@ export function resultScreen(ctx){
 
   // --- aura ---
   const cv=q('#aura'),cx=cv.getContext('2d');
-  let S,photo,cols,finalCol,ribbons,sparks,maskCanvas;
+  let S,photo,cols,finalCol,ribbons,sparks,maskCanvas,hiRes=0; // hiRes: a megosztási kártyához egy pillanatra nagy felbontásban rajzolunk
   function tint(rgb,f){return rgb.map(v=>Math.round(v+(255-v)*f))}
   function deep(rgb,f){return rgb.map(v=>Math.round(v*(1-f)))}
   function lift(rgb){ // élénkítés: az aura fénye legyen ragyogó, a hue marad
@@ -122,7 +124,7 @@ export function resultScreen(ctx){
   function build(){
    const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;
    if(r.width<40||!photo||!photo.naturalWidth){maskCanvas=null;return}
-   cv.width=r.width*d;cv.height=r.height*d;S=cv.width;
+   cv.width=hiRes||r.width*d;cv.height=hiRes||r.height*d;S=cv.width;
    const R=S*0.29; // fotó sugara
    // fotó lágy széllel
    maskCanvas=document.createElement('canvas');maskCanvas.width=maskCanvas.height=Math.ceil(R*2);
@@ -343,9 +345,18 @@ export function resultScreen(ctx){
   // vissza a portrékészítéshez (fotózás)
   q('#bBack').onclick=()=>A?back('my'):back('aura/kamera');
   if(A)mountDelete(q('#ardel'),A.id,{t,esc,done:()=>back('my')});
-  const shot=()=>new Promise(res=>{const cv=q('#aura'),o=document.createElement('canvas');o.width=cv.width;o.height=cv.height;const x=o.getContext('2d');x.fillStyle='#1a0f38';x.fillRect(0,0,o.width,o.height);x.drawImage(cv,0,0);o.toBlob(res,'image/png')});
-  q('#bSave').onclick=async()=>{const b=await shot();if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`pet-aura-${name}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
-  q('#bShare').onclick=async()=>{const b=await shot();if(!b)return;const f=new File([b],`pet-aura-${name}.png`,{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Pet Aura'})}catch(e){}}else q('#bSave').click()};
+  // megosztási kártya: az aura egy pillanatra 1260 px-en rajzolódik (éles), aztán vissza a képernyő méretére
+  let busy=false;
+  const card=async()=>{if(busy)return null;busy=true;try{
+   hiRes=1260;build();await frames(3);const big=document.createElement('canvas');big.width=big.height=1260;big.getContext('2d').drawImage(cv,0,0);hiRes=0;build();
+   const pid=A?A.petId:pet.id,pp=PETS.list.find(p=>p.id===pid)||pet||{},when=new Intl.DateTimeFormat(lang,{dateStyle:'long'}).format(A?new Date(A.date):new Date());
+   let sign='';if(pp.bday){try{const {birthProfile}=await import('./horoscope.js?v=0.6.30');sign=t('zs.'+birthProfile(pp).sun)+' · '}catch(e){}}
+   const msg=q('#msg').textContent,ss=msg.match(/[^.!?。]+[.!?。]+/g)||[msg],quote=ss.slice(-2).join(' ').replace(/\s+/g,' ').replace(/。 /g,'。').trim();
+   return await makeShareCard({lang,aura:big,name,sub:sign+when,title:t('au.card.sample'),quote,quotes:ss.map(x=>x.trim()),layers:L.map(l=>({k:l[0],col:l[2],label:LNAME[l[0]]})),brand:'Pet Aura',tagline:t('au.card.tag')});
+  }finally{hiRes=0;busy=false}};
+  q('#bSave').onclick=async()=>{const b=await card();if(!b)return;const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`pet-aura-${name}.jpg`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
+  q('#bShare').onclick=async()=>{const b=await card();if(!b)return;const f=new File([b],`pet-aura-${name}.jpg`,{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Pet Aura'})}catch(e){}}else q('#bSave').click()};
+  if(new URLSearchParams(location.search).has('kartyateszt'))window.__card=card; // csak teszthez
   return ()=>{alive=false;removeEventListener('resize',onR);RO.disconnect()};
  };
  return {html,mount,back:'home'};

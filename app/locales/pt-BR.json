@@ -299,5 +299,7 @@
 "my.full": "Não foi possível salvar a análise porque o armazenamento do celular está cheio. Exclua algumas análises antigas e tente de novo.",
 "my.fail": "Não foi possível salvar a análise. Tente novamente mais tarde.",
 "my.gone": "Esta análise não foi encontrada.",
-"my.delsub": "Uma análise excluída não pode ser recuperada."
+"my.delsub": "Uma análise excluída não pode ser recuperada.",
+"au.card.sample": "A aura da curiosidade silenciosa",
+"au.card.tag": "Descubra a aura do seu pet"
 }

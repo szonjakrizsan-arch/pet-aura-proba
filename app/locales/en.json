@@ -299,5 +299,7 @@
 "my.full": "The analysis could not be saved because your phone’s storage is full. Delete a few older analyses on the My analyses page and try again.",
 "my.fail": "The analysis could not be saved. Please try again later.",
 "my.gone": "This analysis can no longer be found.",
-"my.delsub": "A deleted analysis cannot be restored."
+"my.delsub": "A deleted analysis cannot be restored.",
+"au.card.sample": "The Aura of Quiet Curiosity",
+"au.card.tag": "Discover your pet’s aura"
 }

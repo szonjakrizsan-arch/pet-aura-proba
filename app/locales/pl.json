@@ -299,5 +299,7 @@
 "my.full": "Nie udało się zapisać analizy, bo pamięć telefonu jest pełna. Usuń kilka starszych analiz i spróbuj ponownie.",
 "my.fail": "Nie udało się zapisać analizy. Spróbuj ponownie później.",
 "my.gone": "Ta analiza już nie istnieje.",
-"my.delsub": "Usuniętej analizy nie można przywrócić."
+"my.delsub": "Usuniętej analizy nie można przywrócić.",
+"au.card.sample": "Aura cichej ciekawości",
+"au.card.tag": "Odkryj aurę swojego pupila"
 }
