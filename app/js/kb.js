@@ -3,7 +3,7 @@
 // iniciálé, és a könyv gerincénél mindig ott a lila selyem könyvjelzőszalag.
 // Az első változat teljesen kódból készül (pergamen, díszek); a rajzolt rétegekről a képernyőképek után döntünk.
 // A szövegek a data/tudastar/<nyelv>.json-ból jönnek; a live:false témák (bevezető, aura) a 4. szakaszig nem jelennek meg.
-const V = '0.6.34';
+const V = '0.6.36';
 const CH = { h: { name: 'nav.cosmic', sub: 'kb.ch.h', jel: 'jel_horo' }, f: { name: 'nav.feng', sub: 'kb.ch.f', jel: 'jel_feng' }, a: { name: 'home.card.aura', sub: 'kb.ch.a', jel: 'jel_aura' } };
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 const cache = {};
@@ -28,8 +28,11 @@ function paras(ps, esc, ja) { // az első bekezdés díszes iniciáléval kezdő
     // Az első szó egyben marad: a rövid első szó (A, Az, El, The, Das…) egészében kerül az iniciáléba; hosszabb szónál a nagy
     // kezdőbetű után a szó többi része kiskapitálissal, szorosan folytatódik (régi kódexek szokása), így sosem válik szét („A | z”).
     const w = /^\S+/.exec(p)[0].replace(/[,.:;!?]+$/, ''), chars = [...w];
-    const big = chars.length <= 3 ? w : chars[0], tail = chars.length <= 3 ? '' : w.slice(chars[0].length), rest = p.slice(w.length);
-    return `<p class="kbfirst"><span class="kbini${[...big].length > 1 ? ' word' : ''}" aria-hidden="true"><b>${esc(big)}</b></span><span class="sr">${esc(big)}</span>${tail ? `<span class="kbsc">${esc(tail)}</span>` : ''}${md(rest, esc)}</p>`;
+    // Szonja kérése: az első betű a díszes iniciálé (az inda csak ezt öleli), a rövid szó további betűi ugyanígy aranyozva,
+    // de kisebben csatlakoznak hozzá; hosszabb szónál a többi betű kiskapitálissal folytatódik a szövegben.
+    const L = (c, cls) => `<span class="kbl${cls}"><b class="k1">${esc(c)}</b><b class="k2">${esc(c)}</b><b class="k3">${esc(c)}</b></span>`;
+    const short = chars.length <= 3, more = short ? chars.slice(1).join('') : '', tail = short ? '' : chars.slice(1).join(''), rest = p.slice(w.length);
+    return `<p class="kbfirst"><span class="kbini" aria-hidden="true"><span class="kbw">${L(chars[0], '')}${more ? L(more, ' sm') : ''}</span></span><span class="sr">${esc(chars[0] + more)}</span>${tail ? `<span class="kbsc">${esc(tail)}</span>` : ''}${md(rest, esc)}</p>`;
   }).join('');
 }
 
