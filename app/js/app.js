@@ -1,16 +1,17 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.44';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.44';
-import { analyze, chakraScores } from './analysis.js?v=0.6.44';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.44';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.44';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.44';
-import { auraScreen, FLOW } from './aura.js?v=0.6.44';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.44';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.44';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.44';
-import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.44';
-import { kbView, mountKb } from './kb.js?v=0.6.44';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.44';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.45';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.45';
+import { analyze, chakraScores } from './analysis.js?v=0.6.45';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.45';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.45';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.45';
+import { auraScreen, FLOW } from './aura.js?v=0.6.45';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.45';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.45';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.45';
+import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.45';
+import { kbView, mountKb } from './kb.js?v=0.6.45';
+import { cameoUrl } from './pets.js?v=0.6.45';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.45';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -33,8 +34,9 @@ function chrome() {
 function homePet() {
   const r = document.querySelector('#s-home [data-go="pets"]'); if (!r) return; const p = S.pet;
   let av = r.querySelector('.hpav'); const paw = r.querySelector('svg:not(.chev)');
-  if (p.photo) { if (!av) { av = document.createElement('span'); av.className = 'hpav'; r.prepend(av); } av.style.backgroundImage = `url(${p.photo})`; if (paw) paw.style.display = 'none'; }
-  else { if (av) av.remove(); if (paw) paw.style.display = ''; }
+  // fotó, ha van; különben a faj szerinti kámea (macska, kutya, vagy mancs, ha még nincs kedvenc / nincs megadva a faj)
+  if (!av) { av = document.createElement('span'); av.className = 'hpav'; r.prepend(av); }
+  av.classList.toggle('cameo', !p.photo); av.style.backgroundImage = `url(${p.photo || cameoUrl(p)})`; if (paw) paw.style.display = 'none';
   const label = p.id ? `${t('top.pets')}: ${p.name || t('au.start.noname')}` : t('top.pets'); r.setAttribute('aria-label', label); r.title = label;
 }
 // Vissza gomb: a főmenü termeiből mindig a kezdőlapra; az alterületekről az előző logikus szintre (szülő).
