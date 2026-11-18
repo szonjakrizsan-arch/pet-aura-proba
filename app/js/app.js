@@ -1,16 +1,16 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.39';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.39';
-import { analyze, chakraScores } from './analysis.js?v=0.6.39';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.39';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.39';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.39';
-import { auraScreen, FLOW } from './aura.js?v=0.6.39';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.39';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.39';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.39';
-import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.39';
-import { kbView, mountKb } from './kb.js?v=0.6.39';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.39';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.40';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.40';
+import { analyze, chakraScores } from './analysis.js?v=0.6.40';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.40';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.40';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.40';
+import { auraScreen, FLOW } from './aura.js?v=0.6.40';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.40';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.40';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.40';
+import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.40';
+import { kbView, mountKb } from './kb.js?v=0.6.40';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.40';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -135,6 +135,7 @@ function render() {
   if (S.tab === 'kb') { S.stopKb = mountKb($('#view'), { t, esc, lang: S.lang, sub: S.sub, go, setRoute }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub')); S.accBgKind = 'kb'; } }
   if (S.tab === 'my') { if (S.stopMy) S.stopMy(); S.stopMy = mountMy($('#view'), { t, esc, lang: S.lang, go, back, render }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub'), { colors: true }); S.accBgKind = 'my'; } }
   if (S.tab === 'feng') mountFeng($('#view'), { t, esc, lang: S.lang, pet: S.pet, go, savePet, render });
+  if (S.tab === 'pets' && !S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub')); S.accBgKind = 'pets'; } // élő fénypor-háttér, mint a Fiókban
   if (S.tab === 'pets') mountPets($('#view'), { t, esc, lang: S.lang, go, back, render }, S.sub);
   if (S.tab === 'regi-aura' && S.scan) drawAura($('#cv'), S.scan);
 }

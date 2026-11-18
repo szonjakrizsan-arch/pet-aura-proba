@@ -1,8 +1,11 @@
 // Kedvencek: több kedvenc tárolása (localStorage 'pets' + 'activePet'), a Kedvenceim lista és az adatlap-űrlap.
-import { searchCities, norm } from './geo.js?v=0.6.39';
-import { fmtDate } from './i18n.js?v=0.6.39';
-import { deleteByPet } from './journal.js?v=0.6.39';
-import { ICON } from './home.js?v=0.6.39';
+import { searchCities, norm } from './geo.js?v=0.6.40';
+import { fmtDate } from './i18n.js?v=0.6.40';
+import { deleteByPet } from './journal.js?v=0.6.40';
+import { ICON } from './home.js?v=0.6.40';
+import { CORNER } from './account.js?v=0.6.40';
+// Szonja kérése: a Kedvenceim kártyái és az adatlap ugyanabban a díszes, aranykeretes stílusban, mint az Elemzéseim és a Fiók
+const CORS = () => ['tl', 'tr', 'bl', 'br'].map((c) => `<i class="accor ${c}">${CORNER}</i>`).join('');
 
 const KEY = 'pets', AKEY = 'activePet';
 const BLANK = { id: '', name: '', species: '', bday: '', btime: '', place: null, photo: '' };
@@ -47,9 +50,9 @@ export function listView({ t, esc, lang }) {
   const spec = (p) => (p.species ? t(p.species === 'cat' ? 'au.al.cat' : 'au.al.dog') : '');
   const born = (p) => { if (!p.bday) return ''; const d = new Date(p.bday + 'T12:00:00'); return isNaN(d) ? '' : fmtDate(lang, d); };
   const head = `<h1 class="t">${esc(t('top.pets'))}</h1>`;
-  if (!PETS.list.length) return head + `<div class="panel pempty"><div class="pbig none">${ICON.paw}</div><p>${esc(t('pets.empty'))}</p><button class="btn-gold" data-go="pets/uj">${esc(t('pets.add'))}</button></div>`;
+  if (!PETS.list.length) return head + `<section class="acard pempty">${CORS()}<div class="pbig none">${ICON.paw}</div><p>${esc(t('pets.empty'))}</p><button class="btn-gold" data-go="pets/uj">${esc(t('pets.add'))}</button></section>`;
   const cards = PETS.list.map((p) => { const on = p.id === PETS.active, meta = [spec(p), born(p)].filter(Boolean).join(' · ');
-    return `<div class="pcard${on ? ' on' : ''}" data-pick="${p.id}" role="button" tabindex="0" aria-pressed="${on}">${portrait(p)}<div class="pinfo"><b>${esc(p.name || t('au.start.noname'))}</b>${meta ? `<small>${esc(meta)}</small>` : ''}${on ? `<span class="pon">✦ ${esc(t('pets.active'))}</span>` : `<span class="poff">${esc(t('pets.pick'))}</span>`}</div><button class="pedit" data-edit="${p.id}" aria-label="${esc(t('pets.edit'))}">${PENCIL}</button></div>`; }).join('');
+    return `<div class="acard myrow pcard${on ? ' on' : ''}" data-pick="${p.id}" role="button" tabindex="0" aria-pressed="${on}">${CORS()}${portrait(p)}<div class="pinfo"><b>${esc(p.name || t('au.start.noname'))}</b>${meta ? `<small>${esc(meta)}</small>` : ''}${on ? `<span class="pon">✦ ${esc(t('pets.active'))}</span>` : `<span class="poff">${esc(t('pets.pick'))}</span>`}</div><button class="pedit" data-edit="${p.id}" aria-label="${esc(t('pets.edit'))}">${PENCIL}</button></div>`; }).join('');
   return head + `<p class="lead2">${esc(t('pets.lead'))}</p>${cards}<div class="pact"><button class="btn-gold" data-go="pets/uj">+ ${esc(t('pets.add'))}</button></div>`;
 }
 
@@ -66,7 +69,7 @@ export function formView({ t, esc, lang }, sub) {
     : `<button class="plink danger" id="del" type="button">${esc(t('pets.del'))}</button>`;
   return `<h1 class="t">${esc(t(isNew ? 'pets.new' : 'pets.edit'))}</h1>
   <div class="pphoto" id="pph" role="button" tabindex="0" aria-label="${esc(t('pets.photo'))}">${portrait(d, 'pbig')}<small>${esc(t('pets.photo'))}</small></div>
-  <div class="panel pform">
+  <section class="acard pform">${CORS()}
    <label for="pn2">${esc(t('cos.name'))}</label><input id="pn2" type="text" value="${esc(d.name)}" maxlength="40" autocomplete="off">
    <p class="perr" id="perr" hidden>${esc(t('pets.needname'))}</p>
    <label>${esc(t('cos.species'))}</label><div class="sprow2">${sp('dog')}${sp('cat')}</div>
@@ -74,7 +77,7 @@ export function formView({ t, esc, lang }, sub) {
    <label for="pt2">${esc(t('pets.time'))}</label><input id="pt2" type="time" value="${esc(d.btime)}">
    <label for="pp2">${esc(t('pets.place'))}</label>${place}
    <p class="pattr">© GeoNames · CC BY 4.0</p>
-  </div>
+  </section>
   <div class="prow"><button class="btn-gold" id="psave" type="button">${esc(t('pets.save'))}</button><button class="pbtn" id="pcancel" type="button">${esc(t('pets.cancel'))}</button></div>
   ${del}`;
 }
@@ -98,7 +101,7 @@ export function mountPets(root, ctx, sub) {
   const clr = q('#pclr'); if (clr) clr.onclick = () => { keep(); draft.place = null; render(); setTimeout(() => q('#pp2')?.focus(), 0); };
   const pp = q('#pp2');
   if (pp) pp.oninput = async () => {
-    if (!cities) cities = (await (await fetch('data/cities.json?v=0.6.39')).json()).map((c) => [...c, norm(c[0])]);
+    if (!cities) cities = (await (await fetch('data/cities.json?v=0.6.40')).json()).map((c) => [...c, norm(c[0])]);
     const box = q('#pr2'); if (!box) return; const v = pp.value;
     const r = v.trim().length < 2 ? [] : searchCities(cities, v);
     box.innerHTML = v.trim().length < 2 ? '' : r.length ? r.map((c) => `<button class="pcity" type="button" data-ci="${cities.indexOf(c)}">${esc(c[0])}<small>${esc(regionName(lang, c[1]))}</small></button>`).join('') : `<p class="pnote">${esc(t('pets.nocity'))}</p>`;
