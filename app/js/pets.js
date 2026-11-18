@@ -1,9 +1,9 @@
 // Kedvencek: több kedvenc tárolása (localStorage 'pets' + 'activePet'), a Kedvenceim lista és az adatlap-űrlap.
-import { searchCities, norm } from './geo.js?v=0.6.40';
-import { fmtDate } from './i18n.js?v=0.6.40';
-import { deleteByPet } from './journal.js?v=0.6.40';
-import { ICON } from './home.js?v=0.6.40';
-import { CORNER } from './account.js?v=0.6.40';
+import { searchCities, norm } from './geo.js?v=0.6.41';
+import { fmtDate } from './i18n.js?v=0.6.41';
+import { deleteByPet } from './journal.js?v=0.6.41';
+import { ICON } from './home.js?v=0.6.41';
+import { CORNER } from './account.js?v=0.6.41';
 // Szonja kérése: a Kedvenceim kártyái és az adatlap ugyanabban a díszes, aranykeretes stílusban, mint az Elemzéseim és a Fiók
 const CORS = () => ['tl', 'tr', 'bl', 'br'].map((c) => `<i class="accor ${c}">${CORNER}</i>`).join('');
 
@@ -42,7 +42,11 @@ function remove(id) { deleteByPet(id); PETS.list = PETS.list.filter((p) => p.id 
 
 const regionName = (lang, cc) => { try { return new Intl.DisplayNames([lang], { type: 'region' }).of(cc) || cc; } catch { return cc; } };
 export const placeLabel = (lang, pl) => pl ? `${pl.n}, ${regionName(lang, pl.cc)}` : '';
-const portrait = (p, cls = 'pav') => `<span class="${cls}${p.photo ? '' : ' none'}"${p.photo ? ` style="background-image:url(${p.photo})"` : ''}>${p.photo ? '' : ICON.paw}</span>`;
+// fotó nélkül: faj szerinti antik kámea (ChatGPT rajza, Szonja ötletére); ha nincs megadva a faj, marad a mancs
+const KAMEA = { cat: 'kamea_macska' };
+export const portrait = (p, cls = 'pav') => p.photo ? `<span class="${cls}" style="background-image:url(${p.photo})"></span>`
+  : KAMEA[p.species] ? `<span class="${cls} cameo" style="background-image:url(assets/kedvenceim/${KAMEA[p.species]}.webp?v=0.6.41)"></span>`
+  : `<span class="${cls} none">${ICON.paw}</span>`;
 const PENCIL = '<svg viewBox="0 0 24 24"><path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 013 3L8 18.5zM13.5 7l3 3" fill="none" stroke="url(#au)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 // ---- Kedvenceim lista ----
@@ -101,7 +105,7 @@ export function mountPets(root, ctx, sub) {
   const clr = q('#pclr'); if (clr) clr.onclick = () => { keep(); draft.place = null; render(); setTimeout(() => q('#pp2')?.focus(), 0); };
   const pp = q('#pp2');
   if (pp) pp.oninput = async () => {
-    if (!cities) cities = (await (await fetch('data/cities.json?v=0.6.40')).json()).map((c) => [...c, norm(c[0])]);
+    if (!cities) cities = (await (await fetch('data/cities.json?v=0.6.41')).json()).map((c) => [...c, norm(c[0])]);
     const box = q('#pr2'); if (!box) return; const v = pp.value;
     const r = v.trim().length < 2 ? [] : searchCities(cities, v);
     box.innerHTML = v.trim().length < 2 ? '' : r.length ? r.map((c) => `<button class="pcity" type="button" data-ci="${cities.indexOf(c)}">${esc(c[0])}<small>${esc(regionName(lang, c[1]))}</small></button>`).join('') : `<p class="pnote">${esc(t('pets.nocity'))}</p>`;
