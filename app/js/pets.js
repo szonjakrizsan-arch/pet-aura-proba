@@ -1,9 +1,10 @@
 // Kedvencek: több kedvenc tárolása (localStorage 'pets' + 'activePet'), a Kedvenceim lista és az adatlap-űrlap.
-import { searchCities, norm } from './geo.js?v=0.6.43';
-import { fmtDate } from './i18n.js?v=0.6.43';
-import { deleteByPet } from './journal.js?v=0.6.43';
-import { ICON } from './home.js?v=0.6.43';
-import { CORNER } from './account.js?v=0.6.43';
+import { searchCities, norm } from './geo.js?v=0.6.44';
+import { fmtDate } from './i18n.js?v=0.6.44';
+import { deleteByPet } from './journal.js?v=0.6.44';
+import { ICON } from './home.js?v=0.6.44';
+import { CORNER } from './account.js?v=0.6.44';
+import { astrolabe } from './astrolabe.js?v=0.6.44';
 // Szonja kérése: a Kedvenceim kártyái és az adatlap ugyanabban a díszes, aranykeretes stílusban, mint az Elemzéseim és a Fiók
 const CORS = () => ['tl', 'tr', 'bl', 'br'].map((c) => `<i class="accor ${c}">${CORNER}</i>`).join('');
 
@@ -45,19 +46,19 @@ export const placeLabel = (lang, pl) => pl ? `${pl.n}, ${regionName(lang, pl.cc)
 // fotó nélkül: faj szerinti antik kámea (ChatGPT rajza, Szonja ötletére); ha nincs megadva a faj, marad a mancs
 const KAMEA = { cat: 'kamea_macska', dog: 'kamea_kutya' };
 export const portrait = (p, cls = 'pav') => p.photo ? `<span class="${cls}" style="background-image:url(${p.photo})"></span>`
-  : KAMEA[p.species] ? `<span class="${cls} cameo" style="background-image:url(assets/kedvenceim/${KAMEA[p.species]}.webp?v=0.6.43)"></span>`
+  : KAMEA[p.species] ? `<span class="${cls} cameo" style="background-image:url(assets/kedvenceim/${KAMEA[p.species]}.webp?v=0.6.44)"></span>`
   : `<span class="${cls} none">${ICON.paw}</span>`;
-const PENCIL = '<img src="assets/kedvenceim/toll.webp?v=0.6.43" alt="">'; // szerkesztés: aranyozott lúdtollas érme (ChatGPT, a kámeák párja)
+const PENCIL = '<img src="assets/kedvenceim/toll.webp?v=0.6.44" alt="">'; // szerkesztés: aranyozott lúdtollas érme (ChatGPT, a kámeák párja)
 
 // ---- Kedvenceim lista ----
 export function listView({ t, esc, lang }) {
   const spec = (p) => (p.species ? t(p.species === 'cat' ? 'au.al.cat' : 'au.al.dog') : '');
   const born = (p) => { if (!p.bday) return ''; const d = new Date(p.bday + 'T12:00:00'); return isNaN(d) ? '' : fmtDate(lang, d); };
   const head = `<h1 class="t">${esc(t('top.pets'))}</h1>`;
-  if (!PETS.list.length) return head + `<section class="acard pempty">${CORS()}<div class="pbig none">${ICON.paw}</div><p>${esc(t('pets.empty'))}</p><button class="btn-gold" data-go="pets/uj">${esc(t('pets.add'))}</button></section>`;
+  if (!PETS.list.length) return head + `<section class="acard pempty">${CORS()}<div class="pbig none">${ICON.paw}</div><p>${esc(t('pets.empty'))}</p><button class="btn-gold" data-go="pets/uj">${esc(t('pets.add'))}</button></section>${astrolabe()}`;
   const cards = PETS.list.map((p) => { const on = p.id === PETS.active, meta = [spec(p), born(p)].filter(Boolean).join(' · ');
     return `<div class="acard myrow pcard${on ? ' on' : ''}" data-pick="${p.id}" role="button" tabindex="0" aria-pressed="${on}">${CORS()}${portrait(p)}<div class="pinfo"><b>${esc(p.name || t('au.start.noname'))}</b>${meta ? `<small>${esc(meta)}</small>` : ''}${on ? `<span class="pon">✦ ${esc(t('pets.active'))}</span>` : `<span class="poff">${esc(t('pets.pick'))}</span>`}</div><button class="pedit" data-edit="${p.id}" aria-label="${esc(t('pets.edit'))}">${PENCIL}</button></div>`; }).join('');
-  return head + `<p class="lead2">${esc(t('pets.lead'))}</p>${cards}<div class="pact"><button class="btn-gold" data-go="pets/uj">+ ${esc(t('pets.add'))}</button></div>`;
+  return head + `<p class="lead2">${esc(t('pets.lead'))}</p>${cards}<div class="pact"><button class="btn-gold" data-go="pets/uj">+ ${esc(t('pets.add'))}</button></div>${astrolabe()}`; // a forgó csillagjel az Elemzéseimből (Szonja kérése)
 }
 
 // ---- Adatlap (új vagy szerkesztés) ----
@@ -105,7 +106,7 @@ export function mountPets(root, ctx, sub) {
   const clr = q('#pclr'); if (clr) clr.onclick = () => { keep(); draft.place = null; render(); setTimeout(() => q('#pp2')?.focus(), 0); };
   const pp = q('#pp2');
   if (pp) pp.oninput = async () => {
-    if (!cities) cities = (await (await fetch('data/cities.json?v=0.6.43')).json()).map((c) => [...c, norm(c[0])]);
+    if (!cities) cities = (await (await fetch('data/cities.json?v=0.6.44')).json()).map((c) => [...c, norm(c[0])]);
     const box = q('#pr2'); if (!box) return; const v = pp.value;
     const r = v.trim().length < 2 ? [] : searchCities(cities, v);
     box.innerHTML = v.trim().length < 2 ? '' : r.length ? r.map((c) => `<button class="pcity" type="button" data-ci="${cities.indexOf(c)}">${esc(c[0])}<small>${esc(regionName(lang, c[1]))}</small></button>`).join('') : `<p class="pnote">${esc(t('pets.nocity'))}</p>`;
