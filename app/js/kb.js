@@ -18,7 +18,8 @@ const DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
 const PAPER = '<i class="kpp kpm"></i><i class="kpp kpt"></i><i class="kpp kpb"></i>';
 const divider = () => `<img class="kbdiv" src="assets/elemzeseim/ablak_valaszto.webp?v=${V}" alt="">`;
 // lila selyemszalag fecskefarok véggel, a könyv gerincénél
-const ribbon = () => `<svg class="kbribbon" viewBox="0 0 26 300" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="kbrib" x1="0" x2="1"><stop offset="0" stop-color="#34105a"/><stop offset=".3" stop-color="#6e32a8"/><stop offset=".5" stop-color="#a46ad8"/><stop offset=".7" stop-color="#6e32a8"/><stop offset="1" stop-color="#2e0e50"/></linearGradient><pattern id="kbweave" width="4" height="3" patternUnits="userSpaceOnUse"><path d="M0 1.5H4" stroke="#ffffff" stroke-width=".35" opacity=".12"/></pattern></defs><path d="M2 0H24V300L13 284L2 300Z" fill="url(#kbrib)"/><path d="M2 0H24V300L13 284L2 300Z" fill="url(#kbweave)"/><path d="M3.6 0V294M22.4 0V294" stroke="#e9c46a" stroke-width="1.2"/><path d="M5.6 0V291M20.4 0V291" stroke="#e9c46a" stroke-width=".5" stroke-dasharray="1.6 1.6" opacity=".85"/></svg><svg class="kbcharm" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="11" fill="url(#kbgold)" stroke="#6b4512" stroke-width=".8"/><circle cx="15" cy="15" r="8" fill="#4a1c78"/><path d="M15 8.5Q15.8 14.2 21.5 15Q15.8 15.8 15 21.5Q14.2 15.8 8.5 15Q14.2 14.2 15 8.5Z" fill="#f6dc8c"/></svg>`;
+// selyem-bársony könyvjelzőszalag (ChatGPT rajza): felső vég, nyújtható középső szakasz, alsó vég a medállal
+const ribbon = () => '<div class="kbribbon" aria-hidden="true"><i class="rt"></i><i class="rm"></i><i class="rb"></i></div>';
 
 const md = (s, esc) => esc(s).replace(/\*\*(.+?)\*\*/g, '<b class="kbem">$1</b>'); // a szövegtár **kiemelései** félkövér lila tintával
 function paras(ps, esc, ja) { // az első bekezdés díszes iniciáléval kezdődik (a japánban nincs iniciálé – ott nem szokás)

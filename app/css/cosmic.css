@@ -439,7 +439,11 @@
 #s-sub .kbcorner.tl{left:8px;top:8px}#s-sub .kbcorner.tr{right:8px;top:8px;transform:scaleX(-1)}#s-sub .kbcorner.bl{left:8px;bottom:8px;transform:scaleY(-1)}#s-sub .kbcorner.br{right:8px;bottom:8px;transform:scale(-1)}
 #s-sub .kbdiv{display:block;width:62%;max-width:250px;margin:6px auto 14px;filter:drop-shadow(0 1px 0 #fff6)}
 /* könyvjelzőszalag a gerincnél: felül a lap mögül bújik elő, alul túllóg, finoman leng */
-#s-sub .kbribbon{position:absolute;left:-7px;top:2px;width:22px;height:calc(100% + 32px);z-index:5;filter:drop-shadow(1px 2px 2px #0006);transform-origin:50% 0;animation:kbsway 7s ease-in-out infinite;pointer-events:none}
+#s-sub .kbribbon{--rw:34px;position:absolute;left:-12px;top:-8px;width:var(--rw);height:calc(100% + 58px);z-index:5;filter:drop-shadow(1px 3px 2px #0007);transform-origin:50% 0;animation:kbsway 7s ease-in-out infinite;pointer-events:none}
+#s-sub .kbribbon i{position:absolute;left:0;right:0;display:block;background-size:100% 100%;background-repeat:no-repeat}
+#s-sub .kbribbon .rt{top:0;height:calc(var(--rw) * 118 / 120);background-image:url(../assets/tudastar/szalag_felso.webp?v=0.6.33)}
+#s-sub .kbribbon .rm{top:calc(var(--rw) * 118 / 120 - .5px);bottom:calc(var(--rw) * 216 / 120 - .5px);background-image:url(../assets/tudastar/szalag_kozep.webp?v=0.6.33)}
+#s-sub .kbribbon .rb{bottom:0;height:calc(var(--rw) * 216 / 120);background-image:url(../assets/tudastar/szalag_also.webp?v=0.6.33)}
 @keyframes kbsway{0%,100%{transform:rotate(0)}50%{transform:rotate(.35deg)}}
 /* címlap */
 #s-sub .kbin.cover{display:flex;flex-direction:column;justify-content:center;padding:44px 28px 34px 36px}
@@ -511,7 +515,5 @@
 @media (max-width:360px){#s-sub .kbin{font-size:17px;padding:30px 20px 16px 26px}}
 #s-sub .kbseal::after{content:'✦';position:absolute;inset:0;display:grid;place-items:center;color:#e9c46a;font-size:13px}
 #s-sub .km:has(.kbk.cov)>h1.t{display:none}
-/* a szalag végén kis arany medál lila kővel – a szalaggal együtt leng */
-#s-sub .kbcharm{position:absolute;left:-11px;bottom:-44px;width:30px;height:30px;z-index:6;filter:drop-shadow(0 2px 2px #0007);animation:kbsway 7s ease-in-out infinite;transform-origin:50% -700px;pointer-events:none}
 #s-sub .kbem{font-weight:600;color:var(--vio)}
 #s-sub .kbscr.withfoot{bottom:calc(3.2% + 50px);-webkit-mask-image:linear-gradient(180deg,#0000 0,#000 26px,#000 calc(100% - 40px),#0000);mask-image:linear-gradient(180deg,#0000 0,#000 26px,#000 calc(100% - 40px),#0000)}
