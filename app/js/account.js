@@ -1,15 +1,15 @@
 // Fiók (3. szakasz): nyelv, kedvencek, adatok (minden csak ezen a telefonon), tájékoztató, névjegy.
 // Bejelentkezés és előfizetés a 4. szakaszban (háttérrendszer) jön, saját felülettel – addig nem jelezzük (Szonja döntése).
-import { SUPPORTED } from './i18n.js?v=0.6.42';
-import { wipeAll } from './journal.js?v=0.6.42';
-import { PETS, portrait } from './pets.js?v=0.6.42';
+import { SUPPORTED } from './i18n.js?v=0.6.43';
+import { wipeAll } from './journal.js?v=0.6.43';
+import { PETS, portrait } from './pets.js?v=0.6.43';
 
-const VERSION = '0.6.42';
+const VERSION = '0.6.43';
 const ORN = (pos) => `<svg class="korn ${pos}" viewBox="0 0 280 20" aria-hidden="true"><path d="M6 10Q70 9.4 140 8.4Q210 9.4 274 10Q210 10.6 140 11.6Q70 10.6 6 10Z" fill="#f6d27a" opacity=".85"/><path d="M112 10c4-6 10-6 12 0-2 4-6 4-7 1M168 10c-4-6-10-6-12 0 2 4 6 4 7 1" stroke="url(#au)" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M140 2 143.4 10 140 18 136.6 10Z" fill="url(#au)"/></svg>`;
 // sarokdísz (egy saroké; a másik hármat CSS tükrözi)
 export const CORNER = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M3 30C3 14 14 3 30 3" fill="none" stroke="url(#au)" stroke-width="2.2" stroke-linecap="round"/><path d="M8 30c0-9 5-16 13-19M10 21c3 1 5 3 5 7M21 10c1 3 3 5 7 5" fill="none" stroke="url(#au)" stroke-width="1.6" stroke-linecap="round"/><circle cx="30" cy="3.5" r="2.4" fill="url(#au)"/><circle cx="3.5" cy="30" r="2.4" fill="url(#au)"/><path d="M6 6l3 0 0 3-3 0z" transform="rotate(45 7.5 7.5)" fill="url(#au)"/></svg>';
 export const glass = (title, body, cls = '') => `<section class="acard ${cls}">${['tl', 'tr', 'bl', 'br'].map((c) => `<i class="accor ${c}">${CORNER}</i>`).join('')}<h3>${title}</h3>${body}</section>`;
-const ARROW = '<img class="acarrow" src="assets/fiok/nyil.webp?v=0.6.42" alt="">';
+const ARROW = '<img class="acarrow" src="assets/fiok/nyil.webp?v=0.6.43" alt="">';
 const WARN = '<svg class="acwsig" viewBox="0 0 40 36" aria-hidden="true"><path d="M20 3 37 33H3Z" fill="none" stroke="#f0c48a" stroke-width="2.4" stroke-linejoin="round"/><path d="M20 13v10" stroke="#f0c48a" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="28" r="1.9" fill="#f0c48a"/></svg>';
 const PAW = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="url(#au)"><ellipse cx="12" cy="16" rx="5" ry="4.2"/><ellipse cx="5.6" cy="10.4" rx="2" ry="2.5"/><ellipse cx="9.4" cy="6.6" rx="2" ry="2.6"/><ellipse cx="14.6" cy="6.6" rx="2" ry="2.6"/><ellipse cx="18.4" cy="10.4" rx="2" ry="2.5"/></g></svg>';
 
@@ -24,7 +24,7 @@ export function accountView({ t, esc, lang }) {
        <div class="acbtns"><button class="acbtn danger" id="acwipeyes" type="button">${esc(t('acc.wipeyes'))}</button><button class="acbtn" id="acwipeno" type="button">${esc(t('pets.cancel'))}</button></div>`
     : `<button class="acdel" id="acwipe" type="button"><img class="acdt" src="assets/fiok/torles_disz_fent.webp?v=0.6.39b" alt=""><img class="acdb" src="assets/fiok/torles_disz_lent.webp?v=0.6.39b" alt=""><span>${esc(t('acc.wipe'))}</span></button>`;
   return `<h1 class="t">${esc(t('top.account'))}</h1>
-  <div class="accrest"><img class="accoin" src="assets/fiok/mancs.webp?v=0.6.42" alt=""></div>
+  <div class="accrest"><img class="accoin" src="assets/fiok/mancs.webp?v=0.6.43" alt=""></div>
   ${glass(esc(t('acc.lang')), `<div class="aclangs">${langs}</div>`)}
   ${glass(esc(t('top.pets')), `<a class="acrow" data-go="pets" role="button" tabindex="0"><span class="acpets">${PETS.list.slice(0, 5).map((p) => portrait(p, 'pav mini')).join('')}</span><span>${esc(t('acc.pets.' + plural(lang, n), { n }))}</span>${ARROW}</a>`)}
   ${glass(esc(t('acc.data')), `<p>${esc(t('acc.local'))}</p>${wipe}`)}

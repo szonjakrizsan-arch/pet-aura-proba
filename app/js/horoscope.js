@@ -1,7 +1,7 @@
 // Birth profile + today's sky from Celestine (positions); texts come from the knowledge base (locales/kb.*.json).
-import { calculateChart } from './vendor/celestine.js?v=0.6.42';
-import tzlookup from './vendor/tzlookup.js?v=0.6.42';
-import { tzOffsetHours } from './geo.js?v=0.6.42';
+import { calculateChart } from './vendor/celestine.js?v=0.6.43';
+import tzlookup from './vendor/tzlookup.js?v=0.6.43';
+import { tzOffsetHours } from './geo.js?v=0.6.43';
 const OPT = { includeAsteroids: false, includeChiron: false, includeLilith: false, includeNodes: false, includeLots: false };
 const body = (c, n) => c.planets.find((p) => p.name === n);
 // A szövegtárhoz: a bolygók jegye és (ha ismert a születési idő és hely) háza, valamint a fő fényszögek.
