@@ -3,7 +3,7 @@
 // iniciálé, és a könyv gerincénél mindig ott a lila selyem könyvjelzőszalag.
 // Az első változat teljesen kódból készül (pergamen, díszek); a rajzolt rétegekről a képernyőképek után döntünk.
 // A szövegek a data/tudastar/<nyelv>.json-ból jönnek; a live:false témák (bevezető, aura) a 4. szakaszig nem jelennek meg.
-const V = '0.6.36';
+const V = '0.6.37';
 const CH = { h: { name: 'nav.cosmic', sub: 'kb.ch.h', jel: 'jel_horo' }, f: { name: 'nav.feng', sub: 'kb.ch.f', jel: 'jel_feng' }, a: { name: 'home.card.aura', sub: 'kb.ch.a', jel: 'jel_aura' } };
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 const cache = {};
@@ -38,7 +38,7 @@ function paras(ps, esc, ja) { // az első bekezdés díszes iniciáléval kezdő
 
 export function kbView({ t, esc, sub }) {
   const cover = !/^[hf]/.test(sub || '');
-  return `<h1 class="t">${esc(t('nav.kb'))}</h1>${DEFS}<div id="kbroot" class="kbk${cover ? ' cov' : ''}"><div class="kbbook"><div class="kbleft"></div><div class="kbpage">${PAPER}<div class="kbscr"><div class="kbin"><i class="kload">${esc(t('cos.loading'))}</i></div></div></div>${ribbon()}</div></div>`;
+  return `<h1 class="t kbhd"><i class="kbfl" aria-hidden="true"></i><span>${esc(t('nav.kb'))}</span><i class="kbfl r" aria-hidden="true"></i></h1>${DEFS}<div id="kbroot" class="kbk${cover ? ' cov' : ''}"><div class="kbbook"><div class="kbleft"></div><div class="kbpage">${PAPER}<div class="kbscr"><div class="kbin"><i class="kload">${esc(t('cos.loading'))}</i></div></div></div>${ribbon()}</div></div>`;
 }
 
 export function mountKb(view, { t, esc, lang, sub, setRoute, go }) {
