@@ -1,16 +1,16 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.38';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.38';
-import { analyze, chakraScores } from './analysis.js?v=0.6.38';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.38';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.38';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.38';
-import { auraScreen, FLOW } from './aura.js?v=0.6.38';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.38';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.38';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.38';
-import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.38';
-import { kbView, mountKb } from './kb.js?v=0.6.38';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.38';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.39';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.39';
+import { analyze, chakraScores } from './analysis.js?v=0.6.39';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.39';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.39';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.39';
+import { auraScreen, FLOW } from './aura.js?v=0.6.39';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.39';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.39';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.39';
+import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.39';
+import { kbView, mountKb } from './kb.js?v=0.6.39';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.39';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -147,18 +147,30 @@ function go(route, replace = false) {
 }
 // Kedvenceim: oda tér vissza, ahonnan jött (pl. az aura-indító névcsere-gombjáról vagy a Kozmikus Mancsból); az adatlapról a listára.
 function petsBack() {
-  if ((S.tab === 'cosmic' || S.tab === 'feng' || S.tab === 'my' || S.tab === 'kb') && S.sub) return S.tab;
+  if (S.tab === 'kb' && S.sub) { const m = KB_TOPIC.exec(S.sub); return m ? 'kb/' + m[1] : 'kb'; } // Tudástár: témaoldal → fejezet tartalomjegyzéke → címlap
+  if ((S.tab === 'cosmic' || S.tab === 'feng' || S.tab === 'my') && S.sub) return S.tab;
   if (S.tab !== 'pets') return PARENT[S.tab] || 'home';
   if (S.sub) return S.tab;
   const prev = STACK[STACK.length - 2]; return prev && !prev.startsWith('pets') ? prev : 'home';
 }
 // Vissza egy logikai szülőre: ha az előző lépés éppen az, valódi „vissza” (a telefon gombjával egyezően); különben odaugrik.
 function back(target) { if (STACK.length > 1 && STACK[STACK.length - 2] === target) { history.back(); return; } go(target, true); }
-// A Tudástár lapozása csak a címsort írja át (nincs újrarajzolás és új előzménylépés), így a vissza gomb a fejezet címlapjára visz.
-function setRoute(route) { const [tab, sub = ''] = route.split('/'); S.tab = tab; S.sub = sub; history.replaceState(null, '', '#' + route); STACK[STACK.length - 1] = route; S.shown = route; }
+// Tudástár: a lapozás nem rajzol újra, csak a címsort írja át. A címlap mindig külön előzménylépés alatta marad, így a
+// vissza (medál és telefon) szintenként lép: témaoldal → a fejezet tartalomjegyzéke → címlap → Kezdőlap (Szonja kérése).
+const KB_TOPIC = /^([hf])-\d+$/;
+function setRoute(route) {
+  const [tab, sub = ''] = route.split('/'), top = STACK[STACK.length - 1];
+  S.tab = tab; S.sub = sub; S.shown = route;
+  if (route === 'kb' && STACK[STACK.length - 2] === 'kb') { S.kbQuiet = true; history.back(); return; } // vissza a címlap-bejegyzésre
+  if (top === 'kb' && route !== 'kb') { history.pushState(null, '', '#' + route); STACK.push(route); return; }
+  history.replaceState(null, '', '#' + route); STACK[STACK.length - 1] = route;
+}
 const curRoute = () => S.tab + (S.sub ? '/' + S.sub : '');
 addEventListener('popstate', () => { const r = location.hash.slice(1) || 'home', [tab, sub = ''] = r.split('/');
   if (STACK.length > 1 && STACK[STACK.length - 2] === r) STACK.pop(); else STACK.push(r);
+  if (S.kbQuiet) { S.kbQuiet = false; return; } // a könyv már maga lapozott a címlapra
+  const m = S.tab === 'kb' && KB_TOPIC.exec(S.sub); // témaoldalról a telefon vissza gombja a fejezet tartalomjegyzékére visz
+  if (m && r === 'kb') { history.pushState(null, '', '#kb/' + m[1]); STACK.push('kb/' + m[1]); S.sub = m[1]; render(); return; }
   if (tab !== S.tab || sub !== S.sub) { S.tab = tab; S.sub = sub; render(); } });
 function drawAura(cv, sc, scanY = null) {
   const g = cv.getContext('2d'), W = cv.width; g.clearRect(0, 0, W, W);

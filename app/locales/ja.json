@@ -309,5 +309,6 @@
 "kb.toc": "この章の内容",
 "kb.prev": "前のページ",
 "kb.next": "次のページ",
-"kb.contents": "目次に戻る"
+"kb.contents": "目次",
+"kb.contents.aria": "目次に戻る"
 }

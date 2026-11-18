@@ -309,5 +309,6 @@
 "kb.toc": "In diesem Kapitel",
 "kb.prev": "Vorherige Seite",
 "kb.next": "Nächste Seite",
-"kb.contents": "Zurück zum Inhaltsverzeichnis"
+"kb.contents": "Inhalt",
+"kb.contents.aria": "Zurück zum Inhaltsverzeichnis"
 }

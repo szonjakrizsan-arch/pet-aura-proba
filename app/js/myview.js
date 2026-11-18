@@ -1,12 +1,12 @@
 // Elemzéseim oldal (alcím: Pet Aura-napló): lista (#my) és egy elemzés visszanézése (#my/<id>).
 // Minden bejegyzésen: dátum, elemzéstípus, a kedvenc neve; az utolsó látogatás óta készültek „Új” jelzést kapnak.
-import { listEntries, getEntry, deleteEntry } from './journal.js?v=0.6.38';
-import { PETS } from './pets.js?v=0.6.38';
-import { glass, CORNER } from './account.js?v=0.6.38';
-import { astrolabe } from './astrolabe.js?v=0.6.38';
+import { listEntries, getEntry, deleteEntry } from './journal.js?v=0.6.39';
+import { PETS } from './pets.js?v=0.6.39';
+import { glass, CORNER } from './account.js?v=0.6.39';
+import { astrolabe } from './astrolabe.js?v=0.6.39';
 
 const SEEN = 'my.seen';
-const JEL = (type, cls = 'myjel') => `<img class="${cls}" src="assets/elemzeseim/jel_${type}.webp?v=0.6.38" alt="">`;
+const JEL = (type, cls = 'myjel') => `<img class="${cls}" src="assets/elemzeseim/jel_${type}.webp?v=0.6.39" alt="">`;
 const when = (lang, ms) => new Intl.DateTimeFormat(lang, { dateStyle: 'long', timeStyle: 'short' }).format(new Date(ms));
 let filter = 'all';
 
@@ -26,7 +26,7 @@ export function mountMy(root, { t, esc, lang, go, back, render }) {
     if (!all.length) { box.innerHTML = glass(esc(t('my.emptyt')), `<p>${esc(t('my.empty'))}</p>`, 'myempty') + astrolabe(); return; }
     box.innerHTML = chips + shown.map((e) => `<a class="acard myrow${e.date > seenAt ? ' new' : ''}" data-go="${e.type === 'aura' && e.portrait ? 'aura/naplo-' + e.id : 'my/' + e.id}" role="button" tabindex="0">${['tl', 'tr', 'bl', 'br'].map((c) => `<i class="accor ${c}">${CORNER}</i>`).join('')}
       ${JEL(e.type)}<span class="pinfo"><b>${esc(t('my.t.' + e.type))}</b><small>${esc(e.petName || '')} · ${esc(when(lang, e.date))}</small>${e.date > seenAt ? `<span class="pon">✦ ${esc(t('my.new'))}</span>` : ''}</span>
-      <img class="acarrow" src="assets/fiok/nyil.webp?v=0.6.38" alt=""></a>`).join('') + astrolabe();
+      <img class="acarrow" src="assets/fiok/nyil.webp?v=0.6.39" alt=""></a>`).join('') + astrolabe();
     const shine = (el) => { el.classList.remove('shine'); void el.offsetWidth; el.classList.add('shine'); };
     box.querySelectorAll('.aclang').forEach((b) => b.addEventListener('pointerdown', () => shine(b)));
     box.querySelectorAll('[data-f]').forEach((b) => { b.onclick = () => { filter = b.dataset.f; setTimeout(render, 300); }; }); // előbb lefut a csillanás
@@ -66,11 +66,11 @@ export function mountDelete(holder, id, { t, esc, done }) {
   if (!holder) return;
   const draw = (ask) => {
     holder.innerHTML = ask
-      ? `<div class="mywin" role="alert">${['fb', 'fj', 'lb', 'lj'].map((c) => `<img class="mywc ${c}" src="assets/elemzeseim/ablak_sarok_${c}.webp?v=0.6.38" alt="">`).join('')}
-         <img class="mywsig" src="assets/elemzeseim/ablak_jel.webp?v=0.6.38" alt=""><p class="mywq">${esc(t('my.delq'))}</p><p class="mywr">${esc(t('my.delsub'))}</p>
-         <img class="mywdiv" src="assets/elemzeseim/ablak_valaszto.webp?v=0.6.38" alt="">
+      ? `<div class="mywin" role="alert">${['fb', 'fj', 'lb', 'lj'].map((c) => `<img class="mywc ${c}" src="assets/elemzeseim/ablak_sarok_${c}.webp?v=0.6.39" alt="">`).join('')}
+         <img class="mywsig" src="assets/elemzeseim/ablak_jel.webp?v=0.6.39" alt=""><p class="mywq">${esc(t('my.delq'))}</p><p class="mywr">${esc(t('my.delsub'))}</p>
+         <img class="mywdiv" src="assets/elemzeseim/ablak_valaszto.webp?v=0.6.39" alt="">
          <div class="acbtns"><button class="acbtn danger" id="mydelyes" type="button">${esc(t('my.delyes'))}</button><button class="acbtn" id="mydelno" type="button">${esc(t('pets.cancel'))}</button></div></div>`
-      : `<button class="mydel" id="mydel" type="button"><img class="mydm" src="assets/elemzeseim/torles_kozep.webp?v=0.6.38" alt=""><img class="mydl" src="assets/elemzeseim/torles_bal.webp?v=0.6.38" alt=""><img class="mydr" src="assets/elemzeseim/torles_jobb.webp?v=0.6.38" alt=""><img class="mydt" src="assets/elemzeseim/torles_disz_fent.webp?v=0.6.38" alt=""><img class="mydb" src="assets/elemzeseim/torles_disz_lent.webp?v=0.6.38" alt=""><span>${esc(t('my.del'))}</span></button>`;
+      : `<button class="mydel" id="mydel" type="button"><img class="mydm" src="assets/elemzeseim/torles_kozep.webp?v=0.6.39" alt=""><img class="mydl" src="assets/elemzeseim/torles_bal.webp?v=0.6.39" alt=""><img class="mydr" src="assets/elemzeseim/torles_jobb.webp?v=0.6.39" alt=""><img class="mydt" src="assets/elemzeseim/torles_disz_fent.webp?v=0.6.39" alt=""><img class="mydb" src="assets/elemzeseim/torles_disz_lent.webp?v=0.6.39" alt=""><span>${esc(t('my.del'))}</span></button>`;
     const q = (s) => holder.querySelector(s);
     const shine = (el) => { el.classList.remove('shine'); void el.offsetWidth; el.classList.add('shine'); };
     holder.querySelectorAll('.mydel,.acbtn').forEach((b) => b.addEventListener('pointerdown', () => shine(b)));

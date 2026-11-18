@@ -309,5 +309,6 @@
 "kb.toc": "A fejezet tartalma",
 "kb.prev": "Előző oldal",
 "kb.next": "Következő oldal",
-"kb.contents": "Vissza a tartalomjegyzékhez"
+"kb.contents": "Tartalom",
+"kb.contents.aria": "Vissza a tartalomjegyzékhez"
 }

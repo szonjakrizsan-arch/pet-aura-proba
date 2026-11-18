@@ -3,7 +3,7 @@
 // iniciálé, és a könyv gerincénél mindig ott a lila selyem könyvjelzőszalag.
 // Az első változat teljesen kódból készül (pergamen, díszek); a rajzolt rétegekről a képernyőképek után döntünk.
 // A szövegek a data/tudastar/<nyelv>.json-ból jönnek; a live:false témák (bevezető, aura) a 4. szakaszig nem jelennek meg.
-const V = '0.6.38';
+const V = '0.6.39';
 const CH = { h: { name: 'nav.cosmic', sub: 'kb.ch.h', jel: 'jel_horo' }, f: { name: 'nav.feng', sub: 'kb.ch.f', jel: 'jel_feng' }, a: { name: 'home.card.aura', sub: 'kb.ch.a', jel: 'jel_aura' } };
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 const cache = {};
@@ -70,9 +70,8 @@ export function mountKb(view, { t, esc, lang, sub, setRoute, go }) {
     }
     return out;
   }
-  const ICON_TOC = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C6.5 4 9.5 4 12 6c2.5-2 5.5-2 8-.5V19c-2.5-1.5-5.5-1.5-8 .5-2.5-2-5.5-2-8-.5Z" fill="none" stroke="#8a5d17" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 6v13.5" stroke="#8a5d17" stroke-width="1.4"/></svg>';
   const foot = () => { const P = pages[idx];
-    const mid = idx ? `<button class="kbtocb" data-kbt="toc" aria-label="${esc(t('kb.contents'))}" title="${esc(t('kb.contents'))}">${ICON_TOC}<span>${P.n ? ROMAN[P.n] + ' / ' + ROMAN[P.of] : '✦'}</span></button>` : '<span class="kbpn">✦</span>';
+    const mid = idx ? `<button class="kbtocb" data-kbt="toc" aria-label="${esc(t('kb.contents.aria'))}"><b>${esc(t('kb.contents'))}</b><span>${P.n ? ROMAN[P.n] + ' / ' + ROMAN[P.of] : '✦'}</span></button>` : '<span class="kbpn">✦</span>';
     return `<div class="kbfoot"><button class="kbarr" data-kbt="-1" ${idx ? '' : 'disabled'} aria-label="${esc(t('kb.prev'))}"><svg viewBox="0 0 20 20"><path d="M13 4l-6 6 6 6"/></svg></button>${mid}<button class="kbarr" data-kbt="1" ${idx < pages.length - 1 ? '' : 'disabled'} aria-label="${esc(t('kb.next'))}"><svg viewBox="0 0 20 20"><path d="M7 4l6 6-6 6"/></svg></button></div>`; };
   const show = () => { root.classList.toggle('cov', !idx); page.innerHTML = PAPER + `<div class="kbscr withfoot">${pages[idx].html}</div>${foot()}`; };
   const scr = (el) => el.querySelector('.kbscr');
@@ -100,7 +99,7 @@ export function mountKb(view, { t, esc, lang, sub, setRoute, go }) {
   const click = (e) => {
     const c = e.target.closest('[data-kbch]'); if (c) { turn(pages.findIndex((x) => x.r === c.dataset.kbch)); return; }
     const p = e.target.closest('[data-kbp]'); if (p) { turn(+p.dataset.kbp); return; }
-    const a = e.target.closest('[data-kbt]'); if (a) turn(a.dataset.kbt === 'toc' ? 0 : idx + +a.dataset.kbt);
+    const a = e.target.closest('[data-kbt]'); if (a) turn(a.dataset.kbt === 'toc' ? (pages[idx].n ? pages.findIndex((x) => x.r === pages[idx].ch) : 0) : idx + +a.dataset.kbt); // „Tartalom”: témaoldalról a fejezet tartalomjegyzéke, onnan a címlap
   };
   let sx = 0, sy = 0, st = 0;
   const down = (e) => { sx = e.clientX; sy = e.clientY; st = Date.now(); };
