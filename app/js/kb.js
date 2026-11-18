@@ -3,7 +3,7 @@
 // iniciálé, és a könyv gerincénél mindig ott a lila selyem könyvjelzőszalag.
 // Az első változat teljesen kódból készül (pergamen, díszek); a rajzolt rétegekről a képernyőképek után döntünk.
 // A szövegek a data/tudastar/<nyelv>.json-ból jönnek; a live:false témák (bevezető, aura) a 4. szakaszig nem jelennek meg.
-const V = '0.6.37';
+const V = '0.6.38';
 const CH = { h: { name: 'nav.cosmic', sub: 'kb.ch.h', jel: 'jel_horo' }, f: { name: 'nav.feng', sub: 'kb.ch.f', jel: 'jel_feng' }, a: { name: 'home.card.aura', sub: 'kb.ch.a', jel: 'jel_aura' } };
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 const cache = {};
@@ -22,9 +22,11 @@ const divider = () => `<img class="kbdiv" src="assets/elemzeseim/ablak_valaszto.
 const ribbon = () => '<div class="kbribbon" aria-hidden="true"><i class="rt"></i><i class="rm"></i><i class="rb"></i></div>';
 
 const md = (s, esc) => esc(s).replace(/\*\*(.+?)\*\*/g, '<b class="kbem">$1</b>'); // a szövegtár **kiemelései** félkövér lila tintával
+// a szövegtár felsorolásai („\n- …”) kódexes listaként, apró arany csillaggal
+const block = (p, esc) => { const [head, ...items] = p.split('\n- '); return `<p>${md(head, esc)}</p>` + (items.length ? `<ul class="kblist">${items.map((x) => `<li>${md(x, esc)}</li>`).join('')}</ul>` : ''); };
 function paras(ps, esc, ja) { // az első bekezdés díszes iniciáléval kezdődik (a japánban nincs iniciálé – ott nem szokás)
   return ps.map((p, i) => {
-    if (i || ja || p.startsWith('*')) return `<p>${md(p, esc)}</p>`;
+    if (i || ja || p.startsWith('*')) return block(p, esc);
     // Az első szó egyben marad: a rövid első szó (A, Az, El, The, Das…) egészében kerül az iniciáléba; hosszabb szónál a nagy
     // kezdőbetű után a szó többi része kiskapitálissal, szorosan folytatódik (régi kódexek szokása), így sosem válik szét („A | z”).
     const w = /^\S+/.exec(p)[0].replace(/[,.:;!?]+$/, ''), chars = [...w];
@@ -45,7 +47,7 @@ export function mountKb(view, { t, esc, lang, sub, setRoute, go }) {
   const root = view.querySelector('#kbroot'); if (!root) return () => {};
   const book = root.querySelector('.kbbook'), page = root.querySelector('.kbpage');
   const ja = lang === 'ja'; root.classList.toggle('ja', ja);
-  let alive = true, pages = [], idx = 0, ch = '', busy = false;
+  let alive = true, pages = [], idx = 0, busy = false; // a teljes könyv egyetlen lapsor: címlap → Kozmikus Mancs → Mancs Feng Shui
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fit = () => { const r = book.getBoundingClientRect(), nav = document.getElementById('nav'), nb = nav && !nav.hidden ? nav.getBoundingClientRect().height : 0;
     book.style.setProperty('--kbh', Math.max(420, innerHeight - r.top - nb - 70) + 'px'); };
@@ -56,18 +58,28 @@ export function mountKb(view, { t, esc, lang, sub, setRoute, go }) {
       return `<button class="kbch${live ? '' : ' sealed'}" ${live ? `data-kbch="${k}"` : 'disabled'}><img src="assets/elemzeseim/${c.jel}.webp?v=${V}" alt=""><span><b>${esc(t(c.name))}</b><i>${esc(t(c.sub))}</i>${live ? '' : `<em>${esc(t('kb.soon'))}</em>`}</span>${live ? '<svg class="kbgo" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" fill="none" stroke="url(#kbgold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '<span class="kbseal" aria-hidden="true"></span>'}</button>`; };
     return frame(`<div class="kbcov"><div class="kbstar" aria-hidden="true">✦</div><h2 class="kbtitle">${esc(t('nav.kb'))}</h2>${divider()}<div class="kbchs">${['h', 'f', 'a'].map(row).join('')}</div></div>`, 'cover');
   }
-  function chapterPages(d, k) {
-    const ts = d.topics.filter((x) => x.part === k && x.live), c = CH[k];
-    const toc = `<div class="kbopen"><img class="kbjel" src="assets/elemzeseim/${c.jel}.webp?v=${V}" alt=""><h2 class="kbchn">${esc(t(c.name))}</h2><p class="kbchs2">${esc(t(c.sub))}</p>${divider()}<h3 class="kbtoch">${esc(t('kb.toc'))}</h3><ol class="kbtoc">${ts.map((x, i) => `<li><button data-kbp="${i + 1}"><span>${esc(x.title)}</span><i>${ROMAN[i + 1]}</i></button></li>`).join('')}</ol></div>`;
-    return [frame(toc, 'open'), ...ts.map((x, i) => frame(`<article class="kbart"><div class="kbnum">${ROMAN[i + 1]}</div><h2 class="kbh">${esc(x.title)}</h2>${divider()}${paras(x.p, esc, ja)}<aside class="kbsee"><h3>${esc(d.see_title)}</h3><p>${md(x.see, esc)}</p></aside></article>`))];
+  // Szonja kérése: a fejezet végén tovább lehet lapozni a következő fejezetbe, és bárhonnan vissza lehet ugrani a tartalomjegyzékhez (címlap).
+  function buildBook(d) {
+    const out = [{ r: '', html: cover(d) }];
+    for (const k of ['h', 'f']) {
+      const ts = d.topics.filter((x) => x.part === k && x.live), c = CH[k]; if (!ts.length) continue;
+      const base = out.length;
+      const toc = `<div class="kbopen"><img class="kbjel" src="assets/elemzeseim/${c.jel}.webp?v=${V}" alt=""><h2 class="kbchn">${esc(t(c.name))}</h2><p class="kbchs2">${esc(t(c.sub))}</p>${divider()}<h3 class="kbtoch">${esc(t('kb.toc'))}</h3><ol class="kbtoc">${ts.map((x, i) => `<li><button data-kbp="${base + 1 + i}"><span>${esc(x.title)}</span><i>${ROMAN[i + 1]}</i></button></li>`).join('')}</ol></div>`;
+      out.push({ r: k, ch: k, html: frame(toc, 'open') });
+      ts.forEach((x, i) => out.push({ r: k + '-' + (i + 1), ch: k, n: i + 1, of: ts.length, html: frame(`<article class="kbart"><div class="kbnum">${ROMAN[i + 1]}</div><h2 class="kbh">${esc(x.title)}</h2>${divider()}${paras(x.p, esc, ja)}<aside class="kbsee"><h3>${esc(d.see_title)}</h3>${block(x.see, esc)}</aside></article>`) }));
+    }
+    return out;
   }
-  const foot = () => `<div class="kbfoot"><button class="kbarr" data-kbt="-1" ${idx ? '' : 'disabled'} aria-label="${esc(t('kb.prev'))}"><svg viewBox="0 0 20 20"><path d="M13 4l-6 6 6 6"/></svg></button><span class="kbpn">${idx ? ROMAN[idx] + ' / ' + ROMAN[pages.length - 1] : '✦'}</span><button class="kbarr" data-kbt="1" ${idx < pages.length - 1 ? '' : 'disabled'} aria-label="${esc(t('kb.next'))}"><svg viewBox="0 0 20 20"><path d="M7 4l6 6-6 6"/></svg></button></div>`;
-  const show = () => { page.innerHTML = PAPER + `<div class="kbscr${ch ? ' withfoot' : ''}">${pages[idx]}</div>${ch ? foot() : ''}`; };
+  const ICON_TOC = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C6.5 4 9.5 4 12 6c2.5-2 5.5-2 8-.5V19c-2.5-1.5-5.5-1.5-8 .5-2.5-2-5.5-2-8-.5Z" fill="none" stroke="#8a5d17" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 6v13.5" stroke="#8a5d17" stroke-width="1.4"/></svg>';
+  const foot = () => { const P = pages[idx];
+    const mid = idx ? `<button class="kbtocb" data-kbt="toc" aria-label="${esc(t('kb.contents'))}" title="${esc(t('kb.contents'))}">${ICON_TOC}<span>${P.n ? ROMAN[P.n] + ' / ' + ROMAN[P.of] : '✦'}</span></button>` : '<span class="kbpn">✦</span>';
+    return `<div class="kbfoot"><button class="kbarr" data-kbt="-1" ${idx ? '' : 'disabled'} aria-label="${esc(t('kb.prev'))}"><svg viewBox="0 0 20 20"><path d="M13 4l-6 6 6 6"/></svg></button>${mid}<button class="kbarr" data-kbt="1" ${idx < pages.length - 1 ? '' : 'disabled'} aria-label="${esc(t('kb.next'))}"><svg viewBox="0 0 20 20"><path d="M7 4l6 6-6 6"/></svg></button></div>`; };
+  const show = () => { root.classList.toggle('cov', !idx); page.innerHTML = PAPER + `<div class="kbscr withfoot">${pages[idx].html}</div>${foot()}`; };
   const scr = (el) => el.querySelector('.kbscr');
 
   function turn(to) {
     if (busy || to < 0 || to >= pages.length || to === idx) return;
-    const fwd = to > idx, old = page.innerHTML, oy = scr(page)?.scrollTop || 0; idx = to; setRoute('kb/' + ch + (idx ? '-' + idx : ''));
+    const fwd = to > idx, old = page.innerHTML, oy = scr(page)?.scrollTop || 0; idx = to; setRoute('kb' + (pages[idx].r ? '/' + pages[idx].r : ''));
     if (still) { show(); return; }
     busy = true;
     const leaf = document.createElement('div'); leaf.className = 'kbleaf ' + (fwd ? 'fwd' : 'back');
@@ -81,22 +93,20 @@ export function mountKb(view, { t, esc, lang, sub, setRoute, go }) {
   load(lang).then((d) => {
     if (!alive) return;
     if (!d) { page.innerHTML = PAPER + `<div class="kbscr">${frame('<p class="kbmiss">✦</p>')}</div>`; return; }
-    const m = /^([hf])(?:-(\d+))?$/.exec(sub || '');
-    if (m) { ch = m[1]; pages = chapterPages(d, ch); idx = Math.min(+(m[2] || 0), pages.length - 1); book.classList.add('chapter'); }
-    else { ch = ''; pages = [cover(d)]; idx = 0; }
+    pages = buildBook(d); idx = Math.max(0, pages.findIndex((x) => x.r === (sub || '')));
     show(); fit();
   });
 
   const click = (e) => {
-    const c = e.target.closest('[data-kbch]'); if (c) { go('kb/' + c.dataset.kbch); return; }
+    const c = e.target.closest('[data-kbch]'); if (c) { turn(pages.findIndex((x) => x.r === c.dataset.kbch)); return; }
     const p = e.target.closest('[data-kbp]'); if (p) { turn(+p.dataset.kbp); return; }
-    const a = e.target.closest('[data-kbt]'); if (a) turn(idx + +a.dataset.kbt);
+    const a = e.target.closest('[data-kbt]'); if (a) turn(a.dataset.kbt === 'toc' ? 0 : idx + +a.dataset.kbt);
   };
   let sx = 0, sy = 0, st = 0;
   const down = (e) => { sx = e.clientX; sy = e.clientY; st = Date.now(); };
-  const up = (e) => { if (!ch || !st) return; const dx = e.clientX - sx, dy = e.clientY - sy; st = 0;
+  const up = (e) => { if (!st) return; const dx = e.clientX - sx, dy = e.clientY - sy; st = 0;
     if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.6) turn(idx + (dx < 0 ? 1 : -1)); };
-  const key = (e) => { if (!ch) return; if (e.key === 'ArrowRight') turn(idx + 1); if (e.key === 'ArrowLeft') turn(idx - 1); };
+  const key = (e) => { if (e.key === 'ArrowRight') turn(idx + 1); if (e.key === 'ArrowLeft') turn(idx - 1); };
   root.addEventListener('click', click); book.addEventListener('pointerdown', down); book.addEventListener('pointerup', up);
   addEventListener('keydown', key); addEventListener('resize', fit); fit();
   return () => { alive = false; removeEventListener('keydown', key); removeEventListener('resize', fit); };
