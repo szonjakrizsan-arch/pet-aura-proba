@@ -22,8 +22,11 @@ const md = (s, esc) => esc(s).replace(/\*\*(.+?)\*\*/g, '<b class="kbem">$1</b>'
 function paras(ps, esc, ja) { // az első bekezdés díszes iniciáléval kezdődik (a japánban nincs iniciálé – ott nem szokás)
   return ps.map((p, i) => {
     if (i || ja || p.startsWith('*')) return `<p>${md(p, esc)}</p>`;
-    const ch = [...p][0], rest = p.slice(ch.length);
-    return `<p class="kbfirst"><span class="kbini" aria-hidden="true"><b>${esc(ch)}</b></span><span class="sr">${esc(ch)}</span>${md(rest, esc)}</p>`;
+    // Az első szó egyben marad: a rövid első szó (A, Az, El, The, Das…) egészében kerül az iniciáléba; hosszabb szónál a nagy
+    // kezdőbetű után a szó többi része kiskapitálissal, szorosan folytatódik (régi kódexek szokása), így sosem válik szét („A | z”).
+    const w = /^\S+/.exec(p)[0].replace(/[,.:;!?]+$/, ''), chars = [...w];
+    const big = chars.length <= 3 ? w : chars[0], tail = chars.length <= 3 ? '' : w.slice(chars[0].length), rest = p.slice(w.length);
+    return `<p class="kbfirst"><span class="kbini${[...big].length > 1 ? ' word' : ''}" aria-hidden="true"><b>${esc(big)}</b></span><span class="sr">${esc(big)}</span>${tail ? `<span class="kbsc">${esc(tail)}</span>` : ''}${md(rest, esc)}</p>`;
   }).join('');
 }
 
