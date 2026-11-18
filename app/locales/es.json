@@ -310,5 +310,11 @@
 "kb.prev": "Página anterior",
 "kb.next": "Página siguiente",
 "kb.contents": "Índice",
-"kb.contents.aria": "Volver al índice"
+"kb.contents.aria": "Volver al índice",
+"acc.medal": "Tu medallón",
+"acc.medal.kezek": "Dos manos con un gatito y un cachorro",
+"acc.medal.gazdi_no_macska": "Mujer con gato",
+"acc.medal.gazdi_no_kutya": "Mujer con perro",
+"acc.medal.gazdi_ferfi_macska": "Hombre con gato",
+"acc.medal.gazdi_ferfi_kutya": "Hombre con perro"
 }

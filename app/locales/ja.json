@@ -310,5 +310,11 @@
 "kb.prev": "前のページ",
 "kb.next": "次のページ",
 "kb.contents": "目次",
-"kb.contents.aria": "目次に戻る"
+"kb.contents.aria": "目次に戻る",
+"acc.medal": "あなたのメダリオン",
+"acc.medal.kezek": "子猫と子犬を包む両手",
+"acc.medal.gazdi_no_macska": "猫を抱く女性",
+"acc.medal.gazdi_no_kutya": "犬を抱く女性",
+"acc.medal.gazdi_ferfi_macska": "猫を抱く男性",
+"acc.medal.gazdi_ferfi_kutya": "犬を抱く男性"
 }

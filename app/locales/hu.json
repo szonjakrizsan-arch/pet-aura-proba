@@ -310,5 +310,11 @@
 "kb.prev": "Előző oldal",
 "kb.next": "Következő oldal",
 "kb.contents": "Tartalom",
-"kb.contents.aria": "Vissza a tartalomjegyzékhez"
+"kb.contents.aria": "Vissza a tartalomjegyzékhez",
+"acc.medal": "A medálod",
+"acc.medal.kezek": "Két kéz kiscicával és kiskutyával",
+"acc.medal.gazdi_no_macska": "Nő macskával",
+"acc.medal.gazdi_no_kutya": "Nő kutyával",
+"acc.medal.gazdi_ferfi_macska": "Férfi macskával",
+"acc.medal.gazdi_ferfi_kutya": "Férfi kutyával"
 }

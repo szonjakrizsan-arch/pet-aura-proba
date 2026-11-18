@@ -1,17 +1,17 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.47';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.47';
-import { analyze, chakraScores } from './analysis.js?v=0.6.47';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.47';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.47';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.47';
-import { auraScreen, FLOW } from './aura.js?v=0.6.47';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.47';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.47';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.47';
-import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.47';
-import { kbView, mountKb } from './kb.js?v=0.6.47';
-import { cameoUrl } from './pets.js?v=0.6.47';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.47';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.48';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.48';
+import { analyze, chakraScores } from './analysis.js?v=0.6.48';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.48';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.48';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.48';
+import { auraScreen, FLOW } from './aura.js?v=0.6.48';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.48';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.48';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.48';
+import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.48';
+import { kbView, mountKb } from './kb.js?v=0.6.48';
+import { cameoUrl } from './pets.js?v=0.6.48';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.48';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -32,6 +32,7 @@ function chrome() {
 }
 // A kezdőlap mancs-gombja a kiválasztott kedvenc portréját mutatja (ha van fotója), így mindig látszik, kié az élmény.
 function homePet() {
+  const hm = document.querySelector('#s-home .hmed'); if (hm) hm.style.backgroundImage = `url(${medalUrl()})`; // a gazdi választott medálja
   const r = document.querySelector('#s-home [data-go="pets"]'); if (!r) return; const p = S.pet;
   let av = r.querySelector('.hpav'); const paw = r.querySelector('svg:not(.chev)');
   // fotó, ha van; különben a faj szerinti kámea (macska, kutya, vagy mancs, ha még nincs kedvenc / nincs megadva a faj)

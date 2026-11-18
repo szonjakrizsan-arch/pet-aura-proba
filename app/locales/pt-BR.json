@@ -310,5 +310,11 @@
 "kb.prev": "Página anterior",
 "kb.next": "Próxima página",
 "kb.contents": "Sumário",
-"kb.contents.aria": "Voltar ao sumário"
+"kb.contents.aria": "Voltar ao sumário",
+"acc.medal": "Seu medalhão",
+"acc.medal.kezek": "Duas mãos com um gatinho e um filhote de cachorro",
+"acc.medal.gazdi_no_macska": "Mulher com gato",
+"acc.medal.gazdi_no_kutya": "Mulher com cachorro",
+"acc.medal.gazdi_ferfi_macska": "Homem com gato",
+"acc.medal.gazdi_ferfi_kutya": "Homem com cachorro"
 }

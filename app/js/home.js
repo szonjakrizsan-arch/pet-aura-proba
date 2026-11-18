@@ -18,7 +18,7 @@ export function homeHtml(t, esc) {
   return `<div class="bg"></div><div class="moonglow"></div><canvas id="stars"></canvas>
   <div class="top">
     <div class="round" data-go="pets" role="button" tabindex="0" title="${esc(t('top.pets'))}" aria-label="${esc(t('top.pets'))}">${ICON.paw}<svg class="chev" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" fill="none" stroke="#f6d27a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <div class="round" data-go="account" role="button" tabindex="0" title="${esc(t('top.account'))}" aria-label="${esc(t('top.account'))}"><span class="hpav cameo" style="background-image:url(assets/kedvenceim/kamea_kezek.webp?v=0.6.47)"></span></div>
+    <div class="round" data-go="account" role="button" tabindex="0" title="${esc(t('top.account'))}" aria-label="${esc(t('top.account'))}"><span class="hpav cameo hmed"></span></div>
   </div>
   <div class="title"><h1>Pet Aura</h1><p>${esc(t('home.tagline'))}</p></div>
   <div class="zodiac"><svg viewBox="0 0 200 200" fill="none" stroke="#f3cf7a" stroke-width=".8">

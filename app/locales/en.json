@@ -310,5 +310,11 @@
 "kb.prev": "Previous page",
 "kb.next": "Next page",
 "kb.contents": "Contents",
-"kb.contents.aria": "Back to contents"
+"kb.contents.aria": "Back to contents",
+"acc.medal": "Your medallion",
+"acc.medal.kezek": "Two hands with a kitten and a puppy",
+"acc.medal.gazdi_no_macska": "Woman with a cat",
+"acc.medal.gazdi_no_kutya": "Woman with a dog",
+"acc.medal.gazdi_ferfi_macska": "Man with a cat",
+"acc.medal.gazdi_ferfi_kutya": "Man with a dog"
 }

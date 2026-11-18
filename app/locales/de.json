@@ -310,5 +310,11 @@
 "kb.prev": "Vorherige Seite",
 "kb.next": "Nächste Seite",
 "kb.contents": "Inhalt",
-"kb.contents.aria": "Zurück zum Inhaltsverzeichnis"
+"kb.contents.aria": "Zurück zum Inhaltsverzeichnis",
+"acc.medal": "Dein Medaillon",
+"acc.medal.kezek": "Zwei Hände mit Kätzchen und Welpe",
+"acc.medal.gazdi_no_macska": "Frau mit Katze",
+"acc.medal.gazdi_no_kutya": "Frau mit Hund",
+"acc.medal.gazdi_ferfi_macska": "Mann mit Katze",
+"acc.medal.gazdi_ferfi_kutya": "Mann mit Hund"
 }
