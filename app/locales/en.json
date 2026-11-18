@@ -301,5 +301,12 @@
 "my.gone": "This analysis can no longer be found.",
 "my.delsub": "A deleted analysis cannot be restored.",
 "au.card.sample": "The Aura of Quiet Curiosity",
-"au.card.tag": "Discover your pet’s aura"
+"au.card.tag": "Discover your pet’s aura",
+"kb.ch.h": "Horoscope – the secrets of the sky",
+"kb.ch.f": "Space, the directions and the five elements",
+"kb.ch.a": "The moment and your pet’s aura",
+"kb.soon": "This chapter opens soon",
+"kb.toc": "In this chapter",
+"kb.prev": "Previous page",
+"kb.next": "Next page"
 }

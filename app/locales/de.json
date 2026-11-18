@@ -301,5 +301,12 @@
 "my.gone": "Diese Analyse ist nicht mehr vorhanden.",
 "my.delsub": "Eine gelöschte Analyse kann nicht wiederhergestellt werden.",
 "au.card.sample": "Die Aura der stillen Neugier",
-"au.card.tag": "Entdecke die Aura deines Lieblings"
+"au.card.tag": "Entdecke die Aura deines Lieblings",
+"kb.ch.h": "Horoskop – die Geheimnisse des Himmels",
+"kb.ch.f": "Der Raum, die Himmelsrichtungen und die fünf Elemente",
+"kb.ch.a": "Der Augenblick und die Aura deines Tieres",
+"kb.soon": "Dieses Kapitel öffnet sich bald",
+"kb.toc": "In diesem Kapitel",
+"kb.prev": "Vorherige Seite",
+"kb.next": "Nächste Seite"
 }

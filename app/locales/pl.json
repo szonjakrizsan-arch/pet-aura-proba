@@ -301,5 +301,12 @@
 "my.gone": "Ta analiza już nie istnieje.",
 "my.delsub": "Usuniętej analizy nie można przywrócić.",
 "au.card.sample": "Aura cichej ciekawości",
-"au.card.tag": "Odkryj aurę swojego pupila"
+"au.card.tag": "Odkryj aurę swojego pupila",
+"kb.ch.h": "Horoskop – tajemnice nieba",
+"kb.ch.f": "Przestrzeń, kierunki i pięć elementów",
+"kb.ch.a": "Chwila i aura twojego pupila",
+"kb.soon": "Ten rozdział wkrótce się otworzy",
+"kb.toc": "W tym rozdziale",
+"kb.prev": "Poprzednia strona",
+"kb.next": "Następna strona"
 }

@@ -1,15 +1,16 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.32';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.32';
-import { analyze, chakraScores } from './analysis.js?v=0.6.32';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.32';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.32';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.32';
-import { auraScreen, FLOW } from './aura.js?v=0.6.32';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.32';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.32';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.32';
-import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.32';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.32';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.33';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.33';
+import { analyze, chakraScores } from './analysis.js?v=0.6.33';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.33';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.33';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.33';
+import { auraScreen, FLOW } from './aura.js?v=0.6.33';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.33';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.33';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.33';
+import { accountView as accountNew, mountAccount, leaveAccount, startAccountBg } from './account.js?v=0.6.33';
+import { kbView, mountKb } from './kb.js?v=0.6.33';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.33';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -120,7 +121,7 @@ function render() {
     homePet(); S.shown = 'home';
     return;
   }
-  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => `<div class="km" data-more="${esc(t('cos.read'))}">${S.sub ? readerView({ t, esc, id: S.sub }) : cosmicNew({ t, esc, lang: S.lang, pet: S.pet, multi: PETS.list.length > 1 })}</div>`, 'regi-kozmikus': () => legacy(cosmicView()), feng: () => `<div class="km">${fengNew({ t, esc, pet: S.pet, sub: S.sub })}</div>`, 'regi-feng': () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: () => `<div class="km">${accountNew({ t, esc, lang: S.lang })}</div>`, 'regi-fiok': accountView, my: () => `<div class="km">${myView({ t, esc, sub: S.sub })}</div>`, kb: () => sub(t('nav.kb'), soon()), styles: () => sub(t('nav.styles'), soon()) };
+  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => `<div class="km" data-more="${esc(t('cos.read'))}">${S.sub ? readerView({ t, esc, id: S.sub }) : cosmicNew({ t, esc, lang: S.lang, pet: S.pet, multi: PETS.list.length > 1 })}</div>`, 'regi-kozmikus': () => legacy(cosmicView()), feng: () => `<div class="km">${fengNew({ t, esc, pet: S.pet, sub: S.sub })}</div>`, 'regi-feng': () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: () => `<div class="km">${accountNew({ t, esc, lang: S.lang })}</div>`, 'regi-fiok': accountView, my: () => `<div class="km">${myView({ t, esc, sub: S.sub })}</div>`, kb: () => `<div class="km">${kbView({ t, esc, sub: S.sub })}</div>`, styles: () => sub(t('nav.styles'), soon()) };
   const html = (views[S.tab] || views.home)(); if (html == null) { back('pets'); return; }
   $('#view').innerHTML = html;
   const route = curRoute(); if (S.shown !== route) { const sc = $('#s-sub'); SCROLL[S.shown] = sc.scrollTop; const y = SCROLL[route] || 0; sc.scrollTop = y; if (y) setTimeout(() => { if (curRoute() === route) sc.scrollTop = y; }, 250); S.shown = route; } // ugyanazon az oldalon (pl. faj választása) nem ugrik a tetejére
@@ -130,6 +131,8 @@ function render() {
   if (S.tab !== 'feng') document.getElementById('fsbg')?.remove();
   if (S.tab === 'account') { mountAccount($('#view'), { setLang, render }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub')); S.accBgKind = 'account'; } }
   else leaveAccount();
+  if (S.stopKb) { S.stopKb(); S.stopKb = null; }
+  if (S.tab === 'kb') { S.stopKb = mountKb($('#view'), { t, esc, lang: S.lang, sub: S.sub, go, setRoute }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub')); S.accBgKind = 'kb'; } }
   if (S.tab === 'my') { if (S.stopMy) S.stopMy(); S.stopMy = mountMy($('#view'), { t, esc, lang: S.lang, go, back, render }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub'), { colors: true }); S.accBgKind = 'my'; } }
   if (S.tab === 'feng') mountFeng($('#view'), { t, esc, lang: S.lang, pet: S.pet, go, savePet, render });
   if (S.tab === 'pets') mountPets($('#view'), { t, esc, lang: S.lang, go, back, render }, S.sub);
@@ -144,13 +147,15 @@ function go(route, replace = false) {
 }
 // Kedvenceim: oda tér vissza, ahonnan jött (pl. az aura-indító névcsere-gombjáról vagy a Kozmikus Mancsból); az adatlapról a listára.
 function petsBack() {
-  if ((S.tab === 'cosmic' || S.tab === 'feng' || S.tab === 'my') && S.sub) return S.tab;
+  if ((S.tab === 'cosmic' || S.tab === 'feng' || S.tab === 'my' || S.tab === 'kb') && S.sub) return S.tab;
   if (S.tab !== 'pets') return PARENT[S.tab] || 'home';
   if (S.sub) return S.tab;
   const prev = STACK[STACK.length - 2]; return prev && !prev.startsWith('pets') ? prev : 'home';
 }
 // Vissza egy logikai szülőre: ha az előző lépés éppen az, valódi „vissza” (a telefon gombjával egyezően); különben odaugrik.
 function back(target) { if (STACK.length > 1 && STACK[STACK.length - 2] === target) { history.back(); return; } go(target, true); }
+// A Tudástár lapozása csak a címsort írja át (nincs újrarajzolás és új előzménylépés), így a vissza gomb a fejezet címlapjára visz.
+function setRoute(route) { const [tab, sub = ''] = route.split('/'); S.tab = tab; S.sub = sub; history.replaceState(null, '', '#' + route); STACK[STACK.length - 1] = route; S.shown = route; }
 const curRoute = () => S.tab + (S.sub ? '/' + S.sub : '');
 addEventListener('popstate', () => { const r = location.hash.slice(1) || 'home', [tab, sub = ''] = r.split('/');
   if (STACK.length > 1 && STACK[STACK.length - 2] === r) STACK.pop(); else STACK.push(r);

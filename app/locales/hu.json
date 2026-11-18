@@ -301,5 +301,12 @@
 "my.gone": "Ez az elemzés már nem található.",
 "my.delsub": "A törölt elemzés nem állítható vissza.",
 "au.card.sample": "A csendes kíváncsiság aurája",
-"au.card.tag": "Fedezd fel kedvenced auráját"
+"au.card.tag": "Fedezd fel kedvenced auráját",
+"kb.ch.h": "Horoszkóp – az égbolt titkai",
+"kb.ch.f": "A tér, az égtájak és az öt elem",
+"kb.ch.a": "A pillanat és a kedvenced aurája",
+"kb.soon": "Ez a fejezet hamarosan kinyílik",
+"kb.toc": "A fejezet tartalma",
+"kb.prev": "Előző oldal",
+"kb.next": "Következő oldal"
 }
