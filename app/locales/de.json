@@ -316,5 +316,14 @@
 "acc.medal.gazdi_no_macska": "Frau mit Katze",
 "acc.medal.gazdi_no_kutya": "Frau mit Hund",
 "acc.medal.gazdi_ferfi_macska": "Mann mit Katze",
-"acc.medal.gazdi_ferfi_kutya": "Mann mit Hund"
+"acc.medal.gazdi_ferfi_kutya": "Mann mit Hund",
+"vm.h.title": "Was ist die Zauberwerkstatt?",
+"vm.h.1t": "Wähle einen Stil",
+"vm.h.1": "Sieh dir die Musterbilder an und wähle die Welt, in die dein Tier gern eintauchen würde. Die Muster zeigen die Pet-Aura-Maskottchen.",
+"vm.h.2t": "Lade ein Foto deines Tieres hoch",
+"vm.h.2": "Bald macht die Zauberwerkstatt auch aus deinem eigenen Foto ein Bild im gewählten Stil. Farben, Zeichnung und Gesicht deines Tieres bleiben erkennbar.",
+"vm.h.3t": "Speichern und teilen",
+"vm.h.3": "Du kannst das fertige Bild speichern oder teilen. In der Ecke steht ein kleines Pet-Aura-Zeichen.",
+"vm.h.tip": "✦ Bilder aus deinen eigenen Fotos gibt es bald. Der Feiertagsstil ist nur zu den Feiertagen zu sehen – schau wieder vorbei!",
+"vm.h.aria": "Was ist die Zauberwerkstatt?"
 }

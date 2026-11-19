@@ -1,10 +1,10 @@
 // Varázsműhely (Stílusok, 4. funkció): a stílusok galériája a mintaképekkel (Szonja gyűjtése, 2026-11-18/19).
 // A mintaképek a Pet Aura kabalafiguráiból készültek; a valódi átalakítás (a gazdi saját fotójából) a 4. szakaszban
 // indul, addig a gomb őszintén „hamarosan” feliratú. Az AI-utasítások nem kerülnek az appba (üzleti titok, design/stilusok).
-import { CORNER } from './account.js?v=0.6.51';
-import { activePet } from './pets.js?v=0.6.51';
+import { CORNER } from './account.js?v=0.6.52';
+import { activePet } from './pets.js?v=0.6.52';
 
-const V = '0.6.51';
+const V = '0.6.52';
 const SEASON = { karacsony: (d) => (d.getMonth() === 11) || (d.getMonth() === 0 && d.getDate() <= 6) }; // dec. 1. – jan. 6. (Szonja döntése)
 // Minden stílusnak cicás és kutyás mintaképe van (Szonja kérése: a cicás gazdi ne higgye, hogy csak kutyáknak szól).
 // A kedvenc faja dönt; ha nincs kedvenc / faj, a galériában felváltva látszanak (sakktáblaszerűen).
@@ -41,8 +41,20 @@ export function mountStyles(view, { t, esc, lang, sub, go }) {
         root.querySelector('.vmbig').src = img(one.id, false, b.dataset.a); }; });
       return;
     }
-    root.innerHTML = `<p class="vmintro">${esc(d.ui.intro)}</p><div class="vmgrid">${list.map((s, i) => `<button class="acard vmcard${SEASON[s.id] ? ' season' : ''}" data-go="styles/${s.id}">${corners()}
+    root.innerHTML = `<div class="vmtop"><p class="vmintro">${esc(d.ui.intro)}</p><button class="fsinfo vminfo" id="vminfo" type="button" aria-label="${esc(t('vm.h.aria'))}"><img src="assets/fengshui/pecset_i.webp?v=${V}" alt=""></button></div><div class="vmgrid">${list.map((s, i) => `<button class="acard vmcard${SEASON[s.id] ? ' season' : ''}" data-go="styles/${s.id}">${corners()}
       <span class="vmimg"><img src="${img(s.id, true, animal(i))}" alt="" loading="lazy"></span>${SEASON[s.id] ? `<span class="vmseason">${esc(d.ui.season)}</span>` : ''}<b>${esc(s.name)}</b></button>`).join('')}</div>`;
+    root.querySelector('#vminfo').onclick = () => help(root, t, esc);
   });
   return () => { alive = false; };
+}
+// „i” pecsét: rövid magyarázat a pergamenlapon, ugyanúgy, mint a Feng Shui iránytűjénél
+function help(root, t, esc) {
+  const steps = [1, 2, 3].map((i) => `<li><span class="fsn">${i}</span><div><b>${esc(t('vm.h.' + i + 't'))}</b><p>${esc(t('vm.h.' + i))}</p></div></li>`).join('');
+  const host = root.closest('.phone') || document.body;
+  host.insertAdjacentHTML('beforeend', `<div class="fsmodal" id="vmmodal" role="dialog" aria-modal="true" aria-labelledby="vmmt"><div class="fsmcard kscroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt="">
+   <button class="zm fsx" id="vmclose" type="button" aria-label="${esc(t('fs.h.close'))}"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M34 34 66 66M66 34 34 66" stroke="url(#au)" stroke-width="9" stroke-linecap="round"/></svg></button>
+   <div class="p-in"><h2 id="vmmt">${esc(t('vm.h.title'))}</h2><ol class="fssteps">${steps}</ol><p class="fstip">${esc(t('vm.h.tip'))}</p></div></div></div>`);
+  const m = host.querySelector('#vmmodal');
+  const close = () => { m.remove(); removeEventListener('keydown', k); }, k = (e) => { if (e.key === 'Escape') close(); };
+  m.onclick = (e) => { if (e.target === m || e.target.closest('#vmclose')) close(); }; addEventListener('keydown', k); m.querySelector('#vmclose').focus();
 }

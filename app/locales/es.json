@@ -316,5 +316,14 @@
 "acc.medal.gazdi_no_macska": "Mujer con gato",
 "acc.medal.gazdi_no_kutya": "Mujer con perro",
 "acc.medal.gazdi_ferfi_macska": "Hombre con gato",
-"acc.medal.gazdi_ferfi_kutya": "Hombre con perro"
+"acc.medal.gazdi_ferfi_kutya": "Hombre con perro",
+"vm.h.title": "¿Qué es el Taller Mágico?",
+"vm.h.1t": "Elige un estilo",
+"vm.h.1": "Mira las imágenes de muestra y elige el mundo al que a tu mascota le encantaría entrar. Las muestras son los personajes de Pet Aura.",
+"vm.h.2t": "Sube la foto de tu mascota",
+"vm.h.2": "Muy pronto, el Taller Mágico también creará una imagen a partir de tu propia foto en el estilo elegido. Los colores, las marcas y la carita de tu mascota seguirán siendo reconocibles.",
+"vm.h.3t": "Guárdala y compártela",
+"vm.h.3": "Puedes guardar o compartir la imagen terminada. En una esquina tendrá una pequeña marca de Pet Aura.",
+"vm.h.tip": "✦ Muy pronto podrás crear imágenes con tus propias fotos. El estilo festivo solo se ve en temporada de fiestas, ¡vuelve a visitarnos!",
+"vm.h.aria": "¿Qué es el Taller Mágico?"
 }

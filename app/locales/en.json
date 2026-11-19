@@ -316,5 +316,14 @@
 "acc.medal.gazdi_no_macska": "Woman with a cat",
 "acc.medal.gazdi_no_kutya": "Woman with a dog",
 "acc.medal.gazdi_ferfi_macska": "Man with a cat",
-"acc.medal.gazdi_ferfi_kutya": "Man with a dog"
+"acc.medal.gazdi_ferfi_kutya": "Man with a dog",
+"vm.h.title": "What is the Magic Workshop?",
+"vm.h.1t": "Choose a style",
+"vm.h.1": "Browse the sample images and pick the world your pet would love to step into. The samples show the Pet Aura mascots.",
+"vm.h.2t": "Upload your pet's photo",
+"vm.h.2": "Soon the Magic Workshop will also create an image from your own photo in the chosen style. Your pet's colors, markings and face will stay recognizable.",
+"vm.h.3t": "Save and share",
+"vm.h.3": "You can save or share the finished image. A small Pet Aura mark will appear in its corner.",
+"vm.h.tip": "✦ Creating images from your own photos is coming soon. The holiday style is only visible during the holidays, so check back!",
+"vm.h.aria": "What is the Magic Workshop?"
 }
