@@ -1,0 +1,76 @@
+{
+ "ui": {
+  "title": "Oficina Mágica",
+  "intro": "Escolha um estilo e veja que retrato mágico o seu pet pode ganhar.",
+  "sample": "Imagem de exemplo: o mascote da Pet Aura",
+  "soon": "Em breve com o seu próprio pet",
+  "season": "Só nas festas de fim de ano"
+ },
+ "styles": [
+  {
+   "id": "kawaii",
+   "name": "Livro Ilustrado em Tons Pastel",
+   "desc": "Uma ilustração de livro infantil suave, inspirada no Japão: olhos brilhantes, cores pastel delicadas e texturas pintadas em aquarela."
+  },
+  {
+   "id": "clay",
+   "name": "Massinha 3D Digital",
+   "desc": "O seu pet como uma figura de massinha modelada à mão, em luz suave, em um pequeno mundo lavanda pastel. A massinha simplifica um pouco as formas."
+  },
+  {
+   "id": "kepregeny",
+   "name": "Herói de Quadrinhos",
+   "desc": "O seu pet vira o herói de uma antiga revista em quadrinhos americana, com capa própria lilás e dourada e medalhão de patinha, entre traços de nanquim e retícula."
+  },
+  {
+   "id": "pixel",
+   "name": "Pixel Art",
+   "desc": "O seu pet como personagem de um videogame retrô, feito de pixels quadrados e nítidos, em uma paisagem noturna estrelada."
+  },
+  {
+   "id": "mexiko",
+   "name": "Festa das Flores Mexicana",
+   "desc": "Um retrato alegre na arte popular mexicana: coroa de flores, flores de cempasúchil e rosas, bandeirinhas de papel picado e luz de velas."
+  },
+  {
+   "id": "ukiyoe",
+   "name": "Ukiyo-e",
+   "desc": "O mundo da xilogravura tradicional japonesa: contornos finos, cores clássicas, ondas e nuvens estilizadas e o monte Fuji ao fundo."
+  },
+  {
+   "id": "karacsony",
+   "name": "Natal",
+   "desc": "Uma cena de Natal aconchegante junto à lareira, com luzes e presentes. O seu pet ganha um gorro de Papai Noel e um cachecol de tricô."
+  },
+  {
+   "id": "ikon",
+   "name": "Retrato de Ícone Dourado",
+   "desc": "No estilo da antiga pintura de ícones: fundo em folha de ouro, superfície antiga com finas rachaduras e moldura dourada ornamentada."
+  },
+  {
+   "id": "boszi",
+   "name": "Bruxinha",
+   "desc": "Um mundo mágico de conto de fadas com chapéu de bruxa pontudo: o gato senta em uma lua crescente, o cachorro guarda uma biblioteca mágica."
+  },
+  {
+   "id": "mandala",
+   "name": "Mandala em Nanquim",
+   "desc": "Um desenho em nanquim preto e branco em que o seu pet fica cheio de padrões de mandala. Você pode imprimir e colorir. A cor do pelo não aparece neste estilo."
+  },
+  {
+   "id": "viking",
+   "name": "Guerreiro Viking",
+   "desc": "O seu pet como um bravo guerreiro viking: capa de pele, elmo de ferro, fiorde, drakkar e aurora boreal."
+  },
+  {
+   "id": "steampunk",
+   "name": "Steampunk",
+   "desc": "O mundo do “futuro antigo”: óculos de aviador com aro de latão, peitoral com engrenagens, uma oficina cheia de vapor e um dirigível ao pôr do sol."
+  },
+  {
+   "id": "tarot",
+   "name": "Carta de Tarô",
+   "desc": "O seu pet como figura principal de uma carta de tarô ornamentada, com moldura dourada, em uma paisagem estrelada e enluarada."
+  }
+ ]
+}

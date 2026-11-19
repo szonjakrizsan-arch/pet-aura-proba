@@ -1,0 +1,76 @@
+{
+ "ui": {
+  "title": "Taller Mágico",
+  "intro": "Elige un estilo y mira qué retrato mágico puede tener tu mascota.",
+  "sample": "Imagen de muestra: el personaje de Pet Aura",
+  "soon": "Muy pronto con tu propia mascota",
+  "season": "Solo en temporada navideña"
+ },
+ "styles": [
+  {
+   "id": "kawaii",
+   "name": "Cuento en Tonos Pastel",
+   "desc": "Una ilustración de cuento suave, de inspiración japonesa: ojos brillantes, delicados colores pastel y texturas pintadas en acuarela."
+  },
+  {
+   "id": "clay",
+   "name": "Plastilina 3D Digital",
+   "desc": "Tu mascota como una figura de plastilina modelada a mano, con luz suave, en un pequeño mundo lavanda pastel. La plastilina simplifica un poco las formas."
+  },
+  {
+   "id": "kepregeny",
+   "name": "Héroe de Cómic",
+   "desc": "Tu mascota se convierte en el héroe de un antiguo cómic estadounidense, con su propia capa lila y dorada y un medallón con huellita, entre trazos de tinta y puntos de trama."
+  },
+  {
+   "id": "pixel",
+   "name": "Pixel Art",
+   "desc": "Tu mascota como personaje de un videojuego retro, hecho de píxeles cuadrados y nítidos, en un paisaje nocturno estrellado."
+  },
+  {
+   "id": "mexiko",
+   "name": "Fiesta Mexicana de Flores",
+   "desc": "Un retrato alegre de arte popular mexicano: corona de flores, cempasúchil y rosas, papel picado y luz de velas."
+  },
+  {
+   "id": "ukiyoe",
+   "name": "Ukiyo-e",
+   "desc": "El mundo del grabado tradicional japonés en madera: contornos finos, colores clásicos, olas y nubes estilizadas y el monte Fuji a lo lejos."
+  },
+  {
+   "id": "karacsony",
+   "name": "Navidad",
+   "desc": "Una cálida escena navideña junto a la chimenea, con luces y regalos. Tu mascota recibe un gorro de Santa Claus y una bufanda tejida."
+  },
+  {
+   "id": "ikon",
+   "name": "Retrato de Ícono Dorado",
+   "desc": "Al estilo de la antigua pintura de íconos: fondo de pan de oro, superficie antigua finamente agrietada y un marco dorado ornamentado."
+  },
+  {
+   "id": "boszi",
+   "name": "Brujita",
+   "desc": "Un mundo mágico de cuento con sombrero puntiagudo de bruja: el gato se sienta en una luna creciente y el perro cuida una biblioteca mágica."
+  },
+  {
+   "id": "mandala",
+   "name": "Mandala en Tinta",
+   "desc": "Un dibujo en tinta en blanco y negro en el que tu mascota se llena de patrones de mandala. Puedes imprimirlo y colorearlo. El color del pelaje no se ve en este estilo."
+  },
+  {
+   "id": "viking",
+   "name": "Guerrero Vikingo",
+   "desc": "Tu mascota como un valiente guerrero vikingo: capa de piel, casco de hierro, fiordo, barco vikingo y auroras boreales."
+  },
+  {
+   "id": "steampunk",
+   "name": "Steampunk",
+   "desc": "El mundo del “futuro antiguo”: lentes de aviador con marco de latón, arnés con engranajes, un taller lleno de vapor y un dirigible al atardecer."
+  },
+  {
+   "id": "tarot",
+   "name": "Carta de Tarot",
+   "desc": "Tu mascota como figura principal de una carta de tarot ornamentada con marco dorado, en un paisaje estrellado bajo la luz de la luna."
+  }
+ ]
+}

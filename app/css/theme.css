@@ -184,3 +184,5 @@ body{display:flex;align-items:center;justify-content:center;font-family:'Cormora
 #s-home .hpav.cameo{inset:-1px;border-radius:50%;background-size:contain;background-color:transparent;box-shadow:0 2px 6px #0008}
 #s-home .round .chev{display:none}
 #s-home .round.multi .chev{display:block;position:absolute;left:50%;bottom:-7px;z-index:2;width:18px;height:11px;padding:2px 3px;border-radius:8px;background:#2a1260;box-shadow:0 0 0 1.2px #e8b95a,0 2px 4px #0008}
+#nav .nl{display:block;max-width:84%;margin:0 auto;line-height:1.08;white-space:normal;overflow-wrap:normal;word-break:keep-all;hyphens:manual;text-align:center}
+#nav a:last-child .nl{max-width:74%;position:relative;left:-5%}#nav a:first-child .nl{max-width:74%;position:relative;left:5%}

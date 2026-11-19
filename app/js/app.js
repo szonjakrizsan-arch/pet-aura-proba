@@ -1,17 +1,18 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.48';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.48';
-import { analyze, chakraScores } from './analysis.js?v=0.6.48';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.48';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.48';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.48';
-import { auraScreen, FLOW } from './aura.js?v=0.6.48';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.48';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.48';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.48';
-import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.48';
-import { kbView, mountKb } from './kb.js?v=0.6.48';
-import { cameoUrl } from './pets.js?v=0.6.48';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.48';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.50';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.50';
+import { analyze, chakraScores } from './analysis.js?v=0.6.50';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.50';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.50';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.50';
+import { auraScreen, FLOW } from './aura.js?v=0.6.50';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.50';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.50';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.50';
+import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.50';
+import { kbView, mountKb } from './kb.js?v=0.6.50';
+import { stylesView, mountStyles } from './styles.js?v=0.6.50';
+import { cameoUrl } from './pets.js?v=0.6.50';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.50';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -27,6 +28,9 @@ const TOP = ['home', 'my', 'kb', 'styles'];
 const langSelect = () => `<select id="lang" aria-label="${esc(t('lang.label'))}">${SUPPORTED.map((s) => `<option value="${s.code}" ${s.code === S.lang ? 'selected' : ''}>${s.label}</option>`).join('')}</select>`;
 function chrome() {
   $('#nav').innerHTML = navHtml(t, esc, S.tab);
+  // hosszú menüfelirat (pl. Zauberwerkstatt): a betű addig kisebbedik, amíg kifér (legfeljebb két sorban)
+  requestAnimationFrame(() => $('#nav').querySelectorAll('.nl').forEach((l) => { let fs = parseFloat(getComputedStyle(l).fontSize);
+    while (fs > 10 && (l.scrollWidth > l.clientWidth + 1 || l.getBoundingClientRect().height > fs * 2.4)) { fs -= .5; l.style.fontSize = fs + 'px'; } }));
   $('#nav').hidden = !TOP.includes(S.tab);
   $('#back').innerHTML = ICON.back; $('#back').setAttribute('aria-label', t('back'));
 }
@@ -125,7 +129,7 @@ function render() {
     homePet(); S.shown = 'home';
     return;
   }
-  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => `<div class="km" data-more="${esc(t('cos.read'))}">${S.sub ? readerView({ t, esc, id: S.sub }) : cosmicNew({ t, esc, lang: S.lang, pet: S.pet, multi: PETS.list.length > 1 })}</div>`, 'regi-kozmikus': () => legacy(cosmicView()), feng: () => `<div class="km">${fengNew({ t, esc, pet: S.pet, sub: S.sub })}</div>`, 'regi-feng': () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: () => `<div class="km">${accountNew({ t, esc, lang: S.lang })}</div>`, 'regi-fiok': accountView, my: () => `<div class="km">${myView({ t, esc, sub: S.sub })}</div>`, kb: () => `<div class="km">${kbView({ t, esc, sub: S.sub })}</div>`, styles: () => sub(t('nav.styles'), soon()) };
+  const views = { 'regi-aura': () => legacy(auraView()), cosmic: () => `<div class="km" data-more="${esc(t('cos.read'))}">${S.sub ? readerView({ t, esc, id: S.sub }) : cosmicNew({ t, esc, lang: S.lang, pet: S.pet, multi: PETS.list.length > 1 })}</div>`, 'regi-kozmikus': () => legacy(cosmicView()), feng: () => `<div class="km">${fengNew({ t, esc, pet: S.pet, sub: S.sub })}</div>`, 'regi-feng': () => legacy(fengView()), pets: () => (S.sub ? formView({ t, esc, lang: S.lang }, S.sub) : listView({ t, esc, lang: S.lang })), account: () => `<div class="km">${accountNew({ t, esc, lang: S.lang })}</div>`, 'regi-fiok': accountView, my: () => `<div class="km">${myView({ t, esc, sub: S.sub })}</div>`, kb: () => `<div class="km">${kbView({ t, esc, sub: S.sub })}</div>`, styles: () => `<div class="km">${stylesView({ t, esc })}</div>` };
   const html = (views[S.tab] || views.home)(); if (html == null) { back('pets'); return; }
   $('#view').innerHTML = html;
   const route = curRoute(); if (S.shown !== route) { const sc = $('#s-sub'); SCROLL[S.shown] = sc.scrollTop; const y = SCROLL[route] || 0; sc.scrollTop = y; if (y) setTimeout(() => { if (curRoute() === route) sc.scrollTop = y; }, 250); S.shown = route; } // ugyanazon az oldalon (pl. faj választása) nem ugrik a tetejére
@@ -136,6 +140,8 @@ function render() {
   if (S.tab === 'account') { mountAccount($('#view'), { setLang, render }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub')); S.accBgKind = 'account'; } }
   else leaveAccount();
   if (S.stopKb) { S.stopKb(); S.stopKb = null; }
+  if (S.stopSt) { S.stopSt(); S.stopSt = null; }
+  if (S.tab === 'styles') { S.stopSt = mountStyles($('#view'), { t, esc, lang: S.lang, sub: S.sub, go }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub')); S.accBgKind = 'styles'; } }
   if (S.tab === 'kb') { S.stopKb = mountKb($('#view'), { t, esc, lang: S.lang, sub: S.sub, go, setRoute }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub')); S.accBgKind = 'kb'; } }
   if (S.tab === 'my') { if (S.stopMy) S.stopMy(); S.stopMy = mountMy($('#view'), { t, esc, lang: S.lang, go, back, render }); if (!S.stopAccBg) { S.stopAccBg = startAccountBg($('#s-sub'), { colors: true }); S.accBgKind = 'my'; } }
   if (S.tab === 'feng') mountFeng($('#view'), { t, esc, lang: S.lang, pet: S.pet, go, savePet, render });
@@ -153,7 +159,7 @@ function go(route, replace = false) {
 // Kedvenceim: oda tér vissza, ahonnan jött (pl. az aura-indító névcsere-gombjáról vagy a Kozmikus Mancsból); az adatlapról a listára.
 function petsBack() {
   if (S.tab === 'kb' && S.sub) { const m = KB_TOPIC.exec(S.sub); return m ? 'kb/' + m[1] : 'kb'; } // Tudástár: témaoldal → fejezet tartalomjegyzéke → címlap
-  if ((S.tab === 'cosmic' || S.tab === 'feng' || S.tab === 'my') && S.sub) return S.tab;
+  if ((S.tab === 'cosmic' || S.tab === 'feng' || S.tab === 'my' || S.tab === 'styles') && S.sub) return S.tab;
   if (S.tab !== 'pets') return PARENT[S.tab] || 'home';
   if (S.sub) return S.tab;
   const prev = STACK[STACK.length - 2]; return prev && !prev.startsWith('pets') ? prev : 'home';

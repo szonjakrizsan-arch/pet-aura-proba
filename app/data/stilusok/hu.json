@@ -1,0 +1,76 @@
+{
+ "ui": {
+  "title": "Varázsműhely",
+  "intro": "Válassz stílust, és nézd meg, milyen varázslatos portré készülhet a kedvencedről.",
+  "sample": "Mintakép: a Pet Aura kabalafigurája",
+  "soon": "Hamarosan a saját kedvenceddel",
+  "season": "Csak az ünnepek alatt"
+ },
+ "styles": [
+  {
+   "id": "kawaii",
+   "name": "Pasztell mesekönyv",
+   "desc": "Lágy, japán ihletésű mesekönyv-illusztráció: csillogó szemek, finom pasztellszínek és akvarelles, festett textúrák."
+  },
+  {
+   "id": "clay",
+   "name": "Digitális 3D Clay",
+   "desc": "Kedvenced kézzel formázott gyurmafiguraként, puha fényben, egy pasztell levendula kis világban. A gyurma kicsit leegyszerűsíti a formákat."
+  },
+  {
+   "id": "kepregeny",
+   "name": "Képregényhős",
+   "desc": "Kedvenced egy régi amerikai képregény hőse lesz: saját lila-arany köpenyt és mancsos medált kap, tusvonalak és pöttyös nyomat között."
+  },
+  {
+   "id": "pixel",
+   "name": "Pixel art",
+   "desc": "Kedvenced egy retró videojáték szereplőjeként, éles, négyzetes képpontokból, csillagos éjszakai tájban."
+  },
+  {
+   "id": "mexiko",
+   "name": "Mexikói virágünnep",
+   "desc": "Vidám mexikói népművészeti portré: virágkoszorú, büdöskevirág és rózsák, papírcsipke-füzérek és gyertyafény."
+  },
+  {
+   "id": "ukiyoe",
+   "name": "Ukiyo-e",
+   "desc": "A hagyományos japán fametszet világa: finom kontúrok, régi színek, stilizált hullámok és felhők, a távolban a Fuji."
+  },
+  {
+   "id": "karacsony",
+   "name": "Karácsony",
+   "desc": "Meleg, kandallós karácsonyi kép fényekkel és ajándékokkal. Kedvenced Mikulás-sapkát és kötött sálat kap."
+  },
+  {
+   "id": "ikon",
+   "name": "Arany ikonportré",
+   "desc": "A régi ikonfestészet stílusában: aranyfüst háttér, finoman repedezett, régies felület és díszes aranykeret."
+  },
+  {
+   "id": "boszi",
+   "name": "Boszorkányos",
+   "desc": "Mesebeli varázsvilág csúcsos boszorkánykalappal: a cica holdsarlón ül, a kutya varázskönyvtárat őriz."
+  },
+  {
+   "id": "mandala",
+   "name": "Mandala tusrajz",
+   "desc": "Fekete-fehér tusrajz, kedvenced teste mandalamintákkal telik meg. Kinyomtathatod és kiszínezheted. A bunda színe ebben a stílusban nem látszik."
+  },
+  {
+   "id": "viking",
+   "name": "Viking harcos",
+   "desc": "Kedvenced bátor viking harcos: szőrmés palást, vassisak, fjord, sárkányhajó és északi fény."
+  },
+  {
+   "id": "steampunk",
+   "name": "Steampunk",
+   "desc": "A „régi jövő” világa: rézkeretes pilótaszemüveg, fogaskerekes hám, gőzös műhely és léghajó a naplementében."
+  },
+  {
+   "id": "tarot",
+   "name": "Tarotkártya",
+   "desc": "Kedvenced egy díszes, aranykeretes tarotkártya főalakja, csillagos, holdfényes tájban."
+  }
+ ]
+}

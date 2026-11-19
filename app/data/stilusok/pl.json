@@ -1,0 +1,76 @@
+{
+ "ui": {
+  "title": "Magiczny warsztat",
+  "intro": "Wybierz styl i zobacz, jaki magiczny portret może dostać twój pupil.",
+  "sample": "Obraz przykładowy: maskotka Pet Aura",
+  "soon": "Wkrótce z twoim własnym pupilem",
+  "season": "Tylko w okresie świątecznym"
+ },
+ "styles": [
+  {
+   "id": "kawaii",
+   "name": "Pastelowa bajka",
+   "desc": "Delikatna ilustracja jak z bajki, inspirowana Japonią: błyszczące oczy, subtelne pastelowe kolory i malowane akwarelowe faktury."
+  },
+  {
+   "id": "clay",
+   "name": "Cyfrowa plastelina 3D",
+   "desc": "Twój pupil jako ręcznie ulepiona figurka z plasteliny, w miękkim świetle, w małym pastelowo-lawendowym świecie. Plastelina nieco upraszcza kształty."
+  },
+  {
+   "id": "kepregeny",
+   "name": "Bohater komiksu",
+   "desc": "Twój pupil staje się bohaterem starego amerykańskiego komiksu, z własną fioletowo-złotą peleryną i medalionem z łapką, wśród linii tuszu i rastrowych kropek."
+  },
+  {
+   "id": "pixel",
+   "name": "Pixel art",
+   "desc": "Twój pupil jako postać z gry retro, złożona z ostrych, kwadratowych pikseli, w gwiaździstym nocnym krajobrazie."
+  },
+  {
+   "id": "mexiko",
+   "name": "Meksykańskie święto kwiatów",
+   "desc": "Radosny portret w stylu meksykańskiej sztuki ludowej: wianek z kwiatów, aksamitki i róże, girlandy z wycinanego papieru i blask świec."
+  },
+  {
+   "id": "ukiyoe",
+   "name": "Ukiyo-e",
+   "desc": "Świat tradycyjnego japońskiego drzeworytu: delikatne kontury, klasyczne kolory, stylizowane fale i chmury, w oddali góra Fuji."
+  },
+  {
+   "id": "karacsony",
+   "name": "Boże Narodzenie",
+   "desc": "Ciepła świąteczna scena przy kominku, z lampkami i prezentami. Twój pupil dostaje czapkę Mikołaja i dziergany szalik."
+  },
+  {
+   "id": "ikon",
+   "name": "Złoty portret w stylu ikony",
+   "desc": "W stylu dawnego malarstwa ikon: tło ze złota płatkowego, delikatnie spękana, stara powierzchnia i zdobiona złota rama."
+  },
+  {
+   "id": "boszi",
+   "name": "Mała czarownica",
+   "desc": "Baśniowy magiczny świat ze spiczastym kapeluszem czarownicy: kot siedzi na sierpie księżyca, pies strzeże magicznej biblioteki."
+  },
+  {
+   "id": "mandala",
+   "name": "Mandala tuszem",
+   "desc": "Czarno-biały rysunek tuszem, w którym twój pupil wypełnia się wzorami mandali. Możesz go wydrukować i pokolorować. Kolor sierści nie jest widoczny w tym stylu."
+  },
+  {
+   "id": "viking",
+   "name": "Wojownik wiking",
+   "desc": "Twój pupil jako dzielny wojownik wiking: futrzany płaszcz, żelazny hełm, fiord, łódź wikingów i zorza polarna."
+  },
+  {
+   "id": "steampunk",
+   "name": "Steampunk",
+   "desc": "Świat „dawnej przyszłości”: gogle lotnicze w mosiężnej oprawie, szelki z zębatkami, warsztat pełen pary i sterowiec o zachodzie słońca."
+  },
+  {
+   "id": "tarot",
+   "name": "Karta tarota",
+   "desc": "Twój pupil jako główna postać zdobionej karty tarota w złotej ramie, w gwiaździstym, księżycowym krajobrazie."
+  }
+ ]
+}

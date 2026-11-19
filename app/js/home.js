@@ -37,7 +37,7 @@ export function navHtml(t, esc, active) {
   const items = [['home', 'home', 'nav.home'], ['my', 'my', 'nav.my'], ['kb', 'kb', 'nav.kb'], ['styles', 'styles', 'nav.styles']];
   const idx = Math.max(0, items.findIndex(([r]) => r === active)), x = 12.5 + idx * 25;
   return `<span class="fl" style="left:${x}%;top:0"></span><span class="fl" style="left:${x}%;top:100%"></span>` +
-    items.map(([route, icon, key]) => `<a data-go="${route}" class="${route === active ? 'on' : ''}" role="button" tabindex="0">${ICON[icon]}${esc(t(key))}</a>`).join('');
+    items.map(([route, icon, key]) => `<a data-go="${route}" class="${route === active ? 'on' : ''}" role="button" tabindex="0">${ICON[icon]}<span class="nl">${esc(t(key))}</span></a>`).join('');
 }
 // Animációk: csillagok, aranypor a könyvből, lámpás. Visszaad egy leállító függvényt.
 export function startHome(root) {

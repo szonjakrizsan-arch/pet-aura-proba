@@ -1,0 +1,76 @@
+{
+ "ui": {
+  "title": "Magic Workshop",
+  "intro": "Choose a style and see what kind of magical portrait your pet could get.",
+  "sample": "Sample: the Pet Aura mascot",
+  "soon": "Coming soon with your own pet",
+  "season": "Holidays only"
+ },
+ "styles": [
+  {
+   "id": "kawaii",
+   "name": "Pastel Storybook",
+   "desc": "A soft, Japanese-inspired storybook illustration: sparkling eyes, delicate pastel colors and painted watercolor textures."
+  },
+  {
+   "id": "clay",
+   "name": "Digital 3D Clay",
+   "desc": "Your pet as a hand-sculpted clay figure in soft light, in a little pastel lavender world. The clay slightly simplifies the shapes."
+  },
+  {
+   "id": "kepregeny",
+   "name": "Comic Book Hero",
+   "desc": "Your pet becomes the hero of a vintage American comic book, with its own violet-and-gold cape and paw medallion, ink lines and halftone dots."
+  },
+  {
+   "id": "pixel",
+   "name": "Pixel Art",
+   "desc": "Your pet as a retro video game character, made of sharp square pixels, in a starry night landscape."
+  },
+  {
+   "id": "mexiko",
+   "name": "Mexican Flower Fiesta",
+   "desc": "A joyful Mexican folk-art portrait: a flower crown, marigolds and roses, papel picado banners and candlelight."
+  },
+  {
+   "id": "ukiyoe",
+   "name": "Ukiyo-e",
+   "desc": "The world of traditional Japanese woodblock prints: fine outlines, classic colors, stylized waves and clouds, Mount Fuji in the distance."
+  },
+  {
+   "id": "karacsony",
+   "name": "Christmas",
+   "desc": "A warm Christmas scene by the fireplace with lights and gifts. Your pet gets a Santa hat and a knitted scarf."
+  },
+  {
+   "id": "ikon",
+   "name": "Golden Icon Portrait",
+   "desc": "In the style of old icon painting: a gold-leaf background, a finely cracked antique surface and an ornate gilded frame."
+  },
+  {
+   "id": "boszi",
+   "name": "Fairy-Tale Witch",
+   "desc": "A fairy-tale magic world with a pointed witch hat: the cat sits on a crescent moon, the dog guards a magical library."
+  },
+  {
+   "id": "mandala",
+   "name": "Mandala Ink Drawing",
+   "desc": "A black-and-white ink drawing in which your pet is filled with mandala patterns. You can print it and color it in. Fur color is not shown in this style."
+  },
+  {
+   "id": "viking",
+   "name": "Viking Warrior",
+   "desc": "Your pet as a brave Viking warrior: a fur cloak, an iron helmet, a fjord, a longship and the northern lights."
+  },
+  {
+   "id": "steampunk",
+   "name": "Steampunk",
+   "desc": "The world of retro-futurism: brass aviator goggles, a geared harness, a steamy workshop and an airship at sunset."
+  },
+  {
+   "id": "tarot",
+   "name": "Tarot Card",
+   "desc": "Your pet as the main figure of an ornate, gold-framed tarot card, in a starry, moonlit landscape."
+  }
+ ]
+}

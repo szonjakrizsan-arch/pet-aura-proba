@@ -1,0 +1,76 @@
+{
+ "ui": {
+  "title": "Zauberwerkstatt",
+  "intro": "Wähle einen Stil und sieh dir an, welches zauberhafte Porträt dein Tier bekommen kann.",
+  "sample": "Musterbild: das Pet-Aura-Maskottchen",
+  "soon": "Bald mit deinem eigenen Tier",
+  "season": "Nur zu den Feiertagen"
+ },
+ "styles": [
+  {
+   "id": "kawaii",
+   "name": "Pastell-Bilderbuch",
+   "desc": "Eine sanfte, japanisch inspirierte Bilderbuch-Illustration: funkelnde Augen, zarte Pastellfarben und gemalte Aquarell-Texturen."
+  },
+  {
+   "id": "clay",
+   "name": "Digitale 3D-Knete",
+   "desc": "Dein Tier als handgeformte Knetfigur in weichem Licht, in einer kleinen pastell-lavendelfarbenen Welt. Die Knete vereinfacht die Formen etwas."
+  },
+  {
+   "id": "kepregeny",
+   "name": "Comic-Held",
+   "desc": "Dein Tier wird zum Helden eines alten amerikanischen Comics, mit eigenem lila-goldenem Umhang und Pfoten-Medaillon, zwischen Tuschelinien und Rasterpunkten."
+  },
+  {
+   "id": "pixel",
+   "name": "Pixel-Art",
+   "desc": "Dein Tier als Figur aus einem Retro-Videospiel, aus scharfen, quadratischen Pixeln, in einer sternklaren Nachtlandschaft."
+  },
+  {
+   "id": "mexiko",
+   "name": "Mexikanisches Blumenfest",
+   "desc": "Ein fröhliches Porträt im Stil mexikanischer Volkskunst: Blumenkranz, Tagetes und Rosen, Papel-picado-Girlanden und Kerzenlicht."
+  },
+  {
+   "id": "ukiyoe",
+   "name": "Ukiyo-e",
+   "desc": "Die Welt des traditionellen japanischen Farbholzschnitts: feine Konturen, klassische Farben, stilisierte Wellen und Wolken, in der Ferne der Fuji."
+  },
+  {
+   "id": "karacsony",
+   "name": "Weihnachten",
+   "desc": "Ein warmes Weihnachtsbild am Kamin mit Lichtern und Geschenken. Dein Tier bekommt eine Weihnachtsmütze und einen gestrickten Schal."
+  },
+  {
+   "id": "ikon",
+   "name": "Goldenes Ikonenporträt",
+   "desc": "Im Stil alter Ikonenmalerei: Blattgoldhintergrund, fein rissige, alte Oberfläche und ein verzierter Goldrahmen."
+  },
+  {
+   "id": "boszi",
+   "name": "Hexenzauber",
+   "desc": "Eine märchenhafte Zauberwelt mit spitzem Hexenhut: die Katze sitzt auf einer Mondsichel, der Hund hütet eine Zauberbibliothek."
+  },
+  {
+   "id": "mandala",
+   "name": "Mandala-Tuschezeichnung",
+   "desc": "Eine Schwarz-Weiß-Tuschezeichnung, in der dein Tier mit Mandala-Mustern gefüllt ist. Du kannst sie ausdrucken und ausmalen. Die Fellfarbe ist in diesem Stil nicht zu sehen."
+  },
+  {
+   "id": "viking",
+   "name": "Wikinger-Krieger",
+   "desc": "Dein Tier als mutiger Wikinger-Krieger: Pelzumhang, eiserner Helm, Fjord, Wikingerschiff und Nordlicht."
+  },
+  {
+   "id": "steampunk",
+   "name": "Steampunk",
+   "desc": "Die Welt der „alten Zukunft“: Fliegerbrille mit Messingrahmen, Geschirr mit Zahnrädern, eine dampfende Werkstatt und ein Luftschiff im Abendrot."
+  },
+  {
+   "id": "tarot",
+   "name": "Tarotkarte",
+   "desc": "Dein Tier als Hauptfigur einer verzierten, goldgerahmten Tarotkarte, in einer sternklaren, mondbeschienenen Landschaft."
+  }
+ ]
+}
