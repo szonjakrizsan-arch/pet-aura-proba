@@ -3,7 +3,7 @@
 // iniciálé, és a könyv gerincénél mindig ott a lila selyem könyvjelzőszalag.
 // Az első változat teljesen kódból készül (pergamen, díszek); a rajzolt rétegekről a képernyőképek után döntünk.
 // A szövegek a data/tudastar/<nyelv>.json-ból jönnek; a live:false témák (bevezető, aura) a 4. szakaszig nem jelennek meg.
-const V = '0.6.52';
+const V = '0.6.53';
 const CH = { h: { name: 'nav.cosmic', sub: 'kb.ch.h', jel: 'jel_horo' }, f: { name: 'nav.feng', sub: 'kb.ch.f', jel: 'jel_feng' }, a: { name: 'home.card.aura', sub: 'kb.ch.a', jel: 'jel_aura' } };
 const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 const cache = {};
@@ -55,7 +55,7 @@ export function mountKb(view, { t, esc, lang, sub, setRoute, go }) {
 
   function cover(d) {
     const row = (k) => { const c = CH[k], live = d.topics.some((x) => x.part === k && x.live);
-      return `<button class="kbch${live ? '' : ' sealed'}" ${live ? `data-kbch="${k}"` : 'disabled'}><img src="assets/elemzeseim/${c.jel}.webp?v=${V}" alt=""><span><b>${esc(t(c.name))}</b><i>${esc(t(c.sub))}</i>${live ? '' : `<em>${esc(t('kb.soon'))}</em>`}</span>${live ? '<svg class="kbgo" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" fill="none" stroke="url(#kbgold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '<span class="kbseal" aria-hidden="true"></span>'}</button>`; };
+      return `<button class="kbch${live ? '' : ' sealed'}" ${live ? `data-kbch="${k}"` : 'disabled'}><img src="assets/elemzeseim/${c.jel}.webp?v=${V}" alt=""><span><b>${esc(t(c.name))}</b><i>${esc(t(c.sub))}</i></span>${live ? '<svg class="kbgo" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" fill="none" stroke="url(#kbgold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '<span class="kbseal" aria-hidden="true"></span>'}</button>`; };
     return frame(`<div class="kbcov"><div class="kbstar" aria-hidden="true">✦</div><h2 class="kbtitle">${esc(t('nav.kb'))}</h2>${divider()}<div class="kbchs">${['h', 'f', 'a'].map(row).join('')}</div></div>`, 'cover');
   }
   // Szonja kérése: a fejezet végén tovább lehet lapozni a következő fejezetbe, és bárhonnan vissza lehet ugrani a tartalomjegyzékhez (címlap).

@@ -1,18 +1,18 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.52';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.52';
-import { analyze, chakraScores } from './analysis.js?v=0.6.52';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.52';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.52';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.52';
-import { auraScreen, FLOW } from './aura.js?v=0.6.52';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.52';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.52';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.52';
-import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.52';
-import { kbView, mountKb } from './kb.js?v=0.6.52';
-import { stylesView, mountStyles } from './styles.js?v=0.6.52';
-import { cameoUrl } from './pets.js?v=0.6.52';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.52';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.53';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.53';
+import { analyze, chakraScores } from './analysis.js?v=0.6.53';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.53';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.53';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.53';
+import { auraScreen, FLOW } from './aura.js?v=0.6.53';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.53';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.53';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.53';
+import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.53';
+import { kbView, mountKb } from './kb.js?v=0.6.53';
+import { stylesView, mountStyles } from './styles.js?v=0.6.53';
+import { cameoUrl } from './pets.js?v=0.6.53';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.53';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -49,7 +49,6 @@ function homePet() {
 const PARENT = { my: 'home', kb: 'home', styles: 'home', aura: 'home', cosmic: 'home', feng: 'home', pets: 'home', account: 'home' };
 const savePet = (o) => saveActive(o);
 const auraCtx = () => ({ t, esc, pet: S.pet, go, back: (r) => back(r), lang: S.lang, savePet });
-const soon = () => `<div class="soon"><div class="star">✦</div><h2>${esc(t('soon.title'))}</h2><p>${esc(t('soon.body'))}</p></div>`;
 const sub = (title, body, lead = '') => `<h1 class="t">${esc(title)}</h1>${lead ? `<p class="lead2">${esc(lead)}</p>` : ''}${body}`;
 function accountView() {
   return sub(t('top.account'), `<div class="panel"><label for="lang">${esc(t('acc.lang'))}</label>${langSelect()}</div>
