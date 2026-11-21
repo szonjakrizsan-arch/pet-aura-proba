@@ -1,18 +1,19 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.53';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.53';
-import { analyze, chakraScores } from './analysis.js?v=0.6.53';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.53';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.53';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.53';
-import { auraScreen, FLOW } from './aura.js?v=0.6.53';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.53';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.53';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.53';
-import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.53';
-import { kbView, mountKb } from './kb.js?v=0.6.53';
-import { stylesView, mountStyles } from './styles.js?v=0.6.53';
-import { cameoUrl } from './pets.js?v=0.6.53';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.53';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.54';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.54';
+import { analyze, chakraScores } from './analysis.js?v=0.6.54';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.54';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.54';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.54';
+import { auraScreen, FLOW } from './aura.js?v=0.6.54';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.54';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.54';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.54';
+import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.54';
+import { kbView, mountKb } from './kb.js?v=0.6.54';
+import { stylesView, mountStyles } from './styles.js?v=0.6.54';
+import { cameoUrl } from './pets.js?v=0.6.54';
+import { session } from './auth.js?v=0.6.54';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.54';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -230,4 +231,5 @@ setLang(detect(navigator.languages, localStorage.getItem('lang'))).then(() => {
   const later = () => ['assets/ui/hatter_aura.webp', 'assets/ui/arany_medal.webp', 'assets/aura/portrekeret.webp', 'assets/aura/perg_felso.webp', 'assets/aura/perg_kozep.webp', 'assets/aura/perg_also.webp'].forEach(imgReady);
   Promise.all([...imgs.map(imgReady), document.fonts ? document.fonts.ready : null]).then(() => requestAnimationFrame(() => requestAnimationFrame(() => { boot(); setTimeout(later, 300); })));
   setTimeout(boot, 5000);
+  setTimeout(() => { session(); }, 2000); // névtelen fiók a háttérben, a megjelenés után (internet nélkül csendben kimarad)
 });
