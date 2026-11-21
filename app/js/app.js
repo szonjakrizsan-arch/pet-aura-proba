@@ -1,19 +1,19 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.55';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.55';
-import { analyze, chakraScores } from './analysis.js?v=0.6.55';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.55';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.55';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.55';
-import { auraScreen, FLOW } from './aura.js?v=0.6.55';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.55';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.55';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.55';
-import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.55';
-import { kbView, mountKb } from './kb.js?v=0.6.55';
-import { stylesView, mountStyles } from './styles.js?v=0.6.55';
-import { cameoUrl } from './pets.js?v=0.6.55';
-import { session } from './auth.js?v=0.6.55';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.55';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.56';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.56';
+import { analyze, chakraScores } from './analysis.js?v=0.6.56';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.56';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.56';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.56';
+import { auraScreen, FLOW } from './aura.js?v=0.6.56';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.56';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.56';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.56';
+import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.56';
+import { kbView, mountKb } from './kb.js?v=0.6.56';
+import { stylesView, mountStyles } from './styles.js?v=0.6.56';
+import { cameoUrl } from './pets.js?v=0.6.56';
+import { session } from './auth.js?v=0.6.56';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.56';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -220,6 +220,8 @@ document.addEventListener('change', (e) => {
   if (e.target.id === 'file' && e.target.files[0]) { scan(e.target.files[0]); e.target.value = ''; }
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.go) go(e.target.dataset.go); });
+// fejlesztői próbaoldal (#varazsteszt): nincs rá link; a kezdőlap fölött nyílik meg, a menüt nem érinti
+const LAB = location.hash === '#varazsteszt'; if (LAB) history.replaceState(null, '', '#home');
 { const [tab, sub = ''] = (location.hash.slice(1) || 'home').split('/'); S.tab = tab; S.sub = sub; } if (!location.hash) history.replaceState(null, '', '#home'); STACK.push(curRoute());
 // Indulás: a takarás csak akkor tűnik el, amikor a kezdőlap minden képe és a betűk betöltöttek – így nem rétegenként jelenik meg.
 const imgReady = (src) => new Promise((r) => { const i = new Image(); i.onload = i.onerror = r; i.src = src; });
@@ -231,5 +233,6 @@ setLang(detect(navigator.languages, localStorage.getItem('lang'))).then(() => {
   const later = () => ['assets/ui/hatter_aura.webp', 'assets/ui/arany_medal.webp', 'assets/aura/portrekeret.webp', 'assets/aura/perg_felso.webp', 'assets/aura/perg_kozep.webp', 'assets/aura/perg_also.webp'].forEach(imgReady);
   Promise.all([...imgs.map(imgReady), document.fonts ? document.fonts.ready : null]).then(() => requestAnimationFrame(() => requestAnimationFrame(() => { boot(); setTimeout(later, 300); })));
   setTimeout(boot, 5000);
-  setTimeout(() => { session(); }, 2000); // névtelen fiók a háttérben, a megjelenés után (internet nélkül csendben kimarad)
+  setTimeout(() => { session(); }, 2000);
+  if (LAB) import('./devlab.js?v=0.6.56').then((m) => m.openLab()); // névtelen fiók a háttérben, a megjelenés után (internet nélkül csendben kimarad)
 });
