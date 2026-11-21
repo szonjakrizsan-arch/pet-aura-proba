@@ -318,7 +318,7 @@
 #s-sub .acarrow{width:46px;height:auto;filter:drop-shadow(0 2px 4px #0008)}
 /* törlés: az ékszer-sáv (a középső rész nyúlik, a feliratot a program írja – minden nyelven) */
 #s-sub .acdel{--h:74px;position:relative;display:flex;align-items:center;justify-content:center;width:calc(100% + 24px);height:var(--h);margin:16px -12px 8px;padding:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
- border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.54) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
+ border-style:solid;border-color:transparent;border-image:url(../assets/fiok/torles_sav.webp?v=0.6.55) 0 202 0 545 fill / 0 calc(var(--h) * .2915) 0 calc(var(--h) * .7864) stretch;overflow:visible;font:inherit}
 #s-sub .acdel span{position:relative;z-index:1;padding:0 calc(var(--h) * .36) 0 calc(var(--h) * .84);font-size:14.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box;color:#f6dca0;text-shadow:0 1px 2px #000c;text-align:center}
 #s-sub .acdt,#s-sub .acdb{position:absolute;left:calc(50% + var(--h) * .25);transform:translateX(-50%);height:calc(var(--h) * .19);width:auto;pointer-events:none}
 #s-sub .acdt{top:calc(var(--h) * .0)}#s-sub .acdb{bottom:calc(var(--h) * -.02)}
@@ -369,7 +369,7 @@
 .jtoast.bad{color:#ffe6df;background:linear-gradient(180deg,#9c2a3f,#5e1124);box-shadow:0 6px 20px #0009,0 0 0 1.5px #c9953f}
 .jtoast.out{opacity:0}
 
-/* Elemzéseim díszítés (v0.6.54): kártyák a Kedvenceim mintájára, jelvények, díszes törlés, mozgó csillagjel */
+/* Elemzéseim díszítés (v0.6.55): kártyák a Kedvenceim mintájára, jelvények, díszes törlés, mozgó csillagjel */
 :is(#s-sub,#s-aura) .myrow{display:flex;align-items:center;margin:14px 2px 0;text-decoration:none;color:inherit;text-align:left;padding:14px 12px 14px 14px;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
 :is(#s-sub,#s-aura) .myrow:active{transform:scale(.985)}
 :is(#s-sub,#s-aura) .myrow.new{box-shadow:0 0 26px #ffcf7a77,0 10px 26px #0007,inset 0 1px 0 #ffffff22,inset 0 0 0 1px #2a1450,inset 0 0 0 2.5px #f3cf7a88}
@@ -392,7 +392,7 @@
 :is(#s-sub,#s-aura) .mydel.shine::after{inset:20% 2% 20% 4%;border-radius:12px}
 :is(#s-sub,#s-aura) .mydel:active{transform:scale(.985)}
 /* megerősítő ablak: lila, aranykeretes (nem olyan erős, mint a teljes törlésnél) */
-:is(#s-sub,#s-aura) .mywin{position:relative;padding:34px 22px 22px;text-align:center;border-style:solid;border-color:transparent;border-image:url(../assets/elemzeseim/ablak.webp?v=0.6.54) 20 fill / 13px stretch;filter:drop-shadow(0 8px 18px #0009)}
+:is(#s-sub,#s-aura) .mywin{position:relative;padding:34px 22px 22px;text-align:center;border-style:solid;border-color:transparent;border-image:url(../assets/elemzeseim/ablak.webp?v=0.6.55) 20 fill / 13px stretch;filter:drop-shadow(0 8px 18px #0009)}
 :is(#s-sub,#s-aura) .mywc{position:absolute;pointer-events:none;width:auto}
 :is(#s-sub,#s-aura) .mywc.fb{left:11px;top:11px;height:40px}:is(#s-sub,#s-aura) .mywc.fj{right:11px;top:11px;height:40px}
 :is(#s-sub,#s-aura) .mywc.lb{left:11px;bottom:11px;height:50px}:is(#s-sub,#s-aura) .mywc.lj{right:11px;bottom:11px;height:50px}
@@ -429,9 +429,9 @@
 #s-sub .kbleft{position:absolute;left:-8px;top:6px;bottom:6px;width:16px;border-radius:4px 0 0 4px;background:repeating-linear-gradient(90deg,#e8d3a6 0 2px,#cdb07a 2px 3px);box-shadow:-3px 4px 10px #0007}
 #s-sub .kbpage,#s-sub .kbleaf .kbface{position:absolute;inset:0;container-type:size;filter:drop-shadow(0 8px 12px #0009) drop-shadow(0 0 1px #6b4a1f88)}
 #s-sub .kpp{position:absolute;left:0;right:0;display:block;pointer-events:none}
-#s-sub .kpt{top:0;height:40.6cqw;background:url(../assets/tudastar/perg_felso.webp?v=0.6.54) top/100% 100% no-repeat}
-#s-sub .kpb{bottom:0;height:40.6cqw;background:url(../assets/tudastar/perg_also.webp?v=0.6.54) bottom/100% 100% no-repeat}
-#s-sub .kpm{top:32.6cqw;bottom:32.6cqw;background:url(../assets/tudastar/perg_kozep.webp?v=0.6.54) top/100% auto repeat-y}
+#s-sub .kpt{top:0;height:40.6cqw;background:url(../assets/tudastar/perg_felso.webp?v=0.6.55) top/100% 100% no-repeat}
+#s-sub .kpb{bottom:0;height:40.6cqw;background:url(../assets/tudastar/perg_also.webp?v=0.6.55) bottom/100% 100% no-repeat}
+#s-sub .kpm{top:32.6cqw;bottom:32.6cqw;background:url(../assets/tudastar/perg_kozep.webp?v=0.6.55) top/100% auto repeat-y}
 #s-sub .kbscr{position:absolute;inset:0;overflow-y:auto;-webkit-mask-image:linear-gradient(180deg,#0000 0,#000 26px,#000 calc(100% - 30px),#0000 calc(100% - 6px));mask-image:linear-gradient(180deg,#0000 0,#000 26px,#000 calc(100% - 30px),#0000 calc(100% - 6px));overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none}
 #s-sub .kbscr::-webkit-scrollbar{display:none}
 #s-sub .kbin{position:relative;min-height:100%;padding:34px 26px 18px 30px;color:var(--ink);font-size:18px;line-height:1.55;box-sizing:border-box}
@@ -441,9 +441,9 @@
 /* könyvjelzőszalag a gerincnél: felül a lap mögül bújik elő, alul túllóg, finoman leng */
 #s-sub .kbribbon{--rw:34px;position:absolute;left:-12px;top:-8px;width:var(--rw);height:calc(100% + 58px);z-index:5;filter:drop-shadow(1px 3px 2px #0007);transform-origin:50% 0;animation:kbsway 7s ease-in-out infinite;pointer-events:none}
 #s-sub .kbribbon i{position:absolute;left:0;right:0;display:block;background-size:100% 100%;background-repeat:no-repeat}
-#s-sub .kbribbon .rt{top:0;height:calc(var(--rw) * 118 / 120);background-image:url(../assets/tudastar/szalag_felso.webp?v=0.6.54)}
-#s-sub .kbribbon .rm{top:calc(var(--rw) * 118 / 120 - .5px);bottom:calc(var(--rw) * 216 / 120 - .5px);background-image:url(../assets/tudastar/szalag_kozep.webp?v=0.6.54)}
-#s-sub .kbribbon .rb{bottom:0;height:calc(var(--rw) * 216 / 120);background-image:url(../assets/tudastar/szalag_also.webp?v=0.6.54)}
+#s-sub .kbribbon .rt{top:0;height:calc(var(--rw) * 118 / 120);background-image:url(../assets/tudastar/szalag_felso.webp?v=0.6.55)}
+#s-sub .kbribbon .rm{top:calc(var(--rw) * 118 / 120 - .5px);bottom:calc(var(--rw) * 216 / 120 - .5px);background-image:url(../assets/tudastar/szalag_kozep.webp?v=0.6.55)}
+#s-sub .kbribbon .rb{bottom:0;height:calc(var(--rw) * 216 / 120);background-image:url(../assets/tudastar/szalag_also.webp?v=0.6.55)}
 @keyframes kbsway{0%,100%{transform:rotate(0)}50%{transform:rotate(.35deg)}}
 /* címlap */
 #s-sub .kbin.cover{display:flex;flex-direction:column;justify-content:center;padding:44px 28px 34px 36px}
@@ -454,7 +454,7 @@
 #s-sub .kbk.ja .kbtitle{font-family:inherit;font-weight:700}
 #s-sub .kbchs{display:flex;flex-direction:column;gap:14px;margin-top:2px}
 #s-sub .kbch{display:flex;align-items:center;gap:12px;width:100%;padding:12px 4px 14px;text-align:left;font:inherit;color:inherit;border:0;background:none;cursor:pointer;position:relative}
-#s-sub .kbch+.kbch::before{content:'';position:absolute;left:12%;right:12%;top:-7px;height:14px;background:url(../assets/elemzeseim/ablak_valaszto.webp?v=0.6.54) center/contain no-repeat;opacity:.75}
+#s-sub .kbch+.kbch::before{content:'';position:absolute;left:12%;right:12%;top:-7px;height:14px;background:url(../assets/elemzeseim/ablak_valaszto.webp?v=0.6.55) center/contain no-repeat;opacity:.75}
 #s-sub .kbch img{width:54px;height:54px;flex:none;filter:drop-shadow(0 2px 3px #0005)}
 #s-sub .kbch>span:not(.kbseal){flex:1;display:flex;flex-direction:column;gap:2px}
 #s-sub .kbch b{font:600 21px/1.2 'EB Garamond',serif;color:var(--vio)}
@@ -464,7 +464,7 @@
 #s-sub .kbgo{width:20px;height:20px;flex:none;animation:kbnudge 2.6s ease-in-out infinite}
 @keyframes kbnudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
 #s-sub .kbch.sealed{cursor:default}#s-sub .kbch.sealed img{filter:grayscale(.6) opacity(.65)}#s-sub .kbch.sealed b,#s-sub .kbch.sealed i{opacity:.7}
-#s-sub .kbseal{width:46px;height:46px;flex:none;background:url(../assets/tudastar/viaszpecset.webp?v=0.6.54) center/contain no-repeat;filter:drop-shadow(0 2px 2px #3a1a0a66)} /* ChatGPT viaszpecsét: lezárt fejezet */
+#s-sub .kbseal{width:46px;height:46px;flex:none;background:url(../assets/tudastar/viaszpecset.webp?v=0.6.55) center/contain no-repeat;filter:drop-shadow(0 2px 2px #3a1a0a66)} /* ChatGPT viaszpecsét: lezárt fejezet */
 /* fejezet nyitólapja */
 #s-sub .kbopen{text-align:center;padding-top:6px}
 #s-sub .kbjel{width:76px;height:76px;filter:drop-shadow(0 3px 4px #0005)}
@@ -485,7 +485,7 @@
 /* Iniciálé (Szonja választása: Cinzel Decorative első betű, a rövid szó többi betűje Cormorant Garamond dőlt) – festett, aranyozott kódexbetű három rétegben: k1 mélylila festett körvonal és árnyék, k2 aranyfüst
    fémes sávokkal és sötét arany kontúrral, k3 halvány fényél a bal felső szélen (domború, aranyozott hatás) */
 #s-sub .kbini{float:left;position:relative;height:6.6em;padding:1.6em .8em 0 2.3em;margin:-.45em .1em 0 -.75em;box-sizing:border-box}
-#s-sub .kbini::before{content:'';position:absolute;left:0;top:0;width:5.7em;height:6.6em;background:url(../assets/tudastar/inicialedisz.webp?v=0.6.54) center/contain no-repeat;filter:drop-shadow(0 1px 1px #5a3a1055)}
+#s-sub .kbini::before{content:'';position:absolute;left:0;top:0;width:5.7em;height:6.6em;background:url(../assets/tudastar/inicialedisz.webp?v=0.6.55) center/contain no-repeat;filter:drop-shadow(0 1px 1px #5a3a1055)}
 #s-sub .kbini b{font:700 3.5em/.8 'Cinzel Decorative','EB Garamond',serif}
 #s-sub .kbw{display:flex;align-items:baseline}
 #s-sub .kbl.sm b{font:italic 700 2.7em/.8 'Cormorant Garamond','EB Garamond',serif;margin-left:.02em}

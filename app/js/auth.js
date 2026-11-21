@@ -15,24 +15,30 @@ async function call(path, body) {
   return { ok: r.ok, status: r.status, d };
 }
 
+const fresh = (s) => s && s.expires_at - 60 > Math.floor(Date.now() / 1000);
+async function obtain() {
+  // A zár ALATT mindig újraolvassuk a tárhelyet: ha közben egy másik lap már létrehozta vagy frissítette, azt használjuk.
+  const s = load(); if (fresh(s)) return s;
+  try {
+    if (s && s.refresh_token) {
+      const r = await call('token?grant_type=refresh_token', { refresh_token: s.refresh_token });
+      if (r.ok && keep(r.d)) { const n = keep(r.d); save(n); return n; }
+      // Meglévő fióknál SOHA nem hozunk létre csendben újat: hálózati vagy szerverhibánál a régi megmarad, később újrapróbáljuk.
+      // Új fiók csak akkor, ha a szerver kifejezetten érvénytelennek mondja a frissítő kulcsot (a fiók törölve vagy visszavonva).
+      if (!(r.status === 400 || r.status === 401)) return null;
+    }
+    const r = await call('signup', {});
+    const n = r.ok ? keep(r.d) : null; if (n) save(n); return n;
+  } catch { return null; } // nincs internet
+}
 let inflight = null;
-// Érvényes munkamenet: a meglévő, ha még él; lejárat előtt frissítve; ha nincs (vagy a frissítő kulcs érvénytelen), új névtelen fiók.
-// Hálózati hibánál null – soha nem dob, és nem írja felül a meglévő munkamenetet.
+// Érvényes munkamenet. Egy böngészőn belül a lapok/ablakok sorban állnak (Web Locks), így egyszerre megnyitott lapok
+// sem hozhatnak létre két fiókot, és nem frissíthetik ugyanazt a kulcsot kétszer. Soha nem dob.
 export function session() {
+  if (fresh(load())) return Promise.resolve(load());
   if (inflight) return inflight;
-  inflight = (async () => {
-    const s = load(); const now = Math.floor(Date.now() / 1000);
-    if (s && s.expires_at - 60 > now) return s;
-    try {
-      if (s && s.refresh_token) {
-        const r = await call('token?grant_type=refresh_token', { refresh_token: s.refresh_token });
-        if (r.ok && keep(r.d)) { const n = keep(r.d); save(n); return n; }
-        if (r.status >= 500) return null; // szerverhiba: a régi munkamenet megmarad, később újrapróbáljuk
-      }
-      const r = await call('signup', {});
-      const n = r.ok ? keep(r.d) : null; if (n) save(n); return n;
-    } catch { return null; } // nincs internet
-  })().finally(() => { inflight = null; });
+  const run = () => (navigator.locks ? navigator.locks.request('pa-auth', obtain) : obtain());
+  inflight = run().catch(() => null).finally(() => { inflight = null; });
   return inflight;
 }
 export const userId = () => load()?.uid || '';
