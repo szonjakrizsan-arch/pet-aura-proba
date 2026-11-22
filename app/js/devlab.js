@@ -1,10 +1,9 @@
-// Varázsműhely – FEJLESZTŐI PRÓBAOLDAL (#varazsteszt). Sehonnan nincs rá link, és a szerverfüggvény jelszót kér (DEV_PASS),
+// Varázsműhely – FEJLESZTŐI PRÓBAOLDAL (varazsteszt.html – külön lap, hogy alatta ne fusson az app). Sehonnan nincs rá link, és a szerverfüggvény jelszót kér (DEV_PASS),
 // így más nem tudja a krediteket elhasználni. A megjelenés végleges változatában ez az oldal nem lesz benne.
 // Egy saját fotóból ugyanabban a stílusban több képmodellel is kép készül, a jóváhagyott mintakép mellé téve – így választunk modellt.
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.57';
-import { activePet } from './pets.js?v=0.6.57';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.58';
 
-const V = '0.6.57';
+const V = '0.6.58';
 const STYLES = [['kawaii', 'Pasztell mesekönyv'], ['clay', '3D gyurmafigura'], ['kepregeny', 'Képregényhős'], ['pixel', 'Pixel art'],
   ['mexiko', 'Mexikói virágünnep'], ['ukiyoe', 'Ukiyo-e'], ['karacsony', 'Karácsony'], ['ikon', 'Arany ikonportré'], ['boszi', 'Boszorkányos'],
   ['mandala', 'Mandala tusrajz'], ['viking', 'Viking harcos'], ['steampunk', 'Steampunk'], ['tarot', 'Tarotkártya']];
@@ -27,9 +26,9 @@ let box = null;
 export function openLab() {
   if (box) return;
   box = document.createElement('div'); box.id = 'devlab';
-  const pet = activePet(); const sp0 = pet && pet.species === 'cat' ? 'cat' : 'dog';
+  let sp0 = 'dog'; try { const L = JSON.parse(localStorage.getItem('pets') || '[]'), a = localStorage.getItem('activePet'); const pet = (Array.isArray(L) ? L : []).find((x) => x.id === a); if (pet && pet.species === 'cat') sp0 = 'cat'; } catch { /* nincs mentett kedvenc */ }
   box.innerHTML = `<style>
-#devlab{position:fixed;inset:0;z-index:9999;overflow:auto;background:#1a1030;color:#f3e9d2;font:15px/1.4 system-ui,sans-serif;padding:16px 14px 60px}
+#devlab{min-height:100vh;box-sizing:border-box;background:#1a1030;color:#f3e9d2;font:15px/1.4 system-ui,sans-serif;padding:16px 14px 60px}
 #devlab h1{font-size:19px;margin:0 0 4px;color:#e8c977}#devlab p.n{margin:0 0 14px;opacity:.75;font-size:13px}
 #devlab label{display:block;margin:12px 0 4px;color:#e8c977;font-size:13px}
 #devlab input,#devlab select{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #6b4fa0;background:#2a1b48;color:#fff;font-size:16px}
@@ -45,9 +44,10 @@ export function openLab() {
 <h1>Varázsműhely – próbaoldal</h1>
 <p class="n">Csak fejlesztéshez. Minden kép a fal.ai kreditből fogy. Koppints egy képre a nagyításhoz és mentéshez.</p>
 <label for="dlpw">Próbaoldal jelszava</label><input id="dlpw" type="password" autocomplete="off" value="${esc(get('pa.devpass'))}">
-<label for="dlf">Fotó a kedvencről</label><input id="dlf" type="file" accept="image/*"><img class="prev" id="dlprev" alt="" hidden>
+<label for="dlf">Fotó a kedvencről</label><input id="dlf" type="file" accept="image/*"><p class="n" id="dlst2" aria-live="polite"></p><img class="prev" id="dlprev" alt="" hidden>
 <label for="dlsp">Faj</label><select id="dlsp"><option value="dog"${sp0 === 'dog' ? ' selected' : ''}>Kutya</option><option value="cat"${sp0 === 'cat' ? ' selected' : ''}>Macska</option></select>
 <label for="dlst">Stílus</label><select id="dlst">${STYLES.map(([id, n]) => `<option value="${id}">${esc(n)}</option>`).join('')}</select>
+<label for="dlv">Utasítás</label><select id="dlv"><option value="base">Eredeti</option><option value="strict">Szigorúbb hűség (próba)</option><option value="both">Mindkettő egymás mellett</option></select>
 <label>Képmodellek</label><div class="ms">${MODELS.map(([id, n, p], i) => `<label><input type="checkbox" value="${id}"${i === 0 ? ' checked' : ''}> ${esc(n)} <small>(${p})</small></label>`).join('')}</div>
 <button class="go" id="dlgo" type="button">Képek készítése</button>
 <div class="grid" id="dlout"></div>`;
@@ -55,7 +55,7 @@ export function openLab() {
   const q = (s) => box.querySelector(s);
   let photo = '';
   q('#dlx').onclick = closeLab;
-  q('#dlf').onchange = async (e) => { const f = e.target.files[0]; if (!f) return; try { photo = await shrink(f); q('#dlprev').src = photo; q('#dlprev').hidden = false; } catch { photo = ''; alertIn('A fájl nem olvasható képként.'); } };
+  q('#dlf').onchange = async (e) => { const f = e.target.files[0]; if (!f) return; q('#dlst2').textContent = 'Fotó feldolgozása…'; q('#dlprev').hidden = true; try { photo = await shrink(f); q('#dlprev').src = photo; q('#dlprev').hidden = false; q('#dlst2').textContent = ''; } catch { photo = ''; q('#dlst2').textContent = ''; alertIn('A fájl nem olvasható képként.'); } };
   box.addEventListener('click', (e) => {
     const im = e.target.closest('figure img, #dlprev'); if (!im || !im.src) return;
     const z = document.createElement('div'); z.className = 'zoom';
@@ -68,6 +68,8 @@ export function openLab() {
     const pw = q('#dlpw').value.trim(); put('pa.devpass', pw);
     const style = q('#dlst').value, species = q('#dlsp').value;
     const models = [...box.querySelectorAll('.ms input:checked')].map((i) => i.value);
+    const vsel = q('#dlv').value; const variants = vsel === 'both' ? [false, true] : [vsel === 'strict'];
+    const jobs = models.flatMap((m) => variants.map((st) => ({ m, st, key: m + (st ? '_s' : '_b'), name: MODELS.find((x) => x[0] === m)[1] + (vsel === 'both' ? (st ? ' · szigorúbb' : ' · eredeti') : (st ? ' · szigorúbb' : '')) })));
     const out = q('#dlout'); out.innerHTML = '';
     if (!pw) return alertIn('Add meg a jelszót.');
     if (!photo) return alertIn('Válassz egy fotót.');
@@ -75,23 +77,23 @@ export function openLab() {
     const s = await session(); if (!s) return alertIn('Nincs kapcsolat a szerverrel (internet?).');
     const sample = `assets/stilusok/${style}_${species === 'cat' ? 'macska' : 'kutya'}.webp?v=${V}`;
     out.innerHTML = `<figure><img src="${sample}" alt=""><figcaption><b>Jóváhagyott minta</b></figcaption></figure>`
-      + models.map((m) => `<figure id="dl_${m}"><img alt=""><figcaption>${esc(MODELS.find((x) => x[0] === m)[1])}: készül…</figcaption></figure>`).join('');
+      + jobs.map((j) => `<figure id="dl_${j.key}"><img alt=""><figcaption>${esc(j.name)}: készül…</figcaption></figure>`).join('');
     q('#dlgo').disabled = true;
-    await Promise.all(models.map(async (m) => {
-      const fig = q('#dl_' + m); const cap = fig.querySelector('figcaption'); const name = MODELS.find((x) => x[0] === m)[1];
+    await Promise.all(jobs.map(async ({ m, st, key, name }) => {
+      const fig = q('#dl_' + key); const cap = fig.querySelector('figcaption');
       try {
         const r = await fetch(SUPABASE_URL + '/functions/v1/varazs', { method: 'POST',
           headers: { Authorization: 'Bearer ' + s.access_token, apikey: SUPABASE_KEY, 'Content-Type': 'application/json', 'x-pa-dev': pw },
-          body: JSON.stringify({ style, species, model: m, image: photo }) });
+          body: JSON.stringify({ style, species, model: m, strict: st, image: photo }) });
         const d = await r.json().catch(() => ({}));
         if (!r.ok || !d.image) { cap.innerHTML = `<span class="err">${esc(name)}: hiba (${r.status}) ${esc(d.error || '')} ${esc(d.detail ? JSON.stringify(d.detail).slice(0, 200) : '')}</span>`; return; }
         // a visszakapott hatalmas szöveges képet (data URI) fájlként kezeljük – így nem akadozik a telefon, és menthető
         const url = URL.createObjectURL(await (await fetch(d.image)).blob());
-        const im = fig.querySelector('img'); im.src = url; im.dataset.name = `varazs_${style}_${m}.jpg`;
+        const im = fig.querySelector('img'); im.src = url; im.dataset.name = `varazs_${style}_${key}.jpg`;
         cap.innerHTML = `<b>${esc(name)}</b> · ${(d.ms / 1000).toFixed(1)} mp`;
       } catch (e) { cap.innerHTML = `<span class="err">${esc(name)}: nem érhető el a szerver (${esc(e.message)})</span>`; }
     }));
     q('#dlgo').disabled = false;
   };
 }
-export function closeLab() { if (box) { box.remove(); box = null; } if (location.hash === '#varazsteszt') history.replaceState(null, '', '#home'); }
+export function closeLab() { location.href = './#home'; }
