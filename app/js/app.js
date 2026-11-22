@@ -1,19 +1,19 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.56';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.56';
-import { analyze, chakraScores } from './analysis.js?v=0.6.56';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.56';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.56';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.56';
-import { auraScreen, FLOW } from './aura.js?v=0.6.56';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.56';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.56';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.56';
-import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.56';
-import { kbView, mountKb } from './kb.js?v=0.6.56';
-import { stylesView, mountStyles } from './styles.js?v=0.6.56';
-import { cameoUrl } from './pets.js?v=0.6.56';
-import { session } from './auth.js?v=0.6.56';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.56';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.57';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.57';
+import { analyze, chakraScores } from './analysis.js?v=0.6.57';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.57';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.57';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.57';
+import { auraScreen, FLOW } from './aura.js?v=0.6.57';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.57';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.57';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.57';
+import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.57';
+import { kbView, mountKb } from './kb.js?v=0.6.57';
+import { stylesView, mountStyles } from './styles.js?v=0.6.57';
+import { cameoUrl } from './pets.js?v=0.6.57';
+import { session } from './auth.js?v=0.6.57';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.57';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -234,5 +234,5 @@ setLang(detect(navigator.languages, localStorage.getItem('lang'))).then(() => {
   Promise.all([...imgs.map(imgReady), document.fonts ? document.fonts.ready : null]).then(() => requestAnimationFrame(() => requestAnimationFrame(() => { boot(); setTimeout(later, 300); })));
   setTimeout(boot, 5000);
   setTimeout(() => { session(); }, 2000);
-  if (LAB) import('./devlab.js?v=0.6.56').then((m) => m.openLab()); // névtelen fiók a háttérben, a megjelenés után (internet nélkül csendben kimarad)
+  if (LAB) import('./devlab.js?v=0.6.57').then((m) => m.openLab()); // névtelen fiók a háttérben, a megjelenés után (internet nélkül csendben kimarad)
 });

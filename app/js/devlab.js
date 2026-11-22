@@ -1,10 +1,10 @@
 // Varázsműhely – FEJLESZTŐI PRÓBAOLDAL (#varazsteszt). Sehonnan nincs rá link, és a szerverfüggvény jelszót kér (DEV_PASS),
 // így más nem tudja a krediteket elhasználni. A megjelenés végleges változatában ez az oldal nem lesz benne.
 // Egy saját fotóból ugyanabban a stílusban több képmodellel is kép készül, a jóváhagyott mintakép mellé téve – így választunk modellt.
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.56';
-import { activePet } from './pets.js?v=0.6.56';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.57';
+import { activePet } from './pets.js?v=0.6.57';
 
-const V = '0.6.56';
+const V = '0.6.57';
 const STYLES = [['kawaii', 'Pasztell mesekönyv'], ['clay', '3D gyurmafigura'], ['kepregeny', 'Képregényhős'], ['pixel', 'Pixel art'],
   ['mexiko', 'Mexikói virágünnep'], ['ukiyoe', 'Ukiyo-e'], ['karacsony', 'Karácsony'], ['ikon', 'Arany ikonportré'], ['boszi', 'Boszorkányos'],
   ['mandala', 'Mandala tusrajz'], ['viking', 'Viking harcos'], ['steampunk', 'Steampunk'], ['tarot', 'Tarotkártya']];
@@ -34,15 +34,16 @@ export function openLab() {
 #devlab label{display:block;margin:12px 0 4px;color:#e8c977;font-size:13px}
 #devlab input,#devlab select{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #6b4fa0;background:#2a1b48;color:#fff;font-size:16px}
 #devlab .ms label{display:flex;gap:8px;align-items:center;color:#f3e9d2;font-size:15px;margin:6px 0}#devlab .ms input{width:auto}
-#devlab button.go{margin-top:16px;width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(#e8c977,#b8913a);color:#2a1b00;font-weight:700;font-size:17px}
-#devlab button.go:disabled{opacity:.5}#devlab .x{position:fixed;top:10px;right:12px;background:#2a1b48;color:#fff;border:1px solid #6b4fa0;border-radius:50%;width:38px;height:38px;font-size:18px}
+#devlab .go{margin-top:16px;width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(#e8c977,#b8913a);color:#2a1b00;font-weight:700;font-size:17px}
+#devlab .go:disabled{opacity:.5}#devlab .x{position:fixed;top:10px;right:12px;background:#2a1b48;color:#fff;border:1px solid #6b4fa0;border-radius:50%;width:38px;height:38px;font-size:18px}
 #devlab .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:16px}
 #devlab figure{margin:0;background:#2a1b48;border-radius:12px;padding:6px}#devlab figure img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;background:#120a22}
 #devlab figcaption{font-size:12px;padding:4px 2px 0}#devlab .err{color:#ff9a9a}#devlab .prev{max-width:150px;border-radius:10px;margin-top:8px;display:block}
+#devlab figure img{cursor:zoom-in}#devlab .zoom{position:fixed;inset:0;z-index:2;background:#0b0616f2;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;gap:12px}#devlab .zoom img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:10px}#devlab .zb{display:flex;gap:10px;width:100%;max-width:420px}#devlab .zb .go{margin:0;flex:1;text-align:center;text-decoration:none;display:block}
 </style>
 <button class="x" id="dlx" type="button" aria-label="Bezár">✕</button>
 <h1>Varázsműhely – próbaoldal</h1>
-<p class="n">Csak fejlesztéshez. Minden kép a fal.ai kreditből fogy.</p>
+<p class="n">Csak fejlesztéshez. Minden kép a fal.ai kreditből fogy. Koppints egy képre a nagyításhoz és mentéshez.</p>
 <label for="dlpw">Próbaoldal jelszava</label><input id="dlpw" type="password" autocomplete="off" value="${esc(get('pa.devpass'))}">
 <label for="dlf">Fotó a kedvencről</label><input id="dlf" type="file" accept="image/*"><img class="prev" id="dlprev" alt="" hidden>
 <label for="dlsp">Faj</label><select id="dlsp"><option value="dog"${sp0 === 'dog' ? ' selected' : ''}>Kutya</option><option value="cat"${sp0 === 'cat' ? ' selected' : ''}>Macska</option></select>
@@ -55,6 +56,13 @@ export function openLab() {
   let photo = '';
   q('#dlx').onclick = closeLab;
   q('#dlf').onchange = async (e) => { const f = e.target.files[0]; if (!f) return; try { photo = await shrink(f); q('#dlprev').src = photo; q('#dlprev').hidden = false; } catch { photo = ''; alertIn('A fájl nem olvasható képként.'); } };
+  box.addEventListener('click', (e) => {
+    const im = e.target.closest('figure img, #dlprev'); if (!im || !im.src) return;
+    const z = document.createElement('div'); z.className = 'zoom';
+    z.innerHTML = `<img src="${im.src}" alt=""><div class="zb"><a class="go" href="${im.src}" download="${esc(im.dataset.name || 'kep.jpg')}">Kép mentése</a><button class="go" type="button">Bezár</button></div>`;
+    z.querySelector('button').onclick = () => z.remove(); z.querySelector('img').onclick = () => z.remove();
+    box.appendChild(z);
+  });
   const alertIn = (m) => { q('#dlout').insertAdjacentHTML('afterbegin', `<p class="err">${esc(m)}</p>`); };
   q('#dlgo').onclick = async () => {
     const pw = q('#dlpw').value.trim(); put('pa.devpass', pw);
@@ -77,7 +85,10 @@ export function openLab() {
           body: JSON.stringify({ style, species, model: m, image: photo }) });
         const d = await r.json().catch(() => ({}));
         if (!r.ok || !d.image) { cap.innerHTML = `<span class="err">${esc(name)}: hiba (${r.status}) ${esc(d.error || '')} ${esc(d.detail ? JSON.stringify(d.detail).slice(0, 200) : '')}</span>`; return; }
-        fig.querySelector('img').src = d.image; cap.innerHTML = `<b>${esc(name)}</b> · ${(d.ms / 1000).toFixed(1)} mp`;
+        // a visszakapott hatalmas szöveges képet (data URI) fájlként kezeljük – így nem akadozik a telefon, és menthető
+        const url = URL.createObjectURL(await (await fetch(d.image)).blob());
+        const im = fig.querySelector('img'); im.src = url; im.dataset.name = `varazs_${style}_${m}.jpg`;
+        cap.innerHTML = `<b>${esc(name)}</b> · ${(d.ms / 1000).toFixed(1)} mp`;
       } catch (e) { cap.innerHTML = `<span class="err">${esc(name)}: nem érhető el a szerver (${esc(e.message)})</span>`; }
     }));
     q('#dlgo').disabled = false;
