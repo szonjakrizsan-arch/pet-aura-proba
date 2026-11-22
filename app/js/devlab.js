@@ -1,9 +1,9 @@
 // Varázsműhely – FEJLESZTŐI PRÓBAOLDAL (varazsteszt.html – külön lap, hogy alatta ne fusson az app). Sehonnan nincs rá link, és a szerverfüggvény jelszót kér (DEV_PASS),
 // így más nem tudja a krediteket elhasználni. A megjelenés végleges változatában ez az oldal nem lesz benne.
 // Egy saját fotóból ugyanabban a stílusban több képmodellel is kép készül, a jóváhagyott mintakép mellé téve – így választunk modellt.
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.58';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.59';
 
-const V = '0.6.58';
+const V = '0.6.59';
 const STYLES = [['kawaii', 'Pasztell mesekönyv'], ['clay', '3D gyurmafigura'], ['kepregeny', 'Képregényhős'], ['pixel', 'Pixel art'],
   ['mexiko', 'Mexikói virágünnep'], ['ukiyoe', 'Ukiyo-e'], ['karacsony', 'Karácsony'], ['ikon', 'Arany ikonportré'], ['boszi', 'Boszorkányos'],
   ['mandala', 'Mandala tusrajz'], ['viking', 'Viking harcos'], ['steampunk', 'Steampunk'], ['tarot', 'Tarotkártya']];
@@ -46,7 +46,7 @@ export function openLab() {
 <label for="dlpw">Próbaoldal jelszava</label><input id="dlpw" type="password" autocomplete="off" value="${esc(get('pa.devpass'))}">
 <label for="dlf">Fotó a kedvencről</label><input id="dlf" type="file" accept="image/*"><p class="n" id="dlst2" aria-live="polite"></p><img class="prev" id="dlprev" alt="" hidden>
 <label for="dlsp">Faj</label><select id="dlsp"><option value="dog"${sp0 === 'dog' ? ' selected' : ''}>Kutya</option><option value="cat"${sp0 === 'cat' ? ' selected' : ''}>Macska</option></select>
-<label for="dlst">Stílus</label><select id="dlst">${STYLES.map(([id, n]) => `<option value="${id}">${esc(n)}</option>`).join('')}</select>
+<label for="dlst">Stílus</label><select id="dlst">${STYLES.map(([id, n]) => `<option value="${id}">${esc(n)}</option>`).join('')}<option value="ALL">Mind a 13 stílus (egymás után, csak az első bejelölt modellel)</option></select>
 <label for="dlv">Utasítás</label><select id="dlv"><option value="base">Eredeti</option><option value="strict">Szigorúbb hűség (próba)</option><option value="both">Mindkettő egymás mellett</option></select>
 <label>Képmodellek</label><div class="ms">${MODELS.map(([id, n, p], i) => `<label><input type="checkbox" value="${id}"${i === 0 ? ' checked' : ''}> ${esc(n)} <small>(${p})</small></label>`).join('')}</div>
 <button class="go" id="dlgo" type="button">Képek készítése</button>
@@ -69,30 +69,36 @@ export function openLab() {
     const style = q('#dlst').value, species = q('#dlsp').value;
     const models = [...box.querySelectorAll('.ms input:checked')].map((i) => i.value);
     const vsel = q('#dlv').value; const variants = vsel === 'both' ? [false, true] : [vsel === 'strict'];
-    const jobs = models.flatMap((m) => variants.map((st) => ({ m, st, key: m + (st ? '_s' : '_b'), name: MODELS.find((x) => x[0] === m)[1] + (vsel === 'both' ? (st ? ' · szigorúbb' : ' · eredeti') : (st ? ' · szigorúbb' : '')) })));
+    const ALL = style === 'ALL'; const mname = (m) => MODELS.find((x) => x[0] === m)[1];
+    // „Mind a 13”: minden stílus az első bejelölt modellel, a saját mintája mellett (stílusonként egy pár)
+    const jobs = ALL ? STYLES.map(([sid, sn]) => ({ m: models[0], st: variants[0], sid, key: sid, name: sn + ' · ' + mname(models[0]) }))
+      : models.flatMap((m) => variants.map((st) => ({ m, st, sid: style, key: m + (st ? '_s' : '_b'), name: mname(m) + (vsel === 'both' ? (st ? ' · szigorúbb' : ' · eredeti') : (st ? ' · szigorúbb' : '')) })));
     const out = q('#dlout'); out.innerHTML = '';
     if (!pw) return alertIn('Add meg a jelszót.');
     if (!photo) return alertIn('Válassz egy fotót.');
     if (!models.length) return alertIn('Jelölj be legalább egy modellt.');
     const s = await session(); if (!s) return alertIn('Nincs kapcsolat a szerverrel (internet?).');
-    const sample = `assets/stilusok/${style}_${species === 'cat' ? 'macska' : 'kutya'}.webp?v=${V}`;
-    out.innerHTML = `<figure><img src="${sample}" alt=""><figcaption><b>Jóváhagyott minta</b></figcaption></figure>`
-      + jobs.map((j) => `<figure id="dl_${j.key}"><img alt=""><figcaption>${esc(j.name)}: készül…</figcaption></figure>`).join('');
+    const sample = (sid) => `assets/stilusok/${sid}_${species === 'cat' ? 'macska' : 'kutya'}.webp?v=${V}`;
+    const fig = (j) => `<figure id="dl_${j.key}"><img alt=""><figcaption>${esc(j.name)}: várakozik…</figcaption></figure>`;
+    out.innerHTML = ALL ? jobs.map((j) => `<figure><img src="${sample(j.sid)}" alt=""><figcaption><b>${esc(STYLES.find((x) => x[0] === j.sid)[1])}</b> · minta</figcaption></figure>` + fig(j)).join('')
+      : `<figure><img src="${sample(style)}" alt=""><figcaption><b>Jóváhagyott minta</b></figcaption></figure>` + jobs.map(fig).join('');
     q('#dlgo').disabled = true;
-    await Promise.all(jobs.map(async ({ m, st, key, name }) => {
-      const fig = q('#dl_' + key); const cap = fig.querySelector('figcaption');
+    // egyszerre legfeljebb 3 kérés megy (a fal.ai egy fióknál korlátozza a párhuzamos munkát)
+    const queue = jobs.slice(); const one = async ({ m, st, sid, key, name }) => {
+      const fig = q('#dl_' + key); const cap = fig.querySelector('figcaption'); cap.textContent = name + ': készül…';
       try {
         const r = await fetch(SUPABASE_URL + '/functions/v1/varazs', { method: 'POST',
           headers: { Authorization: 'Bearer ' + s.access_token, apikey: SUPABASE_KEY, 'Content-Type': 'application/json', 'x-pa-dev': pw },
-          body: JSON.stringify({ style, species, model: m, strict: st, image: photo }) });
+          body: JSON.stringify({ style: sid, species, model: m, strict: st, image: photo }) });
         const d = await r.json().catch(() => ({}));
         if (!r.ok || !d.image) { cap.innerHTML = `<span class="err">${esc(name)}: hiba (${r.status}) ${esc(d.error || '')} ${esc(d.detail ? JSON.stringify(d.detail).slice(0, 200) : '')}</span>`; return; }
         // a visszakapott hatalmas szöveges képet (data URI) fájlként kezeljük – így nem akadozik a telefon, és menthető
         const url = URL.createObjectURL(await (await fetch(d.image)).blob());
-        const im = fig.querySelector('img'); im.src = url; im.dataset.name = `varazs_${style}_${key}.jpg`;
+        const im = fig.querySelector('img'); im.src = url; im.dataset.name = `varazs_${sid}_${m}${st ? '_szigorubb' : ''}.jpg`;
         cap.innerHTML = `<b>${esc(name)}</b> · ${(d.ms / 1000).toFixed(1)} mp`;
       } catch (e) { cap.innerHTML = `<span class="err">${esc(name)}: nem érhető el a szerver (${esc(e.message)})</span>`; }
-    }));
+    };
+    await Promise.all([0, 1, 2].map(async () => { while (queue.length) await one(queue.shift()); }));
     q('#dlgo').disabled = false;
   };
 }
