@@ -1,10 +1,10 @@
 // Varázsműhely – FEJLESZTŐI PRÓBAOLDAL (varazsteszt.html – külön lap, hogy alatta ne fusson az app). Sehonnan nincs rá link, és a szerverfüggvény jelszót kér (DEV_PASS),
 // így más nem tudja a krediteket elhasználni. A megjelenés végleges változatában ez az oldal nem lesz benne.
 // Egy saját fotóból ugyanabban a stílusban több képmodellel is kép készül, a jóváhagyott mintakép mellé téve – így választunk modellt.
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.59';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.60';
 
-const V = '0.6.59';
-const STYLES = [['kawaii', 'Pasztell mesekönyv'], ['clay', '3D gyurmafigura'], ['kepregeny', 'Képregényhős'], ['pixel', 'Pixel art'],
+const V = '0.6.60';
+const STYLES = [['kawaii', 'Mesekönyv'], ['clay', '3D gyurmafigura'], ['kepregeny', 'Képregényhős'], ['pixel', 'Pixel art'],
   ['mexiko', 'Mexikói virágünnep'], ['ukiyoe', 'Ukiyo-e'], ['karacsony', 'Karácsony'], ['ikon', 'Arany ikonportré'], ['boszi', 'Boszorkányos'],
   ['mandala', 'Mandala tusrajz'], ['viking', 'Viking harcos'], ['steampunk', 'Steampunk'], ['tarot', 'Tarotkártya']];
 // ár: csak a Nano Banana 2-é ellenőrzött (fal.ai modelloldal, 1K kép); a többit a fal.ai Usage oldalán nézzük meg az első próba után
