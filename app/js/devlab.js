@@ -1,14 +1,14 @@
 // Varázsműhely – FEJLESZTŐI PRÓBAOLDAL (varazsteszt.html – külön lap, hogy alatta ne fusson az app). Sehonnan nincs rá link, és a szerverfüggvény jelszót kér (DEV_PASS),
 // így más nem tudja a krediteket elhasználni. A megjelenés végleges változatában ez az oldal nem lesz benne.
 // Egy saját fotóból ugyanabban a stílusban több képmodellel is kép készül, a jóváhagyott mintakép mellé téve – így választunk modellt.
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.62';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.63';
 
-const V = '0.6.62';
+const V = '0.6.63';
 const STYLES = [['kawaii', 'Mesekönyv'], ['clay', '3D gyurmafigura'], ['kepregeny', 'Képregényhős'], ['pixel', 'Pixel art'],
   ['mexiko', 'Mexikói virágünnep'], ['ukiyoe', 'Ukiyo-e'], ['karacsony', 'Karácsony'], ['ikon', 'Arany ikonportré'], ['boszi', 'Boszorkányos'],
   ['mandala', 'Mandala tusrajz'], ['viking', 'Viking harcos'], ['steampunk', 'Steampunk'], ['tarot', 'Tarotkártya']];
 // ár: csak a Nano Banana 2-é ellenőrzött (fal.ai modelloldal, 1K kép); a többit a fal.ai Usage oldalán nézzük meg az első próba után
-const MODELS = [['nb2', 'Nano Banana 2', '0,08 $ / kép'], ['flux2pro', 'FLUX.2 Pro', 'ár: fal.ai Usage'], ['kontext', 'FLUX Kontext Pro', 'ár: fal.ai Usage']];
+const MODELS = [['nb2', 'Nano Banana 2', '0,08 $ / kép'], ['nbpro', 'Nano Banana Pro', '0,15 $ / kép'], ['flux2pro', 'FLUX.2 Pro', 'ár: fal.ai Usage'], ['kontext', 'FLUX Kontext Pro', 'ár: fal.ai Usage']];
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const get = (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } };
 const put = (k, v) => { try { localStorage.setItem(k, v); } catch { /* nincs tárhely */ } };
