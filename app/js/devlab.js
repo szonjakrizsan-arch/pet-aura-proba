@@ -1,9 +1,9 @@
 // Varázsműhely – FEJLESZTŐI PRÓBAOLDAL (varazsteszt.html – külön lap, hogy alatta ne fusson az app). Sehonnan nincs rá link, és a szerverfüggvény jelszót kér (DEV_PASS),
 // így más nem tudja a krediteket elhasználni. A megjelenés végleges változatában ez az oldal nem lesz benne.
 // Egy saját fotóból ugyanabban a stílusban több képmodellel is kép készül, a jóváhagyott mintakép mellé téve – így választunk modellt.
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.63';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.64';
 
-const V = '0.6.63';
+const V = '0.6.64';
 const STYLES = [['kawaii', 'Mesekönyv'], ['clay', '3D gyurmafigura'], ['kepregeny', 'Képregényhős'], ['pixel', 'Pixel art'],
   ['mexiko', 'Mexikói virágünnep'], ['ukiyoe', 'Ukiyo-e'], ['karacsony', 'Karácsony'], ['ikon', 'Arany ikonportré'], ['boszi', 'Boszorkányos'],
   ['mandala', 'Mandala tusrajz'], ['viking', 'Viking harcos'], ['steampunk', 'Steampunk'], ['tarot', 'Tarotkártya']];
@@ -48,7 +48,7 @@ export function openLab() {
 <label for="dlsp">Faj</label><select id="dlsp"><option value="dog"${sp0 === 'dog' ? ' selected' : ''}>Kutya</option><option value="cat"${sp0 === 'cat' ? ' selected' : ''}>Macska</option></select>
 <label for="dlst">Stílus</label><select id="dlst">${STYLES.map(([id, n]) => `<option value="${id}">${esc(n)}</option>`).join('')}<option value="ALL">Mind a 13 stílus (egymás után, csak az első bejelölt modellel)</option></select>
 <label for="dlnt">Az állat egyedi jegyei (próba, angolul; üresen hagyható)</label><button class="go" id="dldesc" type="button" style="margin:0 0 8px;padding:10px;font-size:15px">Automatikus leírás készítése a fotóból</button><textarea id="dlnt" rows="9" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #6b4fa0;background:#2a1b48;color:#fff;font-size:15px"></textarea>
-<label for="dlv">Utasítás</label><select id="dlv"><option value="base">Eredeti</option><option value="strict">Szigorúbb hűség (próba)</option><option value="both">Mindkettő egymás mellett</option></select>
+<label for="dlv">Utasítás</label><select id="dlv"><option value="base">Eredeti</option><option value="strict">Retusáló (próba, csak Mexikói)</option><option value="both">Mindkettő egymás mellett</option></select>
 <label>Képmodellek</label><div class="ms">${MODELS.map(([id, n, p], i) => `<label><input type="checkbox" value="${id}"${i === 0 ? ' checked' : ''}> ${esc(n)} <small>(${p})</small></label>`).join('')}</div>
 <button class="go" id="dlgo" type="button">Képek készítése</button>
 <div class="grid" id="dlout"></div>`;
@@ -89,7 +89,7 @@ export function openLab() {
     const ALL = style === 'ALL'; const mname = (m) => MODELS.find((x) => x[0] === m)[1];
     // „Mind a 13”: minden stílus az első bejelölt modellel, a saját mintája mellett (stílusonként egy pár)
     const jobs = ALL ? STYLES.map(([sid, sn]) => ({ m: models[0], st: variants[0], sid, key: sid, name: sn + ' · ' + mname(models[0]) }))
-      : models.flatMap((m) => variants.map((st) => ({ m, st, sid: style, key: m + (st ? '_s' : '_b'), name: mname(m) + (vsel === 'both' ? (st ? ' · szigorúbb' : ' · eredeti') : (st ? ' · szigorúbb' : '')) })));
+      : models.flatMap((m) => variants.map((st) => ({ m, st, sid: style, key: m + (st ? '_s' : '_b'), name: mname(m) + (vsel === 'both' ? (st ? ' · retusáló' : ' · eredeti') : (st ? ' · retusáló' : '')) })));
     const out = q('#dlout'); out.innerHTML = '';
     if (!pw) return alertIn('Add meg a jelszót.');
     if (!photo) return alertIn('Válassz egy fotót.');
@@ -106,7 +106,7 @@ export function openLab() {
       try {
         const r = await fetch(SUPABASE_URL + '/functions/v1/varazs', { method: 'POST',
           headers: { Authorization: 'Bearer ' + s.access_token, apikey: SUPABASE_KEY, 'Content-Type': 'application/json', 'x-pa-dev': pw },
-          body: JSON.stringify({ style: sid, species, model: m, strict: st, notes, image: photo }) });
+          body: JSON.stringify({ style: sid, species, model: m, edit: st, notes, image: photo }) });
         const d = await r.json().catch(() => ({}));
         if (!r.ok || !d.image) { cap.innerHTML = `<span class="err">${esc(name)}: hiba (${r.status}) ${esc(d.error || '')} ${esc(d.detail ? JSON.stringify(d.detail).slice(0, 200) : '')}</span>`; return; }
         // a visszakapott hatalmas szöveges képet (data URI) fájlként kezeljük – így nem akadozik a telefon, és menthető
