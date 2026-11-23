@@ -42,13 +42,13 @@ export function openLab() {
 </style>
 <button class="x" id="dlx" type="button" aria-label="Bezár">✕</button>
 <h1>Varázsműhely – próbaoldal</h1>
-<p class="n">Csak fejlesztéshez. Minden kép a fal.ai kreditből fogy. Koppints egy képre a nagyításhoz és mentéshez.</p>
+<p class="n">Csak fejlesztéshez. Minden kép a fal.ai kreditből fogy. Koppints egy képre a nagyításhoz.</p>
 <label for="dlpw">Próbaoldal jelszava</label><input id="dlpw" type="password" autocomplete="off" value="${esc(get('pa.devpass'))}">
 <label for="dlf">Fotó a kedvencről</label><input id="dlf" type="file" accept="image/*"><p class="n" id="dlst2" aria-live="polite"></p><img class="prev" id="dlprev" alt="" hidden>
 <label for="dlsp">Faj</label><select id="dlsp"><option value="dog"${sp0 === 'dog' ? ' selected' : ''}>Kutya</option><option value="cat"${sp0 === 'cat' ? ' selected' : ''}>Macska</option></select>
 <label for="dlst">Stílus</label><select id="dlst">${STYLES.map(([id, n]) => `<option value="${id}">${esc(n)}</option>`).join('')}<option value="ALL">Mind a 13 stílus (egymás után, csak az első bejelölt modellel)</option></select>
 <label for="dlnt">Az állat egyedi jegyei (próba, angolul; üresen hagyható)</label><button class="go" id="dldesc" type="button" style="margin:0 0 8px;padding:10px;font-size:15px">Automatikus leírás készítése a fotóból</button><textarea id="dlnt" rows="9" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #6b4fa0;background:#2a1b48;color:#fff;font-size:15px"></textarea>
-<label for="dlv">Utasítás</label><select id="dlv"><option value="base">Eredeti</option><option value="strict">Retusáló (próba)</option><option value="both">Mindkettő egymás mellett</option></select>
+<label for="dlv">Utasítás</label><select id="dlv"><option value="clean" selected>Új tiszta utasítás (2026-11-23 este)</option><option value="base">Eredeti</option><option value="strict">Retusáló (próba)</option><option value="both">Mindkettő egymás mellett</option></select>
 <label>Képmodellek</label><div class="ms">${MODELS.map(([id, n, p], i) => `<label><input type="checkbox" value="${id}"${i === 0 ? ' checked' : ''}> ${esc(n)} <small>(${p})</small></label>`).join('')}</div>
 <button class="go" id="dlgo" type="button">Képek készítése</button>
 <div class="grid" id="dlout"></div>`;
@@ -60,7 +60,7 @@ export function openLab() {
   box.addEventListener('click', (e) => {
     const im = e.target.closest('figure img, #dlprev'); if (!im || !im.src) return;
     const z = document.createElement('div'); z.className = 'zoom';
-    z.innerHTML = `<img src="${im.src}" alt=""><div class="zb"><a class="go" href="${im.src}" download="${esc(im.dataset.name || 'kep.jpg')}">Kép mentése</a><button class="go" type="button">Bezár</button></div>`;
+    z.innerHTML = `<img src="${im.src}" alt=""><div class="zb"><button class="go" type="button">Bezár</button></div>`;
     z.querySelector('button').onclick = () => z.remove(); z.querySelector('img').onclick = () => z.remove();
     box.appendChild(z);
   });
@@ -85,11 +85,11 @@ export function openLab() {
     const pw = q('#dlpw').value.trim(); put('pa.devpass', pw);
     const style = q('#dlst').value, species = q('#dlsp').value, notes = q('#dlnt').value.trim();
     const models = [...box.querySelectorAll('.ms input:checked')].map((i) => i.value);
-    const vsel = q('#dlv').value; const variants = vsel === 'both' ? [false, true] : [vsel === 'strict'];
+    const vsel = q('#dlv').value; const CLEAN = vsel === 'clean'; const variants = vsel === 'both' ? [false, true] : [vsel === 'strict'];
     const ALL = style === 'ALL'; const mname = (m) => MODELS.find((x) => x[0] === m)[1];
     // „Mind a 13”: minden stílus az első bejelölt modellel, a saját mintája mellett (stílusonként egy pár)
-    const jobs = ALL ? STYLES.map(([sid, sn]) => ({ m: models[0], st: variants[0], sid, key: sid, name: sn + ' · ' + mname(models[0]) + (variants[0] ? ' · retusáló' : '') }))
-      : models.flatMap((m) => variants.map((st) => ({ m, st, sid: style, key: m + (st ? '_s' : '_b'), name: mname(m) + (vsel === 'both' ? (st ? ' · retusáló' : ' · eredeti') : (st ? ' · retusáló' : '')) })));
+    const jobs = ALL ? STYLES.map(([sid, sn]) => ({ m: models[0], st: variants[0], sid, key: sid, name: sn + ' · ' + mname(models[0]) + (CLEAN ? ' · új' : variants[0] ? ' · retusáló' : '') }))
+      : models.flatMap((m) => variants.map((st) => ({ m, st, sid: style, key: m + (st ? '_s' : '_b'), name: mname(m) + (CLEAN ? ' · új' : vsel === 'both' ? (st ? ' · retusáló' : ' · eredeti') : (st ? ' · retusáló' : '')) })));
     const out = q('#dlout'); out.innerHTML = '';
     if (!pw) return alertIn('Add meg a jelszót.');
     if (!photo) return alertIn('Válassz egy fotót.');
@@ -106,7 +106,7 @@ export function openLab() {
       try {
         const r = await fetch(SUPABASE_URL + '/functions/v1/varazs', { method: 'POST',
           headers: { Authorization: 'Bearer ' + s.access_token, apikey: SUPABASE_KEY, 'Content-Type': 'application/json', 'x-pa-dev': pw },
-          body: JSON.stringify({ style: sid, species, model: m, edit: st, notes, image: photo }) });
+          body: JSON.stringify({ style: sid, species, model: m, edit: st, clean: CLEAN, notes: CLEAN ? '' : notes, image: photo }) });
         const d = await r.json().catch(() => ({}));
         if (!r.ok || !d.image) { cap.innerHTML = `<span class="err">${esc(name)}: hiba (${r.status}) ${esc(d.error || '')} ${esc(d.detail ? JSON.stringify(d.detail).slice(0, 200) : '')}</span>`; return; }
         // a visszakapott hatalmas szöveges képet (data URI) fájlként kezeljük – így nem akadozik a telefon, és menthető
