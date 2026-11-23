@@ -1,10 +1,10 @@
 // Varázsműhely (Stílusok, 4. funkció): a stílusok galériája a mintaképekkel (Szonja gyűjtése, 2026-11-18/19).
 // A mintaképek a Pet Aura kabalafiguráiból készültek; a valódi átalakítás (a gazdi saját fotójából) a 4. szakaszban
 // indul (Szonja: a kiadott appban nincs „hamarosan”-szöveg; a feltöltés gombja akkor kerül ide). Az AI-utasítások nem kerülnek az appba (üzleti titok, design/stilusok).
-import { CORNER } from './account.js?v=0.6.60';
-import { activePet } from './pets.js?v=0.6.60';
+import { CORNER } from './account.js?v=0.6.61';
+import { activePet } from './pets.js?v=0.6.61';
 
-const V = '0.6.60';
+const V = '0.6.61';
 const SEASON = { karacsony: (d) => (d.getMonth() === 11) || (d.getMonth() === 0 && d.getDate() <= 6) }; // dec. 1. – jan. 6. (Szonja döntése)
 // Minden stílusnak cicás és kutyás mintaképe van (Szonja kérése: a cicás gazdi ne higgye, hogy csak kutyáknak szól).
 // A kedvenc faja dönt; ha nincs kedvenc / faj, a galériában felváltva látszanak (sakktáblaszerűen).

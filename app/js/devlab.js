@@ -1,9 +1,9 @@
 // Varázsműhely – FEJLESZTŐI PRÓBAOLDAL (varazsteszt.html – külön lap, hogy alatta ne fusson az app). Sehonnan nincs rá link, és a szerverfüggvény jelszót kér (DEV_PASS),
 // így más nem tudja a krediteket elhasználni. A megjelenés végleges változatában ez az oldal nem lesz benne.
 // Egy saját fotóból ugyanabban a stílusban több képmodellel is kép készül, a jóváhagyott mintakép mellé téve – így választunk modellt.
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.60';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.61';
 
-const V = '0.6.60';
+const V = '0.6.61';
 const STYLES = [['kawaii', 'Mesekönyv'], ['clay', '3D gyurmafigura'], ['kepregeny', 'Képregényhős'], ['pixel', 'Pixel art'],
   ['mexiko', 'Mexikói virágünnep'], ['ukiyoe', 'Ukiyo-e'], ['karacsony', 'Karácsony'], ['ikon', 'Arany ikonportré'], ['boszi', 'Boszorkányos'],
   ['mandala', 'Mandala tusrajz'], ['viking', 'Viking harcos'], ['steampunk', 'Steampunk'], ['tarot', 'Tarotkártya']];
@@ -47,6 +47,7 @@ export function openLab() {
 <label for="dlf">Fotó a kedvencről</label><input id="dlf" type="file" accept="image/*"><p class="n" id="dlst2" aria-live="polite"></p><img class="prev" id="dlprev" alt="" hidden>
 <label for="dlsp">Faj</label><select id="dlsp"><option value="dog"${sp0 === 'dog' ? ' selected' : ''}>Kutya</option><option value="cat"${sp0 === 'cat' ? ' selected' : ''}>Macska</option></select>
 <label for="dlst">Stílus</label><select id="dlst">${STYLES.map(([id, n]) => `<option value="${id}">${esc(n)}</option>`).join('')}<option value="ALL">Mind a 13 stílus (egymás után, csak az első bejelölt modellel)</option></select>
+<label for="dlnt">Az állat egyedi jegyei (próba, angolul; üresen hagyható)</label><textarea id="dlnt" rows="4" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #6b4fa0;background:#2a1b48;color:#fff;font-size:15px"></textarea>
 <label for="dlv">Utasítás</label><select id="dlv"><option value="base">Eredeti</option><option value="strict">Szigorúbb hűség (próba)</option><option value="both">Mindkettő egymás mellett</option></select>
 <label>Képmodellek</label><div class="ms">${MODELS.map(([id, n, p], i) => `<label><input type="checkbox" value="${id}"${i === 0 ? ' checked' : ''}> ${esc(n)} <small>(${p})</small></label>`).join('')}</div>
 <button class="go" id="dlgo" type="button">Képek készítése</button>
@@ -66,7 +67,7 @@ export function openLab() {
   const alertIn = (m) => { q('#dlout').insertAdjacentHTML('afterbegin', `<p class="err">${esc(m)}</p>`); };
   q('#dlgo').onclick = async () => {
     const pw = q('#dlpw').value.trim(); put('pa.devpass', pw);
-    const style = q('#dlst').value, species = q('#dlsp').value;
+    const style = q('#dlst').value, species = q('#dlsp').value, notes = q('#dlnt').value.trim();
     const models = [...box.querySelectorAll('.ms input:checked')].map((i) => i.value);
     const vsel = q('#dlv').value; const variants = vsel === 'both' ? [false, true] : [vsel === 'strict'];
     const ALL = style === 'ALL'; const mname = (m) => MODELS.find((x) => x[0] === m)[1];
@@ -89,7 +90,7 @@ export function openLab() {
       try {
         const r = await fetch(SUPABASE_URL + '/functions/v1/varazs', { method: 'POST',
           headers: { Authorization: 'Bearer ' + s.access_token, apikey: SUPABASE_KEY, 'Content-Type': 'application/json', 'x-pa-dev': pw },
-          body: JSON.stringify({ style: sid, species, model: m, strict: st, image: photo }) });
+          body: JSON.stringify({ style: sid, species, model: m, strict: st, notes, image: photo }) });
         const d = await r.json().catch(() => ({}));
         if (!r.ok || !d.image) { cap.innerHTML = `<span class="err">${esc(name)}: hiba (${r.status}) ${esc(d.error || '')} ${esc(d.detail ? JSON.stringify(d.detail).slice(0, 200) : '')}</span>`; return; }
         // a visszakapott hatalmas szöveges képet (data URI) fájlként kezeljük – így nem akadozik a telefon, és menthető
