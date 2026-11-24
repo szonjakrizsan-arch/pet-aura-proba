@@ -4,11 +4,11 @@
 // AMÍG NINCS FIZETÉS ÉS NAPI KERET: a képkészítő rész csak azon a telefonon látszik, ahol a fejlesztői jelszó el van mentve
 // (localStorage 'pa.devpass'), mert a szerver jelszó nélkül nem dolgozik – így más nem tudja a krediteket elhasználni. Máshol nincs semmi
 // (Szonja: nincs „hamarosan”-szöveg). VÍZJEL: még nincs a kész képen (vm.h.3 ígéri) – a Tarot ✦ XIX ✦ feliratával együtt épül be.
-import { CORNER } from './account.js?v=0.6.70';
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.70';
-import { activePet } from './pets.js?v=0.6.70';
+import { CORNER } from './account.js?v=0.6.71';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.71';
+import { activePet } from './pets.js?v=0.6.71';
 
-const V = '0.6.70';
+const V = '0.6.71';
 const SEASON = { karacsony: (d) => (d.getMonth() === 11) || (d.getMonth() === 0 && d.getDate() <= 6) }; // dec. 1. – jan. 6. (Szonja döntése)
 // Minden stílusnak cicás és kutyás mintaképe van (Szonja kérése: a cicás gazdi ne higgye, hogy csak kutyáknak szól).
 // A kedvenc faja dönt; ha nincs kedvenc / faj, a galériában felváltva látszanak (sakktáblaszerűen).
