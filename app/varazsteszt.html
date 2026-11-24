@@ -1,4 +1,12 @@
 <!doctype html>
 <html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
-<title>Varázsműhely – próbaoldal</title><style>html,body{margin:0;background:#1a1030}</style></head>
-<body><script type="module">import { openLab } from './js/devlab.js?v=0.6.65b'; openLab();</script></body></html>
+<title>Varázsműhely – fejlesztői kulcs</title>
+<!-- Csak fejlesztéshez (2026-11-24): amíg nincs fizetés és napi keret, a képkészítő szerver jelszót kér. Itt lehet a jelszót a telefonra
+     menteni; utána az app Varázsműhely-oldalain, a stílus oldalán megjelenik a fotóválasztás és az „Elkészítem” gomb. Sehonnan nincs rá link. -->
+<style>html,body{margin:0;background:#1a1030;color:#f3e9d2;font:16px/1.45 system-ui,sans-serif}main{max-width:420px;margin:0 auto;padding:28px 18px}
+h1{font-size:20px;color:#e8c977;margin:0 0 8px}p{opacity:.8;font-size:14px}input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #6b4fa0;background:#2a1b48;color:#fff;font-size:16px;margin:10px 0}
+button{width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(#e8c977,#b8913a);color:#2a1b00;font-weight:700;font-size:17px}</style></head>
+<body><main><h1>Varázsműhely – fejlesztői kulcs</h1><p>A jelszó ezen a telefonon marad. Mentés után az app Varázsműhelyében, a stílus oldalán tudsz képet készíteni.</p>
+<input id="pw" type="password" autocomplete="off" placeholder="Jelszó"><button id="ok" type="button">Mentés és tovább a Varázsműhelybe</button></main>
+<script>const pw=document.getElementById('pw');try{pw.value=localStorage.getItem('pa.devpass')||'';}catch(e){}
+document.getElementById('ok').onclick=()=>{try{localStorage.setItem('pa.devpass',pw.value.trim());}catch(e){}location.href='./#styles';};</script></body></html>

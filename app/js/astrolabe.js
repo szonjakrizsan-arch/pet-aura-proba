@@ -1,6 +1,6 @@
 // Lassan mozgó csillagjel az Elemzéseim oldal üres részére (Szonja képe alapján: állatövi kör, iránytűcsillag ametiszttel,
 // körülötte két ferde pálya). A jelek a valódi állatövi jelek helyes sorrendben; minden gyűrű a saját ütemében forog.
-import { ZG } from './zodiac-glyphs.js?v=0.6.65';
+import { ZG } from './zodiac-glyphs.js?v=0.6.66';
 
 const C = 200, CY = 150; // középpont a 400×300-as rajzon
 const ring = (r, w, o = 1) => `<circle cx="${C}" cy="${CY}" r="${r}" fill="none" stroke="url(#alg)" stroke-width="${w}" opacity="${o}"/>`;
@@ -53,7 +53,7 @@ export function astrolabe() {
   <circle cx="${C}" cy="${CY}" r="78" fill="url(#aldisc)"/>
   <g class="alrot r3">${ring(78, 2.6)}<circle cx="${C}" cy="${CY}" r="73" fill="none" stroke="url(#alg)" stroke-width="3.5" stroke-dasharray="1.6 3.2" opacity=".85"/>${ring(68, 1)}</g>
   <g class="alstar">${star()}</g>
-  <circle cx="${C}" cy="${CY}" r="22.5" fill="#2a1048" stroke="url(#alg)" stroke-width="3.2"/><image href="assets/elemzeseim/ko_kerek.webp?v=0.6.65" x="${C - 19.5}" y="${CY - 19}" width="39" height="38"/>
+  <circle cx="${C}" cy="${CY}" r="22.5" fill="#2a1048" stroke="url(#alg)" stroke-width="3.2"/><image href="assets/elemzeseim/ko_kerek.webp?v=0.6.66" x="${C - 19.5}" y="${CY - 19}" width="39" height="38"/>
   ${f1}${f2}${sparks}
   </svg></div>`;
 }

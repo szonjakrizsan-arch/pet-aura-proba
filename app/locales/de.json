@@ -321,5 +321,13 @@
 "vm.h.3t": "Speichern und teilen",
 "vm.h.3": "Du kannst das fertige Bild speichern oder teilen. In der Ecke steht ein kleines Pet-Aura-Zeichen.",
 "vm.h.tip": "✦ Der Feiertagsstil ist nur zu den Feiertagen zu sehen – schau wieder vorbei!",
-"vm.h.aria": "Was ist die Zauberwerkstatt?"
+"vm.h.aria": "Was ist die Zauberwerkstatt?",
+"vm.mk.pick": "Foto deines Tieres auswählen",
+"vm.mk.change": "Anderes Foto wählen",
+"vm.mk.pose": "Auf dem fertigen Bild hat dein Tier dieselbe Haltung wie auf dem Foto. Am schönsten wird das Bild mit einem Foto, auf dem das ganze Tier gut zu sehen ist.",
+"vm.mk.go": "Erstellen",
+"vm.mk.wait": "Dein Bild wird erstellt, das dauert ein paar Sekunden…",
+"vm.mk.save": "Halte das Bild gedrückt, um es zu speichern.",
+"vm.mk.err": "Das Bild konnte diesmal nicht erstellt werden. Versuch es noch einmal oder wähle ein anderes Foto.",
+"vm.mk.bad": "Diese Datei konnte nicht als Bild geöffnet werden. Bitte wähle ein anderes Foto."
 }

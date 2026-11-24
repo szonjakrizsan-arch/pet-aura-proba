@@ -1,19 +1,19 @@
-import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.65';
-import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.65';
-import { analyze, chakraScores } from './analysis.js?v=0.6.65';
-import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.65';
-import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.65';
-import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.65';
-import { auraScreen, FLOW } from './aura.js?v=0.6.65';
-import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.65';
-import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.65';
-import { myView, mountMy, leaveMy } from './myview.js?v=0.6.65';
-import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.65';
-import { kbView, mountKb } from './kb.js?v=0.6.65';
-import { stylesView, mountStyles } from './styles.js?v=0.6.65';
-import { cameoUrl } from './pets.js?v=0.6.65';
-import { session } from './auth.js?v=0.6.65';
-import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.65';
+import { SUPPORTED, KB_READY, detect, loadDicts, translate, fmtPct, fmtDate } from './i18n.js?v=0.6.66';
+import { birthProfile, todaySky, dailyKeys } from './horoscope.js?v=0.6.66';
+import { analyze, chakraScores } from './analysis.js?v=0.6.66';
+import { moonPhase, MOON_GLYPHS, GLYPHS, zodiac, luckyHue, hash } from './cosmos.js?v=0.6.66';
+import { slot, CHAKRA_HUE, catArt, dogArt, moonSvg, elementArt, compassSvg, ring, curve } from './art.js?v=0.6.66';
+import { homeHtml, navHtml, startHome, ICON } from './home.js?v=0.6.66';
+import { auraScreen, FLOW } from './aura.js?v=0.6.66';
+import { cosmicView as cosmicNew, mountCosmic, readerView, mountReader } from './cosmic.js?v=0.6.66';
+import { fengView as fengNew, mountFeng } from './fengshui.js?v=0.6.66';
+import { myView, mountMy, leaveMy } from './myview.js?v=0.6.66';
+import { accountView as accountNew, mountAccount, medalUrl, leaveAccount, startAccountBg } from './account.js?v=0.6.66';
+import { kbView, mountKb } from './kb.js?v=0.6.66';
+import { stylesView, mountStyles } from './styles.js?v=0.6.66';
+import { cameoUrl } from './pets.js?v=0.6.66';
+import { session } from './auth.js?v=0.6.66';
+import { PETS, activePet, saveActive, listView, formView, mountPets, leaveForm, placeLabel } from './pets.js?v=0.6.66';
 const $ = (s) => document.querySelector(s);
 const S = { lang: 'en', dicts: {}, tab: 'home', sub: '', scan: null, stopHome: null, stopAura: null, busy: false, pk: '', pv: null, shown: '' };
 Object.defineProperty(S, 'pet', { get: activePet }); // a kiválasztott kedvenc (Kedvenceim)
@@ -220,7 +220,7 @@ document.addEventListener('change', (e) => {
   if (e.target.id === 'file' && e.target.files[0]) { scan(e.target.files[0]); e.target.value = ''; }
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.go) go(e.target.dataset.go); });
-// a fejlesztői próbaoldal külön lapon van (varazsteszt.html); a régi #varazsteszt link oda irányít
+// a fejlesztői kulcs oldala külön lapon van (varazsteszt.html); a régi #varazsteszt link oda irányít
 if (location.hash === '#varazsteszt') location.replace('varazsteszt.html' + location.search);
 { const [tab, sub = ''] = (location.hash.slice(1) || 'home').split('/'); S.tab = tab; S.sub = sub; } if (!location.hash) history.replaceState(null, '', '#home'); STACK.push(curRoute());
 // Indulás: a takarás csak akkor tűnik el, amikor a kezdőlap minden képe és a betűk betöltöttek – így nem rétegenként jelenik meg.

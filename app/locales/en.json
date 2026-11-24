@@ -321,5 +321,13 @@
 "vm.h.3t": "Save and share",
 "vm.h.3": "You can save or share the finished image. A small Pet Aura mark will appear in its corner.",
 "vm.h.tip": "✦ The holiday style is only visible during the holidays, so check back!",
-"vm.h.aria": "What is the Magic Workshop?"
+"vm.h.aria": "What is the Magic Workshop?",
+"vm.mk.pick": "Choose a photo of your pet",
+"vm.mk.change": "Choose another photo",
+"vm.mk.pose": "In the finished image your pet will be in the same pose as in the photo. The best results come from a photo where the whole animal is clearly visible.",
+"vm.mk.go": "Create",
+"vm.mk.wait": "Your image is being created – this takes a few seconds…",
+"vm.mk.save": "To save it, press and hold the image.",
+"vm.mk.err": "We couldn't create the image this time. Try again, or choose another photo.",
+"vm.mk.bad": "We couldn't open this file as an image. Please choose another photo."
 }

@@ -321,5 +321,13 @@
 "vm.h.3t": "Zapisz i udostępnij",
 "vm.h.3": "Gotowy obraz możesz zapisać lub udostępnić. W jego rogu znajdzie się mały znak Pet Aura.",
 "vm.h.tip": "✦ Styl świąteczny jest widoczny tylko w okresie świąt – zajrzyj znowu!",
-"vm.h.aria": "Czym jest Magiczny warsztat?"
+"vm.h.aria": "Czym jest Magiczny warsztat?",
+"vm.mk.pick": "Wybierz zdjęcie swojego pupila",
+"vm.mk.change": "Wybierz inne zdjęcie",
+"vm.mk.pose": "Na gotowym obrazie twój pupil będzie w tej samej pozie co na zdjęciu. Najładniejszy efekt daje zdjęcie, na którym dobrze widać całe zwierzę.",
+"vm.mk.go": "Stwórz",
+"vm.mk.wait": "Obraz powstaje, to potrwa kilka sekund…",
+"vm.mk.save": "Aby zapisać, przytrzymaj palec na obrazie.",
+"vm.mk.err": "Tym razem nie udało się stworzyć obrazu. Spróbuj ponownie lub wybierz inne zdjęcie.",
+"vm.mk.bad": "Nie udało się otworzyć tego pliku jako obrazu. Wybierz inne zdjęcie."
 }

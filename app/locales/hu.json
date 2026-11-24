@@ -321,5 +321,13 @@
 "vm.h.3t": "Mentsd el, oszd meg",
 "vm.h.3": "A kész képet elmentheted vagy megoszthatod. A sarkában ott lesz a Pet Aura kis jelzése.",
 "vm.h.tip": "✦ Az ünnepi stílus csak az ünnepek idején látható, érdemes visszanézni!",
-"vm.h.aria": "Mi a Varázsműhely?"
+"vm.h.aria": "Mi a Varázsműhely?",
+"vm.mk.pick": "Kedvenced fotójának kiválasztása",
+"vm.mk.change": "Másik fotó választása",
+"vm.mk.pose": "A kész képen kedvenced ugyanabban a pózban lesz, mint a fotón. A legszebb eredményt az a fotó adja, amelyen az egész állat jól látszik.",
+"vm.mk.go": "Elkészítem",
+"vm.mk.wait": "A kép készül, ez néhány másodperc…",
+"vm.mk.save": "A mentéshez nyomd hosszan a képet.",
+"vm.mk.err": "Most nem sikerült elkészíteni a képet. Próbáld újra, vagy válassz másik fotót.",
+"vm.mk.bad": "Ezt a fájlt nem tudtuk képként megnyitni. Válassz másik fotót."
 }

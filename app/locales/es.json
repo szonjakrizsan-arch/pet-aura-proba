@@ -321,5 +321,13 @@
 "vm.h.3t": "Guárdala y compártela",
 "vm.h.3": "Puedes guardar o compartir la imagen terminada. En una esquina tendrá una pequeña marca de Pet Aura.",
 "vm.h.tip": "✦ El estilo festivo solo se ve en temporada de fiestas, ¡vuelve a visitarnos!",
-"vm.h.aria": "¿Qué es el Taller Mágico?"
+"vm.h.aria": "¿Qué es el Taller Mágico?",
+"vm.mk.pick": "Elige una foto de tu mascota",
+"vm.mk.change": "Elige otra foto",
+"vm.mk.pose": "En la imagen terminada, tu mascota tendrá la misma pose que en la foto. El mejor resultado se logra con una foto en la que se vea bien todo el animal.",
+"vm.mk.go": "Crear",
+"vm.mk.wait": "Tu imagen se está creando, tarda unos segundos…",
+"vm.mk.save": "Para guardarla, mantén presionada la imagen.",
+"vm.mk.err": "Esta vez no pudimos crear la imagen. Inténtalo de nuevo o elige otra foto.",
+"vm.mk.bad": "No pudimos abrir este archivo como imagen. Elige otra foto."
 }

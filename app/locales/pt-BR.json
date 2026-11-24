@@ -321,5 +321,13 @@
 "vm.h.3t": "Salve e compartilhe",
 "vm.h.3": "Você pode salvar ou compartilhar a imagem pronta. No canto dela vai aparecer uma pequena marca da Pet Aura.",
 "vm.h.tip": "✦ O estilo de festas só aparece no fim do ano – volte para conferir!",
-"vm.h.aria": "O que é a Oficina Mágica?"
+"vm.h.aria": "O que é a Oficina Mágica?",
+"vm.mk.pick": "Escolha uma foto do seu pet",
+"vm.mk.change": "Escolha outra foto",
+"vm.mk.pose": "Na imagem pronta, seu pet vai estar na mesma pose da foto. O melhor resultado vem de uma foto em que o animal inteiro aparece bem.",
+"vm.mk.go": "Criar",
+"vm.mk.wait": "Sua imagem está sendo criada, leva alguns segundos…",
+"vm.mk.save": "Para salvar, toque e segure a imagem.",
+"vm.mk.err": "Desta vez não conseguimos criar a imagem. Tente de novo ou escolha outra foto.",
+"vm.mk.bad": "Não conseguimos abrir este arquivo como imagem. Escolha outra foto."
 }
