@@ -327,7 +327,6 @@
 "vm.mk.pose": "Dein Liebling wird wie von Zauberhand verwandelt – ganz in seiner eigenen, vertrauten Haltung! Tipp: Wähle ein Foto, auf dem sein süßes Gesichtchen und sein Fell gut zu sehen sind – so wird das Ergebnis richtig lebensecht.",
 "vm.mk.go": "Erstellen",
 "vm.mk.wait": "Dein Bild wird erstellt, das dauert ein paar Sekunden…",
-"vm.mk.save": "Halte das Bild gedrückt, um es zu speichern.",
 "vm.mk.err": "Das Bild konnte diesmal nicht erstellt werden. Versuch es noch einmal oder wähle ein anderes Foto.",
 "vm.mk.bad": "Diese Datei konnte nicht als Bild geöffnet werden. Bitte wähle ein anderes Foto."
 }

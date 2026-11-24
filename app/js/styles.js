@@ -4,11 +4,11 @@
 // AMÍG NINCS FIZETÉS ÉS NAPI KERET: a képkészítő rész csak azon a telefonon látszik, ahol a fejlesztői jelszó el van mentve
 // (localStorage 'pa.devpass'), mert a szerver jelszó nélkül nem dolgozik – így más nem tudja a krediteket elhasználni. Máshol nincs semmi
 // (Szonja: nincs „hamarosan”-szöveg). VÍZJEL: még nincs a kész képen (vm.h.3 ígéri) – a Tarot ✦ XIX ✦ feliratával együtt épül be.
-import { CORNER } from './account.js?v=0.6.80';
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.80';
-import { activePet } from './pets.js?v=0.6.80';
+import { CORNER } from './account.js?v=0.6.81';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.81';
+import { activePet } from './pets.js?v=0.6.81';
 
-const V = '0.6.80';
+const V = '0.6.81';
 const SEASON = { karacsony: (d) => (d.getMonth() === 11) || (d.getMonth() === 0 && d.getDate() <= 6) }; // dec. 1. – jan. 6. (Szonja döntése)
 // Minden stílusnak cicás és kutyás mintaképe van (Szonja kérése: a cicás gazdi ne higgye, hogy csak kutyáknak szól).
 // A kedvenc faja dönt; ha nincs kedvenc / faj, a galériában felváltva látszanak (sakktáblaszerűen).
@@ -63,17 +63,27 @@ export function mountStyles(view, { t, esc, lang, sub, go }) {
   });
   return () => { alive = false; };
 }
-// A gazdi saját fotójából készülő kép: fotó választása → „Elkészítem” → a kész kép (mentés: hosszan nyomva, letöltőgomb NINCS –
-// a korábbi letöltő link elugrasztotta az oldalt, és elveszett a kész kép).
+// A gazdi saját fotójából készülő kép: fotó választása → „Elkészítem” → a kész kép, alatta Mentés és Megosztás gomb
+// (Szonja kérése, 2026-11-24: sokaknak nem menne a hosszan nyomás). Ugyanúgy működik, mint az Aura Scanner eredményénél:
+// a mentés a képet fájlként tölti le (nem navigál el – a korábbi letöltő LINK ugrasztotta el az oldalt), a megosztás a telefon
+// megosztó paneljét nyitja; ahol a böngésző nem tud fájlt megosztani, ott a mentés fut le.
 function makeView(t, esc) {
   return `<section class="acard vmmake">${corners()}<p class="vmpose">${esc(t('vm.mk.pose'))}</p>
     <label class="fsbtn vmpick"><input type="file" accept="image/*" hidden><span>${esc(t('vm.mk.pick'))}</span></label>
     <img class="vmprev" alt="" hidden><button class="fsbtn vmgo" type="button" hidden>${esc(t('vm.mk.go'))}</button>
-    <p class="vmst" aria-live="polite"></p><img class="vmres" alt="" hidden><p class="vmsave" hidden>${esc(t('vm.mk.save'))}</p></section>`;
+    <p class="vmst" aria-live="polite"></p><img class="vmres" alt="" hidden>
+    <div class="vmacts" hidden><button class="fsbtn" type="button" data-act="save">${esc(t('au.res.save'))}</button><button class="fsbtn" type="button" data-act="share">${esc(t('au.res.share'))}</button></div></section>`;
 }
 function mountMake(root, t, style, species, alive) {
   const q = (s) => root.querySelector('.vmmake ' + s);
-  let photo = '', busy = false, url = '';
+  let photo = '', busy = false, url = '', blob = null;
+  const fname = () => `pet-aura-${style}.jpg`;
+  const save = () => { if (!blob) return; const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname(); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
+  q('[data-act="save"]').onclick = save;
+  q('[data-act="share"]').onclick = async () => {
+    if (!blob) return; const f = new File([blob], fname(), { type: 'image/jpeg' });
+    if (navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f], title: 'Pet Aura' }); } catch { /* a gazdi bezárta */ } } else save();
+  };
   const st = (m, err) => { q('.vmst').textContent = m; q('.vmst').classList.toggle('err', !!err); };
   q('input').onchange = async (e) => {
     const f = e.target.files[0]; if (!f) return;
@@ -91,10 +101,10 @@ function mountMake(root, t, style, species, alive) {
       const d = await r.json().catch(() => ({}));
       if (!r.ok || !d.image) throw new Error(d.error || String(r.status));
       // a visszakapott szöveges képet (data URI) fájlként kezeljük – így nem akadozik a telefon, és hosszan nyomva menthető
-      const blob = await (await fetch(d.image)).blob();
+      const b = await (await fetch(d.image)).blob();
       if (!alive()) return;
-      if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(blob);
-      q('.vmres').src = url; q('.vmres').hidden = false; q('.vmsave').hidden = false; st('');
+      blob = b; if (url) URL.revokeObjectURL(url); url = URL.createObjectURL(b);
+      q('.vmres').src = url; q('.vmres').hidden = false; q('.vmacts').hidden = false; st('');
       q('.vmres').scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch { if (alive()) st(t('vm.mk.err'), true); }
     busy = false; if (alive()) q('.vmgo').disabled = false;

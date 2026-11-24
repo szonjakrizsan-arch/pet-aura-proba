@@ -327,7 +327,6 @@
 "vm.mk.pose": "Your little one is transformed in their very own, familiar pose! Tip: choose a photo where their sweet face and fur are clearly visible, so the result turns out truly lifelike.",
 "vm.mk.go": "Create",
 "vm.mk.wait": "Your image is being created – this takes a few seconds…",
-"vm.mk.save": "To save it, press and hold the image.",
 "vm.mk.err": "We couldn't create the image this time. Try again, or choose another photo.",
 "vm.mk.bad": "We couldn't open this file as an image. Please choose another photo."
 }

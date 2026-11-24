@@ -327,7 +327,6 @@
 "vm.mk.pose": "Kedvenced a saját, megszokott pózában varázsolódik át! Tipp: olyan fotót válassz, amin jól látszik a pofija és a bundája, így lesz igazán élethű a végeredmény.",
 "vm.mk.go": "Elkészítem",
 "vm.mk.wait": "A kép készül, ez néhány másodperc…",
-"vm.mk.save": "A mentéshez nyomd hosszan a képet.",
 "vm.mk.err": "Most nem sikerült elkészíteni a képet. Próbáld újra, vagy válassz másik fotót.",
 "vm.mk.bad": "Ezt a fájlt nem tudtuk képként megnyitni. Válassz másik fotót."
 }

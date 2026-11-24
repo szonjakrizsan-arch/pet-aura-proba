@@ -327,7 +327,6 @@
 "vm.mk.pose": "Seu pet se transforma como num passe de mágica, mantendo a pose de sempre! Dica: escolha uma foto em que o rostinho e o pelo dele apareçam bem, assim o resultado fica bem fiel.",
 "vm.mk.go": "Criar",
 "vm.mk.wait": "Sua imagem está sendo criada, leva alguns segundos…",
-"vm.mk.save": "Para salvar, toque e segure a imagem.",
 "vm.mk.err": "Desta vez não conseguimos criar a imagem. Tente de novo ou escolha outra foto.",
 "vm.mk.bad": "Não conseguimos abrir este arquivo como imagem. Escolha outra foto."
 }

@@ -327,7 +327,6 @@
 "vm.mk.pose": "¡Tu mascota se transforma como por arte de magia, manteniendo su pose de siempre! Consejo: elige una foto en la que se vean bien su carita y su pelaje, así el resultado será de lo más realista.",
 "vm.mk.go": "Crear",
 "vm.mk.wait": "Tu imagen se está creando, tarda unos segundos…",
-"vm.mk.save": "Para guardarla, mantén presionada la imagen.",
 "vm.mk.err": "Esta vez no pudimos crear la imagen. Inténtalo de nuevo o elige otra foto.",
 "vm.mk.bad": "No pudimos abrir este archivo como imagen. Elige otra foto."
 }
