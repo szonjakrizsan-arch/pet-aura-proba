@@ -1,8 +1,8 @@
 // Aura Scanner képernyők: indító · fotózás · portré igazítása · elemzés · sikertelen próba · eredmény.
 // A jóváhagyott próbaoldalak (pet-aura-proba) logikája, az app keretébe illesztve. Minden felirat a szótárból (t) jön.
-import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.78';
-import { ICON } from './home.js?v=0.6.78';
-import { resultScreen, archiveScreen } from './aura-result.js?v=0.6.78';
+import { SEAL_SHARDS, IC_GAL, IC_SHOOT, IC_GAL2, IC_SWAP } from './aura-deco.js?v=0.6.79';
+import { ICON } from './home.js?v=0.6.79';
+import { resultScreen, archiveScreen } from './aura-result.js?v=0.6.79';
 
 const A = (f) => `assets/aura/${f}`;
 const RM = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
