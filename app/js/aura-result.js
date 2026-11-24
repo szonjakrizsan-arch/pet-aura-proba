@@ -1,11 +1,11 @@
 // Eredményoldal: a jóváhagyott auraportré-oldal (design/aura_scanner/forras/template.html) az app keretében.
 // A rajzoló kód a sablonból változatlan. Az összetétel és az üzenet a 4. szakaszig mintaadat (a valódi elemzőmotor adja majd).
-import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.66';
-import { FLOW } from './aura.js?v=0.6.66';
-import { saveWithNotice, getEntry } from './journal.js?v=0.6.66';
-import { mountDelete } from './myview.js?v=0.6.66';
-import { makeShareCard } from './sharecard.js?v=0.6.66';
-import { PETS } from './pets.js?v=0.6.66';
+import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.67';
+import { FLOW } from './aura.js?v=0.6.67';
+import { saveWithNotice, getEntry } from './journal.js?v=0.6.67';
+import { mountDelete } from './myview.js?v=0.6.67';
+import { makeShareCard } from './sharecard.js?v=0.6.67';
+import { PETS } from './pets.js?v=0.6.67';
 const GOLD='<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#e9c46f"/><stop offset="1" stop-color="#b07f2c"/></linearGradient></defs>';
 const ICON={
  astro:`<svg viewBox="0 0 32 32">${GOLD}<path fill="url(#gg)" d="M19 5a11 11 0 1 0 8 18A9 9 0 1 1 19 5z"/><path fill="url(#gg)" d="M24 6l1.1 2.9L28 10l-2.9 1.1L24 14l-1.1-2.9L20 10l2.9-1.1z"/></svg>`,
@@ -350,7 +350,7 @@ export function resultScreen(ctx){
   const card=async()=>{if(busy)return null;busy=true;try{
    hiRes=1260;build();await frames(3);const big=document.createElement('canvas');big.width=big.height=1260;big.getContext('2d').drawImage(cv,0,0);hiRes=0;build();
    const pid=A?A.petId:pet.id,pp=PETS.list.find(p=>p.id===pid)||pet||{},when=new Intl.DateTimeFormat(lang,{dateStyle:'long'}).format(A?new Date(A.date):new Date());
-   let sign='';if(pp.bday){try{const {birthProfile}=await import('./horoscope.js?v=0.6.66');sign=t('zs.'+birthProfile(pp).sun)+' · '}catch(e){}}
+   let sign='';if(pp.bday){try{const {birthProfile}=await import('./horoscope.js?v=0.6.67');sign=t('zs.'+birthProfile(pp).sun)+' · '}catch(e){}}
    const msg=q('#msg').textContent,ss=msg.match(/[^.!?。]+[.!?。]+/g)||[msg],quote=ss.slice(-2).join(' ').replace(/\s+/g,' ').replace(/。 /g,'。').trim();
    return await makeShareCard({lang,aura:big,name,sub:sign+when,title:t('au.card.sample'),quote,quotes:ss.map(x=>x.trim()),layers:L.map(l=>({k:l[0],col:l[2],label:LNAME[l[0]]})),brand:'Pet Aura',tagline:t('au.card.tag')});
   }finally{hiRes=0;busy=false}};

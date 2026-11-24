@@ -29,7 +29,7 @@ export const fmtDate = (lang, d) => new Intl.DateTimeFormat(lang, { dateStyle: '
 export async function loadDicts(lang, fetchJson = (u) => fetch(u).then((r) => (r.ok ? r.json() : Promise.reject(new Error(u))))) {
   // Minden szükséges nyelvi fájl egyszerre (párhuzamosan) töltődik – gyorsabb indulás.
   const known = SUPPORTED.map((s) => s.code), out = {}, codes = chain(lang).filter((c) => known.includes(c));
-  const got = await Promise.all(codes.map((c) => Promise.all([fetchJson(`locales/${c}.json?v=0.6.66`).catch(() => null), KB_READY.includes(c) ? fetchJson(`locales/kb.${c}.json?v=0.6.66`).catch(() => null) : null])));
+  const got = await Promise.all(codes.map((c) => Promise.all([fetchJson(`locales/${c}.json?v=0.6.67`).catch(() => null), KB_READY.includes(c) ? fetchJson(`locales/kb.${c}.json?v=0.6.67`).catch(() => null) : null])));
   codes.forEach((c, i) => { const [main, kb] = got[i]; if (main) out[c] = kb ? Object.assign(main, kb) : main; });
   return out;
 }
