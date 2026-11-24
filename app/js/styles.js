@@ -4,11 +4,11 @@
 // AMÍG NINCS FIZETÉS ÉS NAPI KERET: a képkészítő rész csak azon a telefonon látszik, ahol a fejlesztői jelszó el van mentve
 // (localStorage 'pa.devpass'), mert a szerver jelszó nélkül nem dolgozik – így más nem tudja a krediteket elhasználni. Máshol nincs semmi
 // (Szonja: nincs „hamarosan”-szöveg). VÍZJEL: még nincs a kész képen (vm.h.3 ígéri) – a Tarot ✦ XIX ✦ feliratával együtt épül be.
-import { CORNER } from './account.js?v=0.6.81';
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.81';
-import { activePet } from './pets.js?v=0.6.81';
+import { CORNER } from './account.js?v=0.6.82';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.82';
+import { activePet } from './pets.js?v=0.6.82';
 
-const V = '0.6.81';
+const V = '0.6.82';
 const SEASON = { karacsony: (d) => (d.getMonth() === 11) || (d.getMonth() === 0 && d.getDate() <= 6) }; // dec. 1. – jan. 6. (Szonja döntése)
 // Minden stílusnak cicás és kutyás mintaképe van (Szonja kérése: a cicás gazdi ne higgye, hogy csak kutyáknak szól).
 // A kedvenc faja dönt; ha nincs kedvenc / faj, a galériában felváltva látszanak (sakktáblaszerűen).
@@ -112,11 +112,11 @@ function mountMake(root, t, style, species, alive) {
 }
 // „i” pecsét: rövid magyarázat a pergamenlapon, ugyanúgy, mint a Feng Shui iránytűjénél
 function help(root, t, esc) {
-  const steps = [1, 2, 3].map((i) => `<li><span class="fsn">${i}</span><div><b>${esc(t('vm.h.' + i + 't'))}</b><p>${esc(t('vm.h.' + i))}</p></div></li>`).join('');
+  const steps = [1, 2, 3, 4].map((i) => `<li><span class="fsn">${i}</span><div><b>${esc(t('vm.h.' + i + 't'))}</b><p>${esc(t('vm.h.' + i))}</p></div></li>`).join('');
   const host = root.closest('.phone') || document.body;
   host.insertAdjacentHTML('beforeend', `<div class="fsmodal" id="vmmodal" role="dialog" aria-modal="true" aria-labelledby="vmmt"><div class="fsmcard kscroll"><div class="p-mid"></div><img class="p-top" src="assets/aura/perg_felso.webp" alt=""><img class="p-bot" src="assets/aura/perg_also.webp" alt="">
    <button class="zm fsx" id="vmclose" type="button" aria-label="${esc(t('fs.h.close'))}"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M34 34 66 66M66 34 34 66" stroke="url(#au)" stroke-width="9" stroke-linecap="round"/></svg></button>
-   <div class="p-in"><h2 id="vmmt">${esc(t('vm.h.title'))}</h2><ol class="fssteps">${steps}</ol><p class="fstip">${esc(t('vm.h.tip'))}</p></div></div></div>`);
+   <div class="p-in"><h2 id="vmmt">${esc(t('vm.h.title'))}</h2><ol class="fssteps">${steps}</ol><p class="fstip">${esc(t('vm.h.priv'))}</p><p class="fstip">${esc(t('vm.h.tip'))}</p></div></div></div>`);
   const m = host.querySelector('#vmmodal');
   const close = () => { m.remove(); removeEventListener('keydown', k); }, k = (e) => { if (e.key === 'Escape') close(); };
   m.onclick = (e) => { if (e.target === m || e.target.closest('#vmclose')) close(); }; addEventListener('keydown', k); m.querySelector('#vmclose').focus();
