@@ -4,11 +4,11 @@
 // AMÍG NINCS FIZETÉS ÉS NAPI KERET: a képkészítő rész csak azon a telefonon látszik, ahol a fejlesztői jelszó el van mentve
 // (localStorage 'pa.devpass'), mert a szerver jelszó nélkül nem dolgozik – így más nem tudja a krediteket elhasználni. Máshol nincs semmi
 // (Szonja: nincs „hamarosan”-szöveg). VÍZJEL: még nincs a kész képen (vm.h.3 ígéri) – a Tarot ✦ XIX ✦ feliratával együtt épül be.
-import { CORNER } from './account.js?v=0.6.83';
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.83';
-import { activePet } from './pets.js?v=0.6.83';
+import { CORNER } from './account.js?v=0.6.84';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.84';
+import { activePet } from './pets.js?v=0.6.84';
 
-const V = '0.6.83';
+const V = '0.6.84';
 const SEASON = { karacsony: (d) => (d.getMonth() === 11) || (d.getMonth() === 0 && d.getDate() <= 6) }; // dec. 1. – jan. 6. (Szonja döntése)
 // Minden stílusnak cicás és kutyás mintaképe van (Szonja kérése: a cicás gazdi ne higgye, hogy csak kutyáknak szól).
 // A kedvenc faja dönt; ha nincs kedvenc / faj, a galériában felváltva látszanak (sakktáblaszerűen).
@@ -54,7 +54,7 @@ export function mountStyles(view, { t, esc, lang, sub, go }) {
         root.querySelectorAll('[data-a]').forEach((x) => x.classList.toggle('on', x === b));
         species = b.dataset.a === 'kutya' ? 'dog' : 'cat';
         root.querySelector('.vmbig').src = img(one.id, false, b.dataset.a); }; });
-      if (devPass()) mountMake(root, t, one.id, () => species, () => alive);
+      if (devPass()) mountMake(root, t, one.id, one.name, () => species, () => alive);
       return;
     }
     root.innerHTML = `<div class="vmtop"><p class="vmintro">${esc(d.ui.intro)}</p><button class="fsinfo vminfo" id="vminfo" type="button" aria-label="${esc(t('vm.h.aria'))}"><img src="assets/fengshui/pecset_i.webp?v=${V}" alt=""></button></div><div class="vmgrid">${list.map((s, i) => `<button class="acard vmcard${SEASON[s.id] ? ' season' : ''}" data-go="styles/${s.id}">${corners()}
@@ -74,10 +74,12 @@ function makeView(t, esc) {
     <p class="vmst" aria-live="polite"></p><img class="vmres" alt="" hidden>
     <div class="vmacts" hidden><button class="fsbtn" type="button" data-act="save">${esc(t('au.res.save'))}</button><button class="fsbtn" type="button" data-act="share">${esc(t('au.res.share'))}</button></div></section>`;
 }
-function mountMake(root, t, style, species, alive) {
+function mountMake(root, t, style, sname, species, alive) {
   const q = (s) => root.querySelector('.vmmake ' + s);
   let photo = '', busy = false, url = '', blob = null;
-  const fname = () => `pet-aura-${style}.jpg`;
+  // fájlnév a stílus nevéből, a gazdi nyelvén (pl. pet-aura-mesekonyv.jpg) – a belső azonosító (kawaii) ne látsszon
+  const slug = String(sname || style).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\u3040-\u30ff\u4e00-\u9fff]+/g, '-').replace(/^-+|-+$/g, '') || style;
+  const fname = () => `pet-aura-${slug}.jpg`;
   const save = () => { if (!blob) return; const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname(); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
   q('[data-act="save"]').onclick = save;
   q('[data-act="share"]').onclick = async () => {
