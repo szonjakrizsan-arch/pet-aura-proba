@@ -1,26 +1,26 @@
 // Eredményoldal: a jóváhagyott auraportré-oldal (design/aura_scanner/forras/template.html) az app keretében.
 // A rajzoló kód a sablonból változatlan. Az összetétel és az üzenet a 4. szakaszig mintaadat (a valódi elemzőmotor adja majd).
-import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.86';
-import { FLOW } from './aura.js?v=0.6.86';
-import { saveWithNotice, getEntry } from './journal.js?v=0.6.86';
-import { mountDelete } from './myview.js?v=0.6.86';
-import { makeShareCard } from './sharecard.js?v=0.6.86';
-import { PETS } from './pets.js?v=0.6.86';
+import { IC_RBACK, IC_RSHARE, IC_RSAVE } from './aura-deco.js?v=0.6.87';
+import { FLOW } from './aura.js?v=0.6.87';
+import { saveWithNotice, getEntry } from './journal.js?v=0.6.87';
+import { mountDelete } from './myview.js?v=0.6.87';
+import { makeShareCard } from './sharecard.js?v=0.6.87';
+import { PETS } from './pets.js?v=0.6.87';
+import { cosmicLayer, qiLayer, ethoLayer, finalAura } from './aura-engine.js?v=0.6.87';
 const GOLD='<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#e9c46f"/><stop offset="1" stop-color="#b07f2c"/></linearGradient></defs>';
 const ICON={
  astro:`<svg viewBox="0 0 32 32">${GOLD}<path fill="url(#gg)" d="M19 5a11 11 0 1 0 8 18A9 9 0 1 1 19 5z"/><path fill="url(#gg)" d="M24 6l1.1 2.9L28 10l-2.9 1.1L24 14l-1.1-2.9L20 10l2.9-1.1z"/></svg>`,
  qi:`<svg viewBox="0 0 32 32">${GOLD}<circle cx="16" cy="16" r="12" fill="none" stroke="url(#gg)" stroke-width="2"/><path fill="url(#gg)" d="M16 5l3 11-3 11-3-11z"/><circle cx="16" cy="16" r="1.6" fill="#3a1d63"/></svg>`,
  etho:`<svg viewBox="0 0 32 32">${GOLD}<ellipse cx="16" cy="21" rx="6.5" ry="5.5" fill="url(#gg)"/><ellipse cx="8" cy="13.5" rx="2.6" ry="3.3" fill="url(#gg)"/><ellipse cx="13" cy="8.5" rx="2.7" ry="3.5" fill="url(#gg)"/><ellipse cx="19" cy="8.5" rx="2.7" ry="3.5" fill="url(#gg)"/><ellipse cx="24" cy="13.5" rx="2.6" ry="3.3" fill="url(#gg)"/></svg>`};
 const SAT=true,HALO=true;
-// Mintaösszetétel a 4. szakaszig: a réteg színei és címkéi (a döntések 5. pontja szerinti súlyokkal)
-const WU={E:'wood',SE:'wood',S:'fire',SW:'earth',NE:'earth',W:'metal',NW:'metal',N:'water'};
-const QCOL={wood:'#329B78',fire:'#C27A45',earth:'#65875C',metal:'#B8C3CC',water:'#468DAB'};
-export function sampleComposition(t){
- const dog=FLOW.species!=='cat',dir=FLOW.dir;
- const astro=dog?{lab:[t('au.el.fire'),t('au.el.earth'),t('au.el.air')].join(' · '),col:'#BF985D'}:{lab:t('au.el.water'),col:'#468DAB'};
- const etho={lab:t('au.etho.curious'),col:dog?'#6FA9C8':'#E8C66A'};
- if(dir){const w=WU[dir];return [['astro',astro.lab,astro.col,.30],['qi',t('au.dir.'+dir)+' · '+t('au.wu.'+w),QCOL[w],.30],['etho',etho.lab,etho.col,.40]]}
- return [['astro',astro.lab,astro.col,.4286],['etho',etho.lab,etho.col,.5714]];
+// Összetétel (2026-11-25): az Asztrológiai mag és a Környezeti Qi VALÓDI – a színmotorból (js/aura-engine.js, rögzített táblák és súlyok).
+// Az Etológiai pillanat még MINTA („Előre figyelő tekintet”), amíg az AI-elemzés (próba 20–30 valódi fotóval) el nem készül.
+const ETHO_SAMPLE='curious';
+export function composition(t,pet){
+ const sp=FLOW.species==='cat'?'cat':'dog';
+ const a=cosmicLayer(pet),q=qiLayer(FLOW.dir),e=ethoLayer(sp,[ETHO_SAMPLE]),f=finalAura([a,q,e]);
+ const lab={astro:a&&[...new Set(a.factors.map(x=>x.elem))].map(el=>t('au.el.'+el)).join(' · '),qi:q&&(t('au.dir.'+q.dir)+' · '+t('au.wu.'+q.elem)),etho:t('au.etho.'+ETHO_SAMPLE)};
+ return f.layers.map(l=>[l.layer,lab[l.layer],l.color,f.weights[l.layer]]);
 }
 export function resultScreen(ctx){
  // ctx.archive: egy elmentett elemzés (Elemzéseim) – ugyanez a képernyő, a mentéskori fotóval, összetétellel, üzenettel és dátummal
@@ -37,7 +37,7 @@ export function resultScreen(ctx){
  const mount=(root)=>{
   const q=(s)=>root.querySelector(s),sa=q('#sa');let alive=true;
   const FRAMEIMG=new Image();FRAMEIMG.src='assets/aura/portrekeret.webp';
-  const L=A?A.L:sampleComposition(t),LNAME={astro:t('au.res.l.astro'),qi:t('au.res.l.qi'),etho:t('au.res.l.etho')};
+  const L=A?A.L:composition(t,pet),LNAME={astro:t('au.res.l.astro'),qi:t('au.res.l.qi'),etho:t('au.res.l.etho')};
   // csillagok
   const sc=q('#stars'),sx=sc.getContext('2d');let ST=[];const sizeStars=()=>{sc.width=root.clientWidth*devicePixelRatio;sc.height=root.clientHeight*devicePixelRatio;ST=Array.from({length:40},()=>({x:Math.random(),y:Math.random(),r:Math.random()*1.3+.3,p:Math.random()*6}))};sizeStars();
   // --- színkeverés (lineáris RGB, mint az AURA_V1_DONTESEK 5. pontja) ---
@@ -350,7 +350,7 @@ export function resultScreen(ctx){
   const card=async()=>{if(busy)return null;busy=true;try{
    hiRes=1260;build();await frames(3);const big=document.createElement('canvas');big.width=big.height=1260;big.getContext('2d').drawImage(cv,0,0);hiRes=0;build();
    const pid=A?A.petId:pet.id,pp=PETS.list.find(p=>p.id===pid)||pet||{},when=new Intl.DateTimeFormat(lang,{dateStyle:'long'}).format(A?new Date(A.date):new Date());
-   let sign='';if(pp.bday){try{const {birthProfile}=await import('./horoscope.js?v=0.6.86');sign=t('zs.'+birthProfile(pp).sun)+' · '}catch(e){}}
+   let sign='';if(pp.bday){try{const {birthProfile}=await import('./horoscope.js?v=0.6.87');sign=t('zs.'+birthProfile(pp).sun)+' · '}catch(e){}}
    const msg=q('#msg').textContent,ss=msg.match(/[^.!?。]+[.!?。]+/g)||[msg],quote=ss.slice(-2).join(' ').replace(/\s+/g,' ').replace(/。 /g,'。').trim();
    return await makeShareCard({lang,aura:big,name,sub:sign+when,title:t('au.card.sample'),quote,quotes:ss.map(x=>x.trim()),layers:L.map(l=>({k:l[0],col:l[2],label:LNAME[l[0]]})),brand:'Pet Aura',tagline:t('au.card.tag')});
   }finally{hiRes=0;busy=false}};

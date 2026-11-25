@@ -1,7 +1,7 @@
 // Birth profile + today's sky from Celestine (positions); texts come from the knowledge base (locales/kb.*.json).
-import { calculateChart } from './vendor/celestine.js?v=0.6.86';
-import tzlookup from './vendor/tzlookup.js?v=0.6.86';
-import { tzOffsetHours } from './geo.js?v=0.6.86';
+import { calculateChart } from './vendor/celestine.js?v=0.6.87';
+import tzlookup from './vendor/tzlookup.js?v=0.6.87';
+import { tzOffsetHours } from './geo.js?v=0.6.87';
 const OPT = { includeAsteroids: false, includeChiron: false, includeLilith: false, includeNodes: false, includeLots: false };
 const body = (c, n) => c.planets.find((p) => p.name === n);
 // A szövegtárhoz: a bolygók jegye és (ha ismert a születési idő és hely) háza, valamint a fő fényszögek.
@@ -25,7 +25,9 @@ export function birthProfile({ bday, btime, place }) {
   const at = (h, mi) => calculateChart({ year: y, month: m, day: d, hour: h, minute: mi, second: 0, timezone: off, latitude: 0, longitude: 0 }, OPT);
   const noon = at(12, 0), a = at(0, 0), b = at(23, 59);
   const approx = body(a, 'Moon').sign !== body(b, 'Moon').sign || body(a, 'Sun').sign !== body(b, 'Sun').sign;
-  return { sun: body(noon, 'Sun').sign, moon: body(noon, 'Moon').sign, asc: null, approx, level: 'date', ...details(noon, false) };
+  // moonShift / sunShift: az adott napon jegyet váltott (születési idő nélkül nem tudjuk, melyik jegyben volt) – az Aura Scanner ilyenkor kihagyja (AURA_V1_DONTESEK 2.)
+  const moonShift = body(a, 'Moon').sign !== body(b, 'Moon').sign, sunShift = body(a, 'Sun').sign !== body(b, 'Sun').sign;
+  return { sun: body(noon, 'Sun').sign, moon: body(noon, 'Moon').sign, asc: null, approx, moonShift, sunShift, level: 'date', ...details(noon, false) };
 }
 export function todaySky(now = new Date()) {
   const c = calculateChart({ year: now.getUTCFullYear(), month: now.getUTCMonth() + 1, day: now.getUTCDate(), hour: now.getUTCHours(), minute: now.getUTCMinutes(), second: 0, timezone: 0, latitude: 0, longitude: 0 }, OPT);
