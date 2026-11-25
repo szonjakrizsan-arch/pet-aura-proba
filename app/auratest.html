@@ -34,7 +34,7 @@ $('#f').onchange=async(e)=>{for(const f of e.target.files){items.push({name:f.na
 function show(it,d,ms){const r=d.result;const L=ethoLayer(r.animal==='cat'?'cat':r.animal==='dog'?'dog':it.sp,r.categories);
  const obs=Object.entries(r.observations||{}).map(([k,v])=>`${k}: ${esc(v.value)} <i>(${v.visibility})</i>`).join('<br>');
  return `<div>Lát: <b>${esc(r.animal)}</b> (${esc(r.species_confidence)})${r.animal!==it.sp&&r.animal!=='none'?' ⚠️ eltér a beállítottól':''}</div>
- ${r.etho_ok?`<div><span class="sw" style="background:${L?L.color:'#000'}"></span><b>${r.categories.map((c)=>HU[c]||c).join(' + ')}</b> · bizonyosság: ${esc(r.certainty)}</div>`:`<div class="err">Nincs besorolás${r.usable?'':' – '+esc(OK[r.unusable_reason]||r.unusable_reason)} · bizonyosság: ${esc(r.certainty)}</div>`}
+ ${r.etho_ok?`<div><span class="sw" style="background:${L?L.color:'#000'}"></span><b>${r.categories.map((c)=>HU[c]||c).join(' + ')}</b> · bizonyosság: ${esc(r.certainty)}</div>`:`<div class="err">Nincs besorolás${r.species_mismatch?' – nem a megadott faj van a képen':''}${r.usable?'':' – '+esc(OK[r.unusable_reason]||r.unusable_reason)} · bizonyosság: ${esc(r.certainty)}</div>`}
  ${r.health_filtered?'<div class="err">⚠️ egészségügyi szót kiszűrtünk</div>':''}<details><summary>Megfigyelések · ${ms} ms</summary>${obs}<br><i>${esc(r.limitations)}</i></details>`}
 $('#go').onclick=async()=>{const s=await session();if(!s){alert('Nincs bejelentkezés');return}$('#go').disabled=true;let n=0,good=0;const model=$('#m').value;
  for(const it of items){it.res='⏳ elemzés…';draw();
