@@ -35,8 +35,9 @@ function draw(){$('#list').innerHTML=items.map((it,i)=>`<div class="row"><img sr
  <div class="sp"><button data-i="${i}" data-s="dog" class="${it.sp==='dog'?'on':''}">Kutya</button><button data-i="${i}" data-s="cat" class="${it.sp==='cat'?'on':''}">Macska</button></div>
  <div class="res">${it.res||''}</div></div></div>`).join('');
  document.querySelectorAll('.sp button').forEach((b)=>b.onclick=()=>{items[b.dataset.i].sp=b.dataset.s;draw()});
- $('#go').disabled=!items.length||!pass();}
-$('#f').onchange=async(e)=>{for(const f of e.target.files){items.push({name:f.name,img:await shrink(f),sp:/cat|macska|cica|kitten/i.test(f.name)?'cat':'dog'})}e.target.value='';draw()};
+ $('#go').disabled=!items.length||!pass()||items.some((x)=>!x.sp);
+ if(items.some((x)=>!x.sp))$('#sum').innerHTML='<div class="sum">Minden fotónál válaszd ki, hogy kutya vagy macska – csak utána indítható az elemzés.</div>';else if($('#sum').textContent.startsWith('Minden fotónál'))$('#sum').innerHTML='';}
+$('#f').onchange=async(e)=>{for(const f of e.target.files){items.push({name:f.name,img:await shrink(f),sp:''})}e.target.value='';draw()};
 function show(it,d,ms){const r=d.result;const sp=r.animal==='cat'?'cat':r.animal==='dog'?'dog':it.sp;
  const obs=Object.entries(r.observations||{}).map(([k,v])=>`${k}: ${esc(v.value)} <i>(${v.visibility})</i>`).join('<br>');
  const prop=(r.proposed||[]).map((s)=>`<b>${esc(NAME(sp,s.id))}</b> – testtájak: ${s.regions.map((x)=>REG[x]).join(', ')||'–'}<br>${s.evidence.map((e)=>`&nbsp;· ${esc(e.area)}: ${esc(e.signal)}`).join('<br>')}${(s.against||[]).map((e)=>`<br>&nbsp;✗ ellenjel – ${esc(e.area)}: ${esc(e.signal)}`).join('')}`).join('<br>');
