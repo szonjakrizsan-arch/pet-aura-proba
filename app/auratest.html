@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Aura Scanner – etológiai próba</title>
+<!-- Csak fejlesztéshez (2026-11-25): az etológiai AI-elemző összehasonlító próbája 20–30 valós fotóval (AURA_V1_DONTESEK 4.5).
+     A jelszót a varazsteszt.html menti a telefonra. Sehonnan nincs rá link. Minden elemzés pénzbe kerül (fal.ai). -->
+<style>html,body{margin:0;background:#1a1030;color:#f3e9d2;font:15px/1.4 system-ui,sans-serif}main{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:19px;color:#e8c977;margin:4px 0 6px}p.s{opacity:.75;font-size:13px;margin:0 0 12px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}select,button,label.b{font:inherit;padding:10px 14px;border-radius:10px;border:1px solid #6b4fa0;background:#2a1b48;color:#fff}
+button.go{background:linear-gradient(#e8c977,#b8913a);color:#2a1b00;border:0;font-weight:700}button:disabled{opacity:.5}
+.row{display:grid;grid-template-columns:96px 1fr;gap:10px;background:#24173f;border:1px solid #3d2b66;border-radius:12px;padding:10px;margin:10px 0}
+.row img{width:96px;height:96px;object-fit:cover;border-radius:8px}.sp{display:flex;gap:6px;margin-top:6px}.sp button{padding:4px 10px;font-size:13px}.sp button.on{background:#e8c977;color:#2a1b00}
+.res b{color:#f6dca0}.sw{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:middle;margin-right:6px;border:1px solid #fff6}
+details{margin-top:4px;font-size:13px;opacity:.9}.err{color:#ffb3b3}.sum{margin:14px 0;padding:10px;border-radius:10px;background:#2a1b48}</style></head>
+<body><main><h1>Aura Scanner – etológiai próba</h1>
+<p class="s">Válassz több fotót, állítsd be fotónként, hogy kutya vagy macska, válassz modellt, és indítsd. Egy fotó elemzése néhány centbe kerül. A színt nem a gép adja: az app a rögzített táblából számolja.</p>
+<div class="bar"><label class="b">Fotók kiválasztása<input id="f" type="file" accept="image/*" multiple hidden></label>
+<select id="m"><option value="gemini">Gemini 2.5 Flash</option><option value="claude">Claude Sonnet 4.5</option><option value="gpt">GPT-4.1</option><option value="gpro">Gemini 2.5 Pro</option></select>
+<button class="go" id="go" disabled>Elemzés</button></div><div id="sum"></div><div id="list"></div></main>
+<script type="module">
+import { SUPABASE_URL, SUPABASE_KEY, session } from './js/auth.js';
+import { ethoLayer } from './js/aura-engine.js';
+const HU={relaxed:'Ellazult testtartás',curious:'Előre figyelő tekintet',alert:'Feszes test, éber fülek',playful:'Játékra hívó mozdulat',withdrawn:'Visszahúzódó testtartás',defensive:'Védekező testtartás'};
+const OK={face_hidden:'nem látszik az arca',blurry:'homályos',dark:'sötét',too_far:'túl messze',no_animal:'nincs rajta kutya/macska',multiple_animals:'több állat'};
+const pass=()=>{try{return localStorage.getItem('pa.devpass')||''}catch{return ''}};
+const $=(s)=>document.querySelector(s); let items=[];
+async function shrink(file){const bmp=await createImageBitmap(file);const k=Math.min(1,1024/Math.max(bmp.width,bmp.height));const c=document.createElement('canvas');c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.9)}
+const esc=(s)=>String(s??'').replace(/[&<>"]/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function draw(){$('#list').innerHTML=items.map((it,i)=>`<div class="row"><img src="${it.img}" alt=""><div><div>${esc(it.name)}</div>
+ <div class="sp"><button data-i="${i}" data-s="dog" class="${it.sp==='dog'?'on':''}">Kutya</button><button data-i="${i}" data-s="cat" class="${it.sp==='cat'?'on':''}">Macska</button></div>
+ <div class="res">${it.res||''}</div></div></div>`).join('');
+ document.querySelectorAll('.sp button').forEach((b)=>b.onclick=()=>{items[b.dataset.i].sp=b.dataset.s;draw()});
+ $('#go').disabled=!items.length||!pass();}
+$('#f').onchange=async(e)=>{for(const f of e.target.files){items.push({name:f.name,img:await shrink(f),sp:/cat|macska|cica|kitten/i.test(f.name)?'cat':'dog'})}e.target.value='';draw()};
+function show(it,d,ms){const r=d.result;const L=ethoLayer(r.animal==='cat'?'cat':r.animal==='dog'?'dog':it.sp,r.categories);
+ const obs=Object.entries(r.observations||{}).map(([k,v])=>`${k}: ${esc(v.value)} <i>(${v.visibility})</i>`).join('<br>');
+ return `<div>Lát: <b>${esc(r.animal)}</b> (${esc(r.species_confidence)})${r.animal!==it.sp&&r.animal!=='none'?' ⚠️ eltér a beállítottól':''}</div>
+ ${r.etho_ok?`<div><span class="sw" style="background:${L?L.color:'#000'}"></span><b>${r.categories.map((c)=>HU[c]||c).join(' + ')}</b> · bizonyosság: ${esc(r.certainty)}</div>`:`<div class="err">Nincs besorolás${r.usable?'':' – '+esc(OK[r.unusable_reason]||r.unusable_reason)} · bizonyosság: ${esc(r.certainty)}</div>`}
+ ${r.health_filtered?'<div class="err">⚠️ egészségügyi szót kiszűrtünk</div>':''}<details><summary>Megfigyelések · ${ms} ms</summary>${obs}<br><i>${esc(r.limitations)}</i></details>`}
+$('#go').onclick=async()=>{const s=await session();if(!s){alert('Nincs bejelentkezés');return}$('#go').disabled=true;let n=0,good=0;const model=$('#m').value;
+ for(const it of items){it.res='⏳ elemzés…';draw();
+  try{const r=await fetch(SUPABASE_URL+'/functions/v1/aura',{method:'POST',headers:{Authorization:'Bearer '+s.access_token,apikey:SUPABASE_KEY,'Content-Type':'application/json','x-pa-dev':pass()},body:JSON.stringify({image:it.img,species:it.sp,model})});
+   const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||r.status);n++;if(d.result.etho_ok)good++;it.res=`<div style="opacity:.7;font-size:12px">${esc(model)}</div>`+show(it,d,d.ms);}
+  catch(e){it.res=`<span class="err">Hiba: ${esc(e.message)}</span>`}draw()}
+ $('#sum').innerHTML=`<div class="sum">Kész: ${n} elemzés, ebből ${good} kapott besorolást.</div>`;$('#go').disabled=false};
+draw(); if(!pass())$('#sum').innerHTML='<div class="sum err">Ezen a telefonon nincs elmentve a fejlesztői jelszó (varazsteszt.html).</div>';
+</script></body></html>
