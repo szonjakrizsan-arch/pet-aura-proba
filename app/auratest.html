@@ -39,7 +39,7 @@ function show(it,d,ms){const r=d.result;const L=ethoLayer(r.animal==='cat'?'cat'
 $('#go').onclick=async()=>{const s=await session();if(!s){alert('Nincs bejelentkezés');return}$('#go').disabled=true;let n=0,good=0;const model=$('#m').value;
  for(const it of items){it.res='⏳ elemzés…';draw();
   try{const r=await fetch(SUPABASE_URL+'/functions/v1/aura',{method:'POST',headers:{Authorization:'Bearer '+s.access_token,apikey:SUPABASE_KEY,'Content-Type':'application/json','x-pa-dev':pass()},body:JSON.stringify({image:it.img,species:it.sp,model})});
-   const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error((d.error||r.status)+(d.detail?' – '+(typeof d.detail==='string'?d.detail:JSON.stringify(d.detail)).slice(0,300):'')+(d.status?' ('+d.status+')':''));n++;if(d.result.etho_ok)good++;it.res=`<div style="opacity:.7;font-size:12px">${esc($('#m').selectedOptions[0].text)}</div>`+show(it,d,d.ms);}
+   const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error((d.error||r.status)+(d.detail?' – '+(typeof d.detail==='string'?d.detail:JSON.stringify(d.detail)).slice(0,300):'')+(d.status?' ('+d.status+')':'')+(d.raw?' – '+String(d.raw).slice(0,300):''));n++;if(d.result.etho_ok)good++;it.res=`<div style="opacity:.7;font-size:12px">${esc($('#m').selectedOptions[0].text)}</div>`+show(it,d,d.ms);}
   catch(e){it.res=`<span class="err">Hiba: ${esc(e.message)}</span>`}draw()}
  $('#sum').innerHTML=`<div class="sum">Kész: ${n} elemzés, ebből ${good} kapott besorolást.</div>`;$('#go').disabled=false};
 draw(); if(!pass())$('#sum').innerHTML='<div class="sum err">Ezen a telefonon nincs elmentve a fejlesztői jelszó (varazsteszt.html).</div>';
