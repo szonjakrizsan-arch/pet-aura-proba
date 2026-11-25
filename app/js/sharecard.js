@@ -24,7 +24,7 @@ const ICON = { // a fénygörbék közepén: hold (csillagjegy), iránytű (égt
 
 export async function makeShareCard({ lang, aura, name, sub, title, quote, quotes, layers, brand, tagline, noBehaviour }) {
   await Promise.all([document.fonts.load('400 170px "Great Vibes"'), document.fonts.load('600 58px "Cormorant Garamond"'), document.fonts.load('italic 600 40px "Cormorant Garamond"'), document.fonts.load('700 52px "Cormorant Garamond"')].map((p) => p.catch(() => {})));
-  const [bg, div, paw] = await Promise.all([img('assets/kezdolap/bg.webp?v=0.6.84'), img('assets/elemzeseim/ablak_valaszto.webp?v=0.6.84'), img('assets/fiok/mancs.webp?v=0.6.84')]);
+  const [bg, div, paw] = await Promise.all([img('assets/kezdolap/bg.webp?v=0.6.85'), img('assets/elemzeseim/ablak_valaszto.webp?v=0.6.85'), img('assets/fiok/mancs.webp?v=0.6.85')]);
   const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
   // háttér: a kezdőlap galaktikus képe, kitöltve; alul sötétedő ív, hogy a szöveg jól olvasható legyen
   x.fillStyle = '#1c1240'; x.fillRect(0, 0, W, H);

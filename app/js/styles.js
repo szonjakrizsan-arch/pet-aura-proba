@@ -4,11 +4,11 @@
 // AMÍG NINCS FIZETÉS ÉS NAPI KERET: a képkészítő rész csak azon a telefonon látszik, ahol a fejlesztői jelszó el van mentve
 // (localStorage 'pa.devpass'), mert a szerver jelszó nélkül nem dolgozik – így más nem tudja a krediteket elhasználni. Máshol nincs semmi
 // (Szonja: nincs „hamarosan”-szöveg). VÍZJEL: még nincs a kész képen (vm.h.3 ígéri) – a Tarot ✦ XIX ✦ feliratával együtt épül be.
-import { CORNER } from './account.js?v=0.6.84';
-import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.84';
-import { activePet } from './pets.js?v=0.6.84';
+import { CORNER } from './account.js?v=0.6.85';
+import { SUPABASE_URL, SUPABASE_KEY, session } from './auth.js?v=0.6.85';
+import { activePet } from './pets.js?v=0.6.85';
 
-const V = '0.6.84';
+const V = '0.6.85';
 const SEASON = { karacsony: (d) => (d.getMonth() === 11) || (d.getMonth() === 0 && d.getDate() <= 6) }; // dec. 1. – jan. 6. (Szonja döntése)
 // Minden stílusnak cicás és kutyás mintaképe van (Szonja kérése: a cicás gazdi ne higgye, hogy csak kutyáknak szól).
 // A kedvenc faja dönt; ha nincs kedvenc / faj, a galériában felváltva látszanak (sakktáblaszerűen).
@@ -78,7 +78,7 @@ function mountMake(root, t, style, sname, species, alive) {
   const q = (s) => root.querySelector('.vmmake ' + s);
   let photo = '', busy = false, url = '', blob = null;
   // fájlnév a stílus nevéből, a gazdi nyelvén (pl. pet-aura-mesekonyv.jpg) – a belső azonosító (kawaii) ne látsszon
-  const slug = String(sname || style).normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\u3040-\u30ff\u4e00-\u9fff]+/g, '-').replace(/^-+|-+$/g, '') || style;
+  const slug = String(sname || style).replace(/ł/g, 'l').replace(/Ł/g, 'L').replace(/ß/g, 'ss').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\u3040-\u30ff\u4e00-\u9fff]+/g, '-').replace(/^-+|-+$/g, '') || style;
   const fname = () => `pet-aura-${slug}.jpg`;
   const save = () => { if (!blob) return; const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname(); a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
   q('[data-act="save"]').onclick = save;
