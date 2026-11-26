@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="hu"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fióktörlés – élő próba</title>
+<style>body{font-family:system-ui,sans-serif;background:#1d1233;color:#f3e6c8;max-width:640px;margin:24px auto;padding:0 16px;line-height:1.5}button{font-size:17px;padding:12px 18px;border-radius:12px;border:0;background:#e3b85c;color:#2a1448;font-weight:700;cursor:pointer}li{margin:8px 0}.ok{color:#9be89b}.err{color:#ff9b8f}</style></head><body>
+<h2>Fióktörlés – élő próba</h2>
+<p>Ez a próba egy <b>új, üres, névtelen próbafiókot</b> hoz létre, majd a „fiok-torles” szerverfüggvénnyel törli, és végül ellenőrzi, hogy a fiók valóban eltűnt-e. A valódi fiókodhoz és adataidhoz nem nyúl.</p>
+<button id="go">Próba indítása</button><ol id="out"></ol>
+<script>
+const URL_='https://rjyzioicvplvguzkselg.supabase.co',KEY='sb_publishable_0qlYsmL2r1hbDqkTMkMUpw_6Pke3kbj';
+const out=document.getElementById('out');const say=(t,c='')=>{const li=document.createElement('li');li.className=c;li.textContent=t;out.appendChild(li)};
+document.getElementById('go').onclick=async()=>{out.innerHTML='';document.getElementById('go').disabled=true;
+ try{
+  const s=await (await fetch(URL_+'/auth/v1/signup',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:'{}'})).json();
+  if(!s.access_token)throw new Error('a próbafiók nem jött létre: '+JSON.stringify(s).slice(0,200));
+  say('Próbafiók létrehozva ('+s.user.id.slice(0,8)+'…)','ok');
+  const r=await fetch(URL_+'/functions/v1/fiok-torles',{method:'POST',headers:{Authorization:'Bearer '+s.access_token,apikey:KEY,'Content-Type':'application/json'},body:'{}'});
+  const j=await r.json().catch(()=>({}));
+  if(r.ok&&j.deleted===true)say('A szerver visszaigazolta a törlést','ok');else throw new Error('a törlés nem sikerült: '+r.status+' '+JSON.stringify(j));
+  const u=await fetch(URL_+'/auth/v1/user',{headers:{Authorization:'Bearer '+s.access_token,apikey:KEY}});
+  if(u.ok){const x=await u.json().catch(()=>({}));if(x&&x.id)throw new Error('a fiók még létezik');}
+  say('Ellenőrizve: a fiók már nem létezik ('+u.status+')','ok');say('✔ A fióktörlés működik.','ok');
+ }catch(e){say('✘ '+e.message,'err')}
+ document.getElementById('go').disabled=false};
+</script></body></html>
